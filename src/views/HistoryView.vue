@@ -1,11 +1,11 @@
-<!-- src/views/MyPageView.vue -->
+<!-- src/views/HistoryView.vue -->
 <template>
   <div class="page">
     <AppHeader />
 
-    <main class="page__content mypage">
-      <h1 class="mypage__title">My Page</h1>
-      <!-- TODO: 프로필/통계/최근기록 -->
+    <main class="page__content history">
+      <h1 class="history__title">HistoryView</h1>
+      <!-- TODO: 게임 설명/팁 UI -->
     </main>
 
     <AppFooter />
@@ -18,7 +18,7 @@ import AppFooter from "@/components/layout/AppFooter.vue";
 </script>
 
 <style lang="scss" scoped>
-.mypage {
+.history {
   max-width: 1200px;
   margin: 1.5rem auto 2rem;
   padding: 0 1.5rem;

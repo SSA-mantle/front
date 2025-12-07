@@ -1,19 +1,27 @@
 <!-- src/views/EditProfileView.vue -->
 <template>
-  <div class="edit-profile">
-    <h1 class="edit-profile__title">회원 정보 수정</h1>
-    <!-- TODO: EditProfileForm + 뒤로가기/탈퇴 버튼 등 -->
+  <div class="page">
+    <AppHeader />
+
+    <main class="page__content edit-profile">
+      <h1 class="edit-profile__title">회원 정보 수정</h1>
+      <!-- TODO: 프로필 수정 폼 -->
+    </main>
+
+    <AppFooter />
   </div>
 </template>
 
 <script setup>
-// 나중에 "뒤로 가기" → router.push('mypage')
-//       "회원 탈퇴" → router.push('welcome') 와 연동
+import AppHeader from "@/components/layout/AppHeader.vue";
+import AppFooter from "@/components/layout/AppFooter.vue";
 </script>
 
 <style lang="scss" scoped>
 .edit-profile {
-  padding: 2rem;
+  max-width: 1200px;
+  margin: 1.5rem auto 2rem;
+  padding: 0 1.5rem;
 
   &__title {
     font-size: 1.5rem;

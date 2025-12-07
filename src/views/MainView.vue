@@ -1,18 +1,27 @@
 <!-- src/views/MainView.vue -->
 <template>
-  <div class="main">
-    <h1 class="main__title">Main View (게임 화면)</h1>
-    <!-- TODO: 나중에 Header + GameLayout 배치 -->
+  <div class="page">
+    <AppHeader />
+
+    <main class="page__content main">
+      <h1 class="main__title">Main View (게임 화면)</h1>
+      <!-- TODO: 게임 UI 배치 -->
+    </main>
+
+    <AppFooter />
   </div>
 </template>
 
 <script setup>
-// 추후 GameLayout, Header 등을 import 해서 사용할 예정
+import AppHeader from "@/components/layout/AppHeader.vue";
+import AppFooter from "@/components/layout/AppFooter.vue";
 </script>
 
 <style lang="scss" scoped>
 .main {
-  padding: 2rem;
+  max-width: 1200px;
+  margin: 1.5rem auto 2rem;
+  padding: 0 1.5rem;
 
   &__title {
     font-size: 1.5rem;
