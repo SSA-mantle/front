@@ -72,7 +72,7 @@ const goMyPage = () => {
   &__inner {
     max-width: 1200px;
     margin: 0 auto;
-    height: 80px; // ⬅ 높이 키움
+    height: 60px; // ⬅ 높이 키움
     display: flex;
     align-items: center;
     // justify-content: space-between;
@@ -87,8 +87,8 @@ const goMyPage = () => {
   }
 
   &__logo {
-    width: 50px;
-    height: 50px;
+    width: 30px;
+    height: 30px;
     border-radius: 999px;
     background-color: rgba(15, 23, 42, 0.18);
     display: flex;
@@ -98,7 +98,7 @@ const goMyPage = () => {
   }
 
   &__title {
-    font-size: 2rem;
+    font-size: 1.3rem;
     font-weight: 800;
     letter-spacing: 0.04em;
   }
@@ -107,13 +107,13 @@ const goMyPage = () => {
     display: flex;
     align-items: center;
     gap: 3rem;
-    margin-left: 3rem;
+    margin-left: auto;
     margin-right: auto;
   }
 
   &__nav-link {
     position: relative;
-    font-size: 1.5rem;
+    font-size: 1.2rem;
     font-weight: 500;
     color: rgba(255, 255, 255, 0.9);
     padding: 0.35rem 0.6rem;
@@ -155,7 +155,7 @@ const goMyPage = () => {
     background-color: rgba(15, 23, 42, 0.2);
     color: #f9fafb;
     cursor: pointer;
-    font-size: 1.2rem; // ⬅ 글씨 조금 키움
+    font-size: 0.7rem; // ⬅ 글씨 조금 키움
     font-weight: 500;
   }
 }

@@ -31,25 +31,25 @@
 .app-footer {
   background-color: #020617;
   color: #e5e7eb;
-  padding-top: 2rem; // 위쪽 여백
+  padding-top: 1rem; // 위쪽 여백
   margin-top: 2.5rem;
 
   &__inner {
     max-width: 1200px;
     margin: 0 auto;
-    padding: 0 2rem 2.25rem; // 좌우/아래 여백
+    padding: 0 2rem 1rem; // 좌우/아래 여백
     display: grid;
     grid-template-columns: 1.5fr 1fr 1fr;
     gap: 2.5rem;
   }
 
   &__section {
-    font-size: 1rem; // 전체 글자 크기
+    font-size: 0.7rem; // 전체 글자 크기
   }
 
   &__logo {
     margin: 0 0 0.6rem;
-    font-size: 1.3rem;
+    font-size: 0.85rem;
     font-weight: 700;
   }
 
@@ -61,13 +61,13 @@
 
   &__copyright {
     margin-top: 0.9rem;
-    font-size: 1rem;
+    font-size: 0.7rem;
     color: #6b7280;
   }
 
   &__heading {
     margin: 0 0 0.5rem;
-    font-size: 1.3rem;
+    font-size: 0.85rem;
     font-weight: 600;
   }
 
@@ -75,7 +75,7 @@
     border-top: 1px solid #1f2933;
     padding: 1rem 2rem 1.4rem;
     text-align: center;
-    font-size: 0.85rem; // 하단 문구 글자 크기
+    font-size: 0.65rem; // 하단 문구 글자 크기
     color: #9ca3af;
   }
 }
