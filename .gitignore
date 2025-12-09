@@ -32,7 +32,7 @@ coverage
 /cypress/videos/
 /cypress/screenshots/
 
-#Docs
+#Docs(Model)
 docs/
 
 # Vitest
