@@ -56,7 +56,8 @@ const handleSubmitGuess = (word) => {
 
 <style lang="scss" scoped>
 .main {
-  max-width: 1200px;
+  max-width: 1280px;
+  width: 60%;
   margin: 1.5rem auto 2.5rem;
   padding: 0 2rem;
 
@@ -82,6 +83,7 @@ const handleSubmitGuess = (word) => {
   &__title {
     margin: 0;
     font-size: 3.6rem;
+    // color: #1e3a8a;
     font-weight: 900;
     letter-spacing: 0.02em;
     display: inline-block;
