@@ -1,14 +1,14 @@
 <template>
-  <section class="guide-sample">
-    <div class="guide-sample__inner">
-      <h2 class="guide-sample__title">플레이 예시</h2>
-      <p class="guide-sample__description">
+  <section class="about-sample">
+    <div class="about-sample__inner">
+      <h2 class="about-sample__title">플레이 예시</h2>
+      <p class="about-sample__description">
         실제 Daily Challenge 화면에서 단어를 입력한 뒤 유사도를 확인하는 과정을 캡쳐해
         튜토리얼로 제공할 예정입니다.
       </p>
-      <button class="guide-sample__button" type="button">튜토리얼 준비중</button>
+      <button class="about-sample__button" type="button">튜토리얼 준비중</button>
     </div>
-    <div class="guide-sample__preview">
+    <div class="about-sample__preview">
       (예시 단어로 플레이하는 캡쳐본 + 플레이 과정 설명이 들어갈 예정입니다)
     </div>
   </section>
@@ -17,7 +17,7 @@
 <script setup></script>
 
 <style lang="scss" scoped>
-.guide-sample {
+.about-sample {
   margin-top: 2.5rem;
   background-color: #0ea5e9;
   border-radius: 1.5rem;
@@ -70,7 +70,7 @@
 }
 
 @media (max-width: 640px) {
-  .guide-sample {
+  .about-sample {
     padding: 1.8rem;
 
     &__title {

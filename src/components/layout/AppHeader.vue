@@ -12,11 +12,11 @@
       <!-- 메뉴 -->
       <nav class="app-header__nav">
         <RouterLink
-          to="/guide"
+          to="/about"
           class="app-header__nav-link"
           active-class="app-header__nav-link--active"
         >
-          How to / Tip
+          About
         </RouterLink>
         <RouterLink
           to="/leaderboard"

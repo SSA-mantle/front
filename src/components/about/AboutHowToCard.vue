@@ -1,17 +1,17 @@
 <template>
-  <section class="guide-how">
-    <header class="guide-how__header">
-      <span class="guide-how__icon">🎮</span>
+  <section class="about-how">
+    <header class="about-how__header">
+      <span class="about-how__icon">🎮</span>
       <div>
-        <p class="guide-how__title">게임 방법</p>
-        <p class="guide-how__subtitle">정답 단어와 가장 유사한 단어를 찾아보세요</p>
+        <p class="about-how__title">게임 방법</p>
+        <p class="about-how__subtitle">정답 단어와 가장 유사한 단어를 찾아보세요</p>
       </div>
     </header>
 
-    <ol class="guide-how__list">
-      <li v-for="item in items" :key="item.number" class="guide-how__item">
-        <span class="guide-how__badge">{{ item.number }}</span>
-        <p class="guide-how__text">{{ item.text }}</p>
+    <ol class="about-how__list">
+      <li v-for="item in items" :key="item.number" class="about-how__item">
+        <span class="about-how__badge">{{ item.number }}</span>
+        <p class="about-how__text">{{ item.text }}</p>
       </li>
     </ol>
   </section>
@@ -27,7 +27,7 @@ const props = defineProps({
 </script>
 
 <style lang="scss" scoped>
-.guide-how {
+.about-how {
   background-color: #ffffff;
   border-radius: 1.25rem;
   padding: 1.8rem 2rem;
@@ -101,7 +101,7 @@ const props = defineProps({
 }
 
 @media (max-width: 768px) {
-  .guide-how {
+  .about-how {
     padding: 1.4rem 1.2rem;
   }
 }

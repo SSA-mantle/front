@@ -1,20 +1,20 @@
 <template>
-  <section class="guide-tips">
-    <header class="guide-tips__header">
-      <span class="guide-tips__icon">💡</span>
+  <section class="about-tips">
+    <header class="about-tips__header">
+      <span class="about-tips__icon">💡</span>
       <div>
-        <p class="guide-tips__title">게임 팁</p>
-        <p class="guide-tips__subtitle">정답에 가까워지는 방법을 빠르게 익혀보세요</p>
+        <p class="about-tips__title">게임 팁</p>
+        <p class="about-tips__subtitle">정답에 가까워지는 방법을 빠르게 익혀보세요</p>
       </div>
     </header>
 
-    <div class="guide-tips__cards">
-      <article v-for="tip in tips" :key="tip.title" class="guide-tips__card">
-        <div class="guide-tips__card-icon" :style="{ backgroundColor: tip.tint }">
+    <div class="about-tips__cards">
+      <article v-for="tip in tips" :key="tip.title" class="about-tips__card">
+        <div class="about-tips__card-icon" :style="{ backgroundColor: tip.tint }">
           {{ tip.icon }}
         </div>
-        <h3 class="guide-tips__card-title">{{ tip.title }}</h3>
-        <p class="guide-tips__card-desc">{{ tip.description }}</p>
+        <h3 class="about-tips__card-title">{{ tip.title }}</h3>
+        <p class="about-tips__card-desc">{{ tip.description }}</p>
       </article>
     </div>
   </section>
@@ -30,7 +30,7 @@ const props = defineProps({
 </script>
 
 <style lang="scss" scoped>
-.guide-tips {
+.about-tips {
   background: linear-gradient(135deg, #e0f2ff, #f5f3ff);
   border-radius: 1.25rem;
   padding: 1.8rem 2rem;
@@ -106,7 +106,7 @@ const props = defineProps({
 }
 
 @media (max-width: 768px) {
-  .guide-tips {
+  .about-tips {
     padding: 1.4rem 1.2rem;
   }
 }
