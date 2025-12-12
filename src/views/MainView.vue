@@ -56,81 +56,72 @@ const handleSubmitGuess = (word) => {
 
 <style lang="scss" scoped>
 .main {
-  max-width: 1280px;
-  width: 60%;
-  margin: 1.5rem auto 2.5rem;
-  padding: 0 2rem;
+  max-width: 800px;
+  width: 100%;
+  margin: 2rem auto 4rem;
+  padding: 0 1.5rem;
 
   &__hero {
     text-align: center;
-    margin-bottom: 2rem;
+    margin-bottom: 3rem;
   }
 
   &__logo-circle {
-    width: 140px;
-    height: 140px;
-    margin: 0 auto 1rem;
-    border-radius: 999px;
-    background-color: #4f46e5;
+    width: 120px;
+    height: 120px;
+    margin: 0 auto 1.5rem;
+    border-radius: 32px; /* Sqircle ish */
+    background: linear-gradient(135deg, var(--color-primary-400), var(--color-primary-700));
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 3.6rem;
+    font-size: 3.5rem;
     color: #ffffff;
-    box-shadow: 0 18px 40px rgba(79, 70, 229, 0.18);
+    box-shadow: var(--shadow-xl);
+    transform: rotate(-5deg);
+    transition: transform 0.3s var(--ease-spring);
+
+    &:hover {
+      transform: rotate(0deg) scale(1.05);
+    }
   }
 
   &__title {
     margin: 0;
-    font-size: 3.6rem;
-    // color: #1e3a8a;
+    font-size: 3.5rem;
     font-weight: 900;
-    letter-spacing: 0.02em;
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+    background: linear-gradient(135deg, var(--color-text-heading) 30%, var(--color-primary-600));
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
     display: inline-block;
-    position: relative;
-    padding: 0.15rem 0.35rem;
-    color: #111827;
-  }
-
-  /* highlight bar behind the title text */
-  &__title::after {
-    content: "";
-    position: absolute;
-    left: 0;
-    right: 0;
-    bottom: 18%;
-    height: 26%;
-    background: #f59e0b; /* amber/orange */
-    z-index: -1;
-    border-radius: 4px;
   }
 
   &__subtitle {
-    margin: 0.6rem 0 0;
-    font-size: 1.05rem;
-    color: #374151;
-    font-weight: 600;
+    margin: 1rem 0 0;
+    font-size: 1.25rem;
+    color: var(--color-text-muted);
+    font-weight: 500;
   }
 
   &__subtitle-strong {
-    display: inline-block;
-    font-weight: 900;
-    margin-right: 0.45rem;
+    font-weight: 700;
+    color: var(--color-text-heading);
   }
 
   &__row {
     margin-top: 2rem;
     display: flex;
-    flex-direction: column; /* 세로로 쌓기 */
-    gap: 1rem;
-    align-items: center; /* 가로 중앙 정렬 */
+    flex-direction: column;
+    gap: 1.5rem;
+    width: 100%;
   }
 
   &__left,
   &__right {
-    min-height: 260px;
     width: 100%;
-    max-width: 760px; /* 두 카드의 가로폭을 일치시키기 위한 제한값 */
   }
 }
 </style>

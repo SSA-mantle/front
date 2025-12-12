@@ -1,34 +1,133 @@
 /* src/assets/main.scss */
 
-/* Pretendard CDN 사용 */
+/* Pretendard CDN */
 @import url("https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css");
 
-/* 리셋 & 기본 설정 */
-*,
-*::before,
-*::after {
+/* 
+  ---------------------------------------------------------------------------
+  ✨ DESIGN SYSTEM: Premium & Vivid
+  ---------------------------------------------------------------------------
+*/
+:root {
+  /* --- Colors: Primary (Vivid Blue/Violet) --- */
+  --color-primary-50:  #eff6ff;
+  --color-primary-100: #dbeafe;
+  --color-primary-400: #60a5fa;
+  --color-primary:     #3b82f6; /* Main Brand Color */
+  --color-primary-600: #2563eb;
+  --color-primary-700: #1d4ed8;
+  
+  /* --- Colors: Accent (Gradient Stops) --- */
+  --color-accent-blue: #3b82f6;
+  --color-accent-purple: #8b5cf6;
+  --color-accent-cyan: #06b6d4;
+
+  /* --- Colors: Neutral (Modern Slate) --- */
+  --color-bg-base:     #f8fafc; /* Cool White */
+  --color-bg-inset:    #f1f5f9;
+  --color-surface:     #ffffff;
+  
+  --color-text-heading: #0f172a; /* Slate 900 */
+  --color-text-body:    #334155; /* Slate 700 */
+  --color-text-muted:   #64748b; /* Slate 500 */
+  
+  --color-border:       #e2e8f0; /* Slate 200 */
+
+  /* --- Radius & Spacing --- */
+  --radius-sm: 0.5rem;   /* 8px */
+  --radius-md: 0.75rem;  /* 12px */
+  --radius-lg: 1rem;     /* 16px */
+  --radius-xl: 1.5rem;   /* 24px */
+  
+  /* --- Shadows (Soft & Diffused) --- */
+  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.06), 0 2px 4px -2px rgb(0 0 0 / 0.06);
+  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.08), 0 4px 6px -4px rgb(0 0 0 / 0.08);
+  --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.08), 0 8px 10px -6px rgb(0 0 0 / 0.08);
+  --shadow-glow: 0 0 20px rgba(59, 130, 246, 0.15); /* Primary Glow */
+
+  /* --- Transitions --- */
+  --ease-spring: cubic-bezier(0.4, 0.0, 0.2, 1);
+}
+
+/* 
+  ---------------------------------------------------------------------------
+  🧱 RESET & BASE
+  ---------------------------------------------------------------------------
+*/
+*, *::before, *::after {
   box-sizing: border-box;
 }
 
-html,
-body {
+html, body {
   margin: 0;
   padding: 0;
+  scrollbar-gutter: stable;
+  height: 100%;
 }
 
 body {
-  font-family: "Pretendard", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-  background-color: #f3f4f6;
-  color: #111827;
+  font-family: "Pretendard", system-ui, -apple-system, sans-serif;
+  
+  /* Mesh Gradient Background (Subtle) */
+  background-color: var(--color-bg-base);
+  background-image: 
+    radial-gradient(at 0% 0%, hsla(253,16%,7%,0) 0, hsla(253,16%,7%,0) 50%), 
+    radial-gradient(at 50% 0%, hsla(225,39%,30%,0) 0, hsla(225,39%,30%,0) 50%), 
+    radial-gradient(at 100% 0%, hsla(339,49%,30%,0) 0, hsla(339,49%,30%,0) 50%);
+  /* We will add a stronger background element in App.vue */
+  
+  color: var(--color-text-body);
+  -webkit-font-smoothing: antialiased;
+  line-height: 1.6;
 }
 
-/* a 기본값 */
 a {
   color: inherit;
   text-decoration: none;
 }
 
-/* 기본 페이지 레이아웃 유틸 (헤더/푸터 끼우기용) */
+button {
+  font-family: inherit;
+}
+
+/* 
+  ---------------------------------------------------------------------------
+  🎨 UTILITIES
+  ---------------------------------------------------------------------------
+*/
+
+/* Glass Effect */
+.glass {
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.5);
+}
+
+/* Card Style */
+.card {
+  background: var(--color-surface);
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--color-border);
+  box-shadow: var(--shadow-sm);
+  transition: transform 0.2s var(--ease-spring), box-shadow 0.2s var(--ease-spring);
+}
+
+.card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-lg);
+}
+
+/* Gradient Text */
+.text-gradient {
+  background: linear-gradient(135deg, var(--color-accent-blue), var(--color-accent-purple));
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+/* Layout Utilities */
 .page {
   min-height: 100vh;
   display: flex;
@@ -36,5 +135,14 @@ a {
 
   &__content {
     flex: 1;
+    width: 100%;
   }
+}
+
+/* Container */
+.container {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 1.5rem;
 }

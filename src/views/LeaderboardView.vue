@@ -4,11 +4,13 @@
 
     <main class="page__content leaderboard">
       <section class="leaderboard__hero">
-        <div class="leaderboard__hero-icon">🏆</div>
-        <div class="leaderboard__hero-text">
-          <h1 class="leaderboard__hero-title">오늘의 명예의 전당</h1>
-          <p class="leaderboard__hero-subtitle">상위 50위 기록을 확인해보세요.</p>
+        <div class="leaderboard__hero-title">
+          <span class="leaderboard__hero-highlight">명예의 전당</span>
+          <span class="leaderboard__hero-suffix">TOP 50</span>
         </div>
+        <p class="leaderboard__hero-description">
+          오늘의 <strong>상위 50위</strong> 플레이어 기록을 확인해보세요.
+        </p>
       </section>
 
       <LeaderboardList :entries="sortedEntries" />
@@ -53,61 +55,62 @@ const sortedEntries = computed(() => {
 
 <style lang="scss" scoped>
 .leaderboard {
-  max-width: 1100px;
-  width: 50%;
-  margin: 1.5rem auto 3rem;
-  padding: 0 1.5rem 2.5rem;
+  width: 100%;
+  max-width: 800px;
+  margin: 2rem auto 4rem;
+  padding: 0 1.5rem;
   display: flex;
   flex-direction: column;
-  gap: 1.5rem;
+  gap: 2rem;
 
   &__hero {
     display: flex;
-    align-items: center;
-    gap: 1rem;
-    background-color: #fff4d7;
-    border-radius: 1.2rem;
-    padding: 1.5rem 2rem;
-    border: 1px solid rgba(245, 158, 11, 0.3);
-    box-shadow: 0 18px 40px rgba(15, 23, 42, 0.08);
-  }
-
-  &__hero-icon {
-    width: 60px;
-    height: 60px;
-    border-radius: 999px;
-    background-color: #facc15;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 2rem;
+    flex-direction: column;
+    gap: 0.5rem;
+    text-align: center;
+    margin-bottom: 1rem;
   }
 
   &__hero-title {
-    margin: 0;
-    font-size: 1.7rem;
-    font-weight: 900;
-    color: #111827;
+    display: flex;
+    justify-content: center;
+    align-items: baseline;
+    gap: 0.5rem;
+    flex-wrap: wrap;
   }
 
-  &__hero-subtitle {
-    margin: 0.2rem 0 0;
-    font-size: 1rem;
-    color: #6b7280;
+  &__hero-highlight {
+    font-size: clamp(2rem, 4vw, 3rem);
+    font-weight: 900;
+    background: linear-gradient(135deg, var(--color-primary-600), var(--color-accent-purple));
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+
+  &__hero-suffix {
+    font-size: clamp(1.5rem, 3vw, 2.2rem);
+    font-weight: 700;
+    color: var(--color-text-muted);
+  }
+
+  &__hero-description {
+    margin: 0;
+    font-size: 1.1rem;
+    color: var(--color-text-body);
+    line-height: 1.6;
+
+    strong {
+      color: var(--color-primary);
+      font-weight: 700;
+    }
   }
 }
 
 @media (max-width: 640px) {
   .leaderboard {
-    &__hero {
-      flex-direction: column;
-      text-align: center;
-    }
-
-    &__hero-icon {
-      width: 48px;
-      height: 48px;
-      font-size: 1.7rem;
+    &__hero-title {
+       justify-content: center;
     }
   }
 }
