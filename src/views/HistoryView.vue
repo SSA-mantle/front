@@ -4,14 +4,13 @@
 
     <main class="page__content history">
       <section class="history__hero">
-        <div class="history__hero-icon">🕑</div>
-        <div>
-          <p class="history__hero-eyebrow">Yesterday Recap</p>
-          <h1 class="history__hero-title">어제의 정답과 유사도</h1>
-          <p class="history__hero-description">
-            지난 챌린지에서 정답에 가장 가까웠던 단어들을 한 번에 확인하세요.
-          </p>
+        <div class="history__hero-title">
+          <span class="history__hero-highlight">어제의 기록</span>
+          <span class="history__hero-suffix">다시보기</span>
         </div>
+        <p class="history__hero-description">
+          지난 챌린지에서 <strong>정답에 가장 가까웠던 단어</strong>들을 확인하세요.
+        </p>
       </section>
 
       <HistoryAnswerCard
@@ -64,54 +63,55 @@ const topWords = computed(() => {
 
 <style lang="scss" scoped>
 .history {
-  max-width: 1200px;
-  margin: 1.5rem auto 3rem;
-  padding: 0 1.5rem 2.5rem;
+  width: 100%;
+  max-width: 800px;
+  margin: 2rem auto 4rem;
+  padding: 0 1.5rem;
   display: flex;
   flex-direction: column;
-  gap: 1.5rem;
+  gap: 2rem;
 
   &__hero {
     display: flex;
-    gap: 1rem;
-    align-items: center;
-    padding: 1.5rem 2rem;
-    border-radius: 1.2rem;
-    background: linear-gradient(120deg, #dbeafe, #eff6ff);
-    box-shadow: 0 18px 40px rgba(15, 23, 42, 0.08);
-  }
-
-  &__hero-icon {
-    width: 60px;
-    height: 60px;
-    border-radius: 18px;
-    background-color: #1d4ed8;
-    color: #ffffff;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 1.8rem;
-  }
-
-  &__hero-eyebrow {
-    margin: 0;
-    font-size: 0.95rem;
-    font-weight: 700;
-    color: #2563eb;
-    letter-spacing: 0.08em;
+    flex-direction: column;
+    gap: 0.5rem;
+    text-align: center;
+    margin-bottom: 1rem;
   }
 
   &__hero-title {
-    margin: 0.2rem 0 0.4rem;
-    font-size: clamp(1.8rem, 3vw, 2.4rem);
+    display: flex;
+    justify-content: center;
+    align-items: baseline;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+  }
+
+  &__hero-highlight {
+    font-size: clamp(2rem, 4vw, 3rem);
     font-weight: 900;
-    color: #0f172a;
+    background: linear-gradient(135deg, var(--color-primary-600), var(--color-accent-purple));
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+
+  &__hero-suffix {
+    font-size: clamp(1.5rem, 3vw, 2.2rem);
+    font-weight: 700;
+    color: var(--color-text-muted);
   }
 
   &__hero-description {
     margin: 0;
-    font-size: 1rem;
-    color: #374151;
+    font-size: 1.1rem;
+    color: var(--color-text-body);
+    line-height: 1.6;
+
+    strong {
+      color: var(--color-primary);
+      font-weight: 700;
+    }
   }
 }
 

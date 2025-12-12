@@ -4,12 +4,15 @@
     <AppHeader />
 
     <main class="page__content faq">
-      <div class="faq__header">
-        <span class="faq__icon">?</span>
-        <h1 class="faq__title">
-          <span class="faq__title-highlight">자주 묻는 질문</span>
-        </h1>
-      </div>
+      <section class="faq__hero">
+        <div class="faq__hero-title">
+          <span class="faq__hero-highlight">자주 묻는 질문</span>
+          <span class="faq__hero-suffix">Q&A</span>
+        </div>
+        <p class="faq__hero-description">
+          SSA-mantle에 대해 <strong>궁금한 점</strong>을 확인해보세요.
+        </p>
+      </section>
 
       <div class="faq__list">
         <div 
@@ -92,54 +95,50 @@ const toggleFaq = (index) => {
 
 <style lang="scss" scoped>
 .faq {
-  width : 800px; // 디자인에 맞춰 조금 더 좁게 설정
-  max-width: 100%; 
-  
+  width: 100%;
+  max-width: 800px; 
   margin: 2rem auto 4rem;
   padding: 0 1.5rem;
 
-  &__header {
+  &__hero {
     display: flex;
-    align-items: center;
-    gap: 0.75rem;
-    margin-bottom: 2rem;
+    flex-direction: column;
+    gap: 0.5rem;
+    text-align: center;
+    margin-bottom: 2.5rem;
   }
 
-  &__icon {
+  &__hero-title {
     display: flex;
-    align-items: center;
     justify-content: center;
-    width: 32px;
-    height: 32px;
-    border-radius: 50%;
-    background-color: var(--color-primary-light, #e8f0fe);
-    color: var(--color-primary, #4285f4);
-    font-weight: bold;
-    font-size: 1.25rem;
-    border: 2px solid currentColor;
+    align-items: baseline;
+    gap: 0.5rem;
   }
 
-  &__title {
-    font-size: 1.75rem;
+  &__hero-highlight {
+    font-size: clamp(2rem, 4vw, 3rem);
+    font-weight: 900;
+    background: linear-gradient(135deg, var(--color-primary-600), var(--color-accent-purple));
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+
+  &__hero-suffix {
+    font-size: clamp(1.5rem, 3vw, 2.2rem);
     font-weight: 700;
-    color: var(--color-text-heading, #202124);
+    color: var(--color-text-muted);
   }
 
-  &__title-highlight {
-    position: relative;
-    z-index: 1;
-    
-    &::after {
-      content: "";
-      position: absolute;
-      bottom: 2px;
-      left: 0;
-      width: 100%;
-      height: 12px;
-      background-color: #fbbf24; 
-      z-index: -1;
-      opacity: 0.6;
-      border-radius: 4px;
+  &__hero-description {
+    margin: 0;
+    font-size: 1.1rem;
+    color: var(--color-text-body);
+    line-height: 1.6;
+
+    strong {
+      color: var(--color-primary);
+      font-weight: 700;
     }
   }
 

@@ -64,99 +64,128 @@ const goMyPage = () => {
 .app-header {
   position: sticky;
   top: 0;
-  z-index: 50;
-  background: linear-gradient(90deg, #2563eb, #0ea5e9);
-  color: #ffffff;
-  box-shadow: 0 4px 12px rgba(15, 23, 42, 0.25);
+  z-index: 100;
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
 
   &__inner {
     max-width: 1200px;
     margin: 0 auto;
-    height: 60px; // ⬅ 높이 키움
+    height: 64px;
     display: flex;
     align-items: center;
-    // justify-content: space-between;
-    padding: 0 2rem; // ⬅ 좌우 여백 조금 더
+    padding: 0 1.5rem;
   }
 
   &__brand {
     display: flex;
     flex-shrink: 0;
     align-items: center;
-    gap: 0.75rem;
+    gap: 0.5rem;
   }
 
   &__logo {
-    width: 30px;
-    height: 30px;
-    border-radius: 999px;
-    background-color: rgba(15, 23, 42, 0.18);
+    width: 36px;
+    height: 36px;
+    border-radius: 10px;
+    background: linear-gradient(135deg, var(--color-primary-400), var(--color-primary-600));
+    color: white;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 1.3rem;
+    font-size: 1.4rem;
+    box-shadow: var(--shadow-md);
   }
 
   &__title {
-    font-size: 1.3rem;
+    font-size: 1.25rem;
     font-weight: 800;
-    letter-spacing: 0.04em;
+    color: var(--color-text-heading);
+    letter-spacing: -0.02em;
   }
 
   &__nav {
     display: flex;
     align-items: center;
-    gap: 3rem;
+    gap: 0.5rem;
     margin-left: auto;
-    margin-right: auto;
+    margin-right: 2rem;
   }
 
   &__nav-link {
-    position: relative;
-    font-size: 1.2rem;
-    font-weight: 500;
-    color: rgba(255, 255, 255, 0.9);
-    padding: 0.35rem 0.6rem;
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: var(--color-text-muted);
+    padding: 0.5rem 1rem;
     border-radius: 999px;
-    transition: all 0.18s ease;
-    border-bottom: 2px solid transparent;
+    transition: all 0.2s var(--ease-spring);
 
     &:hover {
-      background-color: rgba(255, 255, 255, 0.9);
-      color: #0f172a;
+      background-color: var(--color-bg-inset);
+      color: var(--color-primary);
     }
 
     &--active {
-      background-color: #ffffff; // ⬅ 선택된 메뉴 표시
-      color: #0f172a;
-      font-weight: 600;
-      border-bottom-color: transparent;
+      background-color: var(--color-primary-50);
+      color: var(--color-primary);
     }
   }
 
   &__user {
     display: flex;
     align-items: center;
-    gap: 0.5rem;
-    flex-shrink: 0;
+    gap: 0.75rem;
+    padding-left: 1.5rem;
+    border-left: 1px solid var(--color-border);
   }
 
   &__icon-button {
     border: none;
     background: transparent;
     cursor: pointer;
-    font-size: 1.2rem;
+    font-size: 1.25rem;
+    color: var(--color-text-muted);
+    padding: 4px;
+    border-radius: 50%;
+    transition: background-color 0.2s;
+
+    &:hover {
+      background-color: var(--color-bg-inset);
+      color: var(--color-text-heading);
+    }
   }
 
   &__user-name {
+    border: 1px solid var(--color-border);
+    padding: 0.4rem 1rem;
     border-radius: 999px;
-    border: 1px solid rgba(248, 250, 252, 0.75);
-    padding: 0.35rem 0.9rem;
-    background-color: rgba(15, 23, 42, 0.2);
-    color: #f9fafb;
+    background-color: transparent;
+    color: var(--color-text-body);
+    font-size: 0.85rem;
+    font-weight: 600;
     cursor: pointer;
-    font-size: 0.7rem; // ⬅ 글씨 조금 키움
-    font-weight: 500;
+    transition: all 0.2s;
+
+    &:hover {
+      border-color: var(--color-primary-400);
+      color: var(--color-primary);
+      background-color: var(--color-surface);
+    }
+  }
+}
+
+@media (max-width: 768px) {
+  .app-header {
+    &__nav {
+      display: none; // Mobile menu to be implemented later or use hamburger
+    }
+    
+    &__user {
+      margin-left: auto;
+      border-left: none;
+    }
   }
 }
 </style>
