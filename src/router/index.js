@@ -2,7 +2,7 @@ import { createRouter, createWebHistory } from "vue-router";
 
 import WelcomeView from "@/views/WelcomeView.vue";
 import MainView from "@/views/MainView.vue";
-import GuideView from "@/views/GuideView.vue";
+import AboutView from "@/views/AboutView.vue";
 import LeaderboardView from "@/views/LeaderboardView.vue";
 import HistoryView from "@/views/HistoryView.vue";
 import FaqView from "@/views/FaqView.vue";
@@ -24,9 +24,9 @@ const router = createRouter({
       meta: { requiresAuth: true },
     },
     {
-      path: "/guide",
-      name: "guide",
-      component: GuideView,
+      path: "/about",
+      name: "about",
+      component: AboutView,
       meta: { requiresAuth: true },
     },
     {

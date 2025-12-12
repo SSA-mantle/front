@@ -2,26 +2,25 @@
   <div class="page">
     <AppHeader />
 
-    <main class="page__content guide">
-      <section class="guide__hero">
-        <!-- <p class="guide__hero-eyebrow">SSA-mantle 이란?</p> -->
-        <div class="guide__hero-title">
-          <span class="guide__hero-highlight">SSA-mantle</span>
-          <span class="guide__hero-suffix">이란?</span>
+    <main class="page__content about">
+      <section class="about__hero">
+        <div class="about__hero-title">
+          <span class="about__hero-highlight">SSA-mantle</span>
+          <span class="about__hero-suffix">이란?</span>
         </div>
-        <p class="guide__hero-description">
+        <p class="about__hero-description">
           <strong>SSA-mantle(싸맨틀)</strong>은
           <strong>유사도 기반 SSAFY 관련 단어 유추게임</strong>
           입니다.
         </p>
       </section>
 
-      <section class="guide__grid">
-        <GuideHowToCard :items="howToItems" />
-        <GuideTips :tips="tips" />
+      <section class="about__grid">
+        <AboutHowToCard :items="howToItems" />
+        <AboutTips :tips="tips" />
       </section>
 
-      <GuideSampleBanner />
+      <AboutSampleBanner />
     </main>
 
     <AppFooter />
@@ -31,9 +30,9 @@
 <script setup>
 import AppHeader from "@/components/layout/AppHeader.vue";
 import AppFooter from "@/components/layout/AppFooter.vue";
-import GuideHowToCard from "@/components/guide/GuideHowToCard.vue";
-import GuideTips from "@/components/guide/GuideTips.vue";
-import GuideSampleBanner from "@/components/guide/GuideSampleBanner.vue";
+import AboutHowToCard from "@/components/about/AboutHowToCard.vue";
+import AboutTips from "@/components/about/AboutTips.vue";
+import AboutSampleBanner from "@/components/about/AboutSampleBanner.vue";
 
 const howToItems = [
   { number: 1, text: "정답 단어와 의미적으로 가장 유사한 단어를 찾는 게임입니다." },
@@ -65,83 +64,75 @@ const tips = [
 </script>
 
 <style lang="scss" scoped>
-.guide {
-  max-width: 1280px;
+.about {
+  max-width: 1000px; /* Slightly narrower for modern look but wide enough for grid */
   width: 100%;
-  margin: 1.5rem auto 3.5rem;
-  padding: 0 3rem 3rem;
+  margin: 2rem auto 4rem;
+  padding: 0 1.5rem;
   display: flex;
   flex-direction: column;
-  gap: 2rem;
+  gap: 3rem;
 
   &__hero {
     display: flex;
     flex-direction: column;
-    gap: 0.75rem;
-  }
-
-  &__hero-eyebrow {
-    margin: 0;
-    font-size: 1rem;
-    font-weight: 700;
-    color: #3b82f6;
-    letter-spacing: 0.08em;
+    gap: 0.5rem;
+    text-align: center;
+    align-items: center;
   }
 
   &__hero-title {
     display: flex;
-    color: #1e3a8a;
     align-items: baseline;
     gap: 0.5rem;
+    flex-wrap: wrap;
+    justify-content: center;
   }
 
   &__hero-highlight {
-    font-size: clamp(2.4rem, 4vw, 3.6rem);
+    font-size: clamp(2.5rem, 5vw, 3.5rem);
     font-weight: 900;
-    position: relative;
-    padding: 0.1rem 0.4rem;
-
-    &::after {
-      content: "";
-      position: absolute;
-      inset: 60% 0 0;
-      background-color: #fbbf24;
-      border-radius: 6px;
-      z-index: -1;
-    }
+    line-height: 1.1;
+    background: linear-gradient(135deg, var(--color-primary-600), var(--color-accent-purple));
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
   }
 
   &__hero-suffix {
-    font-size: clamp(1.6rem, 3vw, 2.4rem);
+    font-size: clamp(1.8rem, 4vw, 2.5rem);
     font-weight: 700;
-    color: #1e3a8a;
+    color: var(--color-text-heading);
   }
 
   &__hero-description {
-    margin: 0;
-    font-size: 1.2rem;
-    color: #1f2937;
+    margin: 1rem 0 0;
+    font-size: 1.15rem;
+    color: var(--color-text-body);
     line-height: 1.6;
 
     strong {
-      font-weight: 800;
+      color: var(--color-primary);
+      font-weight: 700;
     }
   }
 
   &__grid {
     display: grid;
-    grid-template-columns: 45% 55%;
-    // grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-columns: 1fr 1fr;
     gap: 1.5rem;
   }
 }
 
-@media (max-width: 1024px) {
-  .guide {
-    padding: 0 1.5rem 2.5rem;
-
+@media (max-width: 768px) {
+  .about {
     &__grid {
       grid-template-columns: 1fr;
+    }
+    
+    &__hero-title {
+      flex-direction: column;
+      align-items: center;
     }
   }
 }
