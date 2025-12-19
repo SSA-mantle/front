@@ -17,6 +17,16 @@
       </div>
 
       <div class="auth-card__field">
+        <label class="auth-card__label">닉네임</label>
+        <input
+          v-model="nickname"
+          type="text"
+          class="auth-card__input"
+          placeholder="사용할 닉네임을 입력해주세요"
+        />
+      </div>
+
+      <div class="auth-card__field">
         <label class="auth-card__label">비밀번호</label>
         <input
           v-model="password"
@@ -52,16 +62,20 @@
 
 <script setup>
 import { ref } from "vue";
+import { useAuthStore } from "@/stores/auth";
 
 const emit = defineEmits(["signup-success", "switch-to-login"]);
+const authStore = useAuthStore();
 
 const userId = ref("");
+const nickname = ref("");
 const password = ref("");
 const passwordConfirm = ref("");
 const errorMessage = ref("");
+const isLoading = ref(false);
 
-const onSubmit = () => {
-  if (!userId.value || !password.value || !passwordConfirm.value) {
+const onSubmit = async () => {
+  if (!userId.value || !password.value || !passwordConfirm.value || !nickname.value) {
     errorMessage.value = "모든 정보를 입력해주세요.";
     return;
   }
@@ -72,10 +86,28 @@ const onSubmit = () => {
   }
 
   errorMessage.value = "";
-  emit("signup-success", {
-    userId: userId.value,
-    password: password.value,
-  });
+  isLoading.value = true;
+
+  try {
+    const success = await authStore.signup({
+      email: userId.value,
+      password: password.value,
+      nickname: nickname.value
+    });
+    
+    if (success) {
+      alert("회원가입이 완료되었습니다!");
+      emit("signup-success");
+    }
+  } catch (error) {
+    if (error.response && error.response.data && error.response.data.error) {
+       errorMessage.value = error.response.data.error.message;
+    } else {
+       errorMessage.value = "회원가입 중 오류가 발생했습니다.";
+    }
+  } finally {
+    isLoading.value = false;
+  }
 };
 
 const switchToLogin = () => {
