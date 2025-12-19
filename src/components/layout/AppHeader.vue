@@ -45,18 +45,40 @@
       <div class="app-header__user">
         <button class="app-header__icon-button" @click="goMyPage">👤</button>
         <button class="app-header__user-name" @click="goMyPage">마이페이지</button>
+        <button class="app-header__user-name" @click="handleLogout">로그아웃</button>
       </div>
+
+      <BaseModal :isOpen="showLogoutModal" @close="showLogoutModal = false" title="로그아웃">
+        <div class="logout-content">
+          <p>정상적으로 <span class="highlight">로그아웃</span> 되었습니다!</p>
+        </div>
+        <template #footer>
+          <button class="modal-confirm-btn" @click="confirmLogout">확인</button>
+        </template>
+      </BaseModal>
     </div>
   </header>
 </template>
 
 <script setup>
+import { ref } from "vue";
 import { useRouter, RouterLink } from "vue-router";
+import BaseModal from "@/components/common/BaseModal.vue";
 
 const router = useRouter();
+const showLogoutModal = ref(false);
 
 const goMyPage = () => {
   router.push({ name: "mypage" });
+};
+
+const handleLogout = () => {
+  showLogoutModal.value = true;
+};
+
+const confirmLogout = () => {
+  showLogoutModal.value = false;
+  router.push({ name: "welcome" });
 };
 </script>
 
@@ -109,16 +131,15 @@ const goMyPage = () => {
   &__nav {
     display: flex;
     align-items: center;
-    gap: 0.5rem;
-    margin-left: auto;
-    margin-right: 2rem;
+    gap: 1.5rem; /* Increased gap */
+    margin: 0 auto; /* Center alignment */
   }
 
   &__nav-link {
-    font-size: 0.95rem;
-    font-weight: 600;
+    font-size: 1.1rem; /* Increased font size */
+    font-weight: 700; /* Bolder */
     color: var(--color-text-muted);
-    padding: 0.5rem 1rem;
+    padding: 0.6rem 1.2rem;
     border-radius: 999px;
     transition: all 0.2s var(--ease-spring);
 
@@ -173,6 +194,35 @@ const goMyPage = () => {
       color: var(--color-primary);
       background-color: var(--color-surface);
     }
+  }
+
+  .logout-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    
+    .highlight {
+      color: var(--color-primary);
+      font-weight: 700;
+    }
+  }
+}
+
+.modal-confirm-btn {
+  /* BaseModal passes scoped styles but Teleport moves it out of .app-header */
+  background: linear-gradient(135deg, #3b82f6, #2563eb); /* Modern blue gradient */
+  color: white;
+  width: 100%;
+  box-shadow: 0 4px 6px -1px rgba(37, 99, 235, 0.2), 0 2px 4px -1px rgba(37, 99, 235, 0.1); 
+  
+  &:hover {
+    background: linear-gradient(135deg, #2563eb, #1d4ed8);
+    box-shadow: 0 10px 15px -3px rgba(37, 99, 235, 0.3), 0 4px 6px -2px rgba(37, 99, 235, 0.15);
+    transform: translateY(-1px);
+  }
+
+  &:active {
+    transform: translateY(0);
   }
 }
 
