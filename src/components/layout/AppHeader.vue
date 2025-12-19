@@ -61,12 +61,16 @@
 </template>
 
 <script setup>
-import { ref } from "vue";
+import { ref, computed } from "vue";
 import { useRouter, RouterLink } from "vue-router";
+import { useAuthStore } from "@/stores/auth";
 import BaseModal from "@/components/common/BaseModal.vue";
 
 const router = useRouter();
+const authStore = useAuthStore();
 const showLogoutModal = ref(false);
+
+const nickname = computed(() => authStore.user?.nickname || '마이페이지');
 
 const goMyPage = () => {
   router.push({ name: "mypage" });
@@ -77,6 +81,7 @@ const handleLogout = () => {
 };
 
 const confirmLogout = () => {
+  authStore.logout();
   showLogoutModal.value = false;
   router.push({ name: "welcome" });
 };
