@@ -42,24 +42,42 @@
 
 <script setup>
 import { ref } from "vue";
+import { useAuthStore } from "@/stores/auth";
 
 const emit = defineEmits(["login-success", "switch-to-signup"]);
+const authStore = useAuthStore();
 
 const userId = ref("");
 const password = ref("");
 const errorMessage = ref("");
+const isLoading = ref(false);
 
-const onSubmit = () => {
+const onSubmit = async () => {
   if (!userId.value || !password.value) {
     errorMessage.value = "아이디와 비밀번호를 모두 입력해주세요.";
     return;
   }
 
   errorMessage.value = "";
-  emit("login-success", {
-    userId: userId.value,
-    password: password.value,
-  });
+  isLoading.value = true;
+
+  try {
+    const success = await authStore.login(userId.value, password.value);
+    if (success) {
+      emit("login-success");
+    } else {
+      errorMessage.value = "로그인에 실패했습니다.";
+    }
+  } catch (error) {
+    // API throws error (e.g. 401)
+    if (error.response && error.response.data && error.response.data.error) {
+       errorMessage.value = error.response.data.error.message;
+    } else {
+       errorMessage.value = "서버 오류가 발생했습니다.";
+    }
+  } finally {
+    isLoading.value = false;
+  }
 };
 
 const switchToSignup = () => {

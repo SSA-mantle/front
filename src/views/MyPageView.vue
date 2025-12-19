@@ -13,8 +13,8 @@
             </svg>
           </div>
           <div class="text">
-            <h1 class="username">test님</h1>
-            <p class="user-desc">SSA-mantle 플레이어</p>
+            <h1 class="username">{{ nickname }}님</h1>
+            <p class="user-desc">{{ email }}</p>
           </div>
         </div>
         <router-link to="/profile/edit" class="btn-edit">
@@ -177,8 +177,14 @@
 </template>
 
 <script setup>
+import { computed } from "vue";
+import { useAuthStore } from "@/stores/auth";
 import AppHeader from "@/components/layout/AppHeader.vue";
 import AppFooter from "@/components/layout/AppFooter.vue";
+
+const authStore = useAuthStore();
+const nickname = computed(() => authStore.user?.nickname || '알 수 없음');
+const email = computed(() => authStore.user?.email || '');
 </script>
 
 <style lang="scss" scoped>

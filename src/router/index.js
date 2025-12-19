@@ -68,4 +68,25 @@ const router = createRouter({
   ],
 });
 
+router.beforeEach(async (to, from, next) => {
+  // Pinia Store는 함수 내부에서 호출
+  const { useAuthStore } = await import('@/stores/auth');
+  const authStore = useAuthStore();
+
+  const requiresAuth = to.matched.some((record) => record.meta.requiresAuth);
+
+  // 인증이 필요한 페이지인데 로그인 상태가 아니라면
+  if (requiresAuth && !authStore.isAuthenticated) {
+    // Welcome 페이지로 리다이렉트
+    next({ name: 'welcome' });
+  } else {
+    // 로그인 되어있는데 Welcome 페이지에 접근하면
+    if (to.name === 'welcome' && authStore.isAuthenticated) {
+       next({ name: 'main' });
+    } else {
+       next();
+    }
+  }
+});
+
 export default router;

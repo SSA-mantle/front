@@ -8,6 +8,17 @@ const api = axios.create({
   },
 });
 
+// Mock Interceptor (MUST be attached before request/response interceptors to take precedence? 
+// No, actually we want it to replace the adapter or use a request interceptor to short-circuit)
+// But axios doesn't support short-circuiting in interceptors easily without throwing.
+// Easier approach: Use a custom adapter if Mock mode is on.
+
+if (import.meta.env.VITE_USE_MOCK === 'true') {
+    const { mockHandler } = await import('./mockHandlers');
+    api.defaults.adapter = mockHandler;
+    console.log("⚠️ API Mock Mode Activated");
+}
+
 // Request Interceptor: Add Token
 api.interceptors.request.use(
   (config) => {
