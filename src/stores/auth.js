@@ -52,6 +52,22 @@ export const useAuthStore = defineStore('auth', () => {
     }
   };
 
+  // Update Profile
+  const updateProfile = async (userData) => {
+      try {
+          const data = await authApi.updateUser(userData);
+          if (data.success && data.data) {
+              // Update local state immediately
+              user.value = { ...user.value, ...data.data };
+              return true;
+          }
+          return false;
+      } catch (error) {
+          console.error('Update Profile Failed:', error);
+          throw error;
+      }
+  };
+
   // Logout Action
   const logout = () => {
     user.value = null;
@@ -76,6 +92,8 @@ export const useAuthStore = defineStore('auth', () => {
     login,
     signup,
     logout,
-    fetchUser
+    logout,
+    fetchUser,
+    updateProfile
   };
 });

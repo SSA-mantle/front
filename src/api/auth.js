@@ -24,4 +24,12 @@ export const authApi = {
     const response = await api.post('/auth/refresh', { refreshToken: token });
     return response.data;
   },
+
+  // Update User Info
+  updateUser: async (userData) => {
+    // Using PATCH for partial updates, or PUT. 
+    // Based on "update-user-response.json", we'll assume the endpoint is /users/me
+    const response = await api.patch('/users/me', userData);
+    return response.data;
+  },
 };
