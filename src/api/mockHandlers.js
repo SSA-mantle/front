@@ -4,6 +4,10 @@ import signUpResponseDuplicate from './api-docs/api-docs/users/sign-up-response-
 import getMyInfoResponse from './api-docs/api-docs/users/get-my-info-response.json';
 import refreshResponse from './api-docs/api-docs/auth/refresh-response.json';
 import signInInvalidResponse from './api-docs/api-docs/auth/sign-in-response-invalid-credentials.json';
+import guessResponseCorrect from '../../docs/api-docs/api-docs/games/guess-response-correct.json';
+import guessResponseWrong from '../../docs/api-docs/api-docs/games/guess-response-wrong.json';
+import giveUpResponse from '../../docs/api-docs/api-docs/games/give-up-response.json';
+
 
 // Simple delay function to simulate network latency
 const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
@@ -91,8 +95,40 @@ export const mockHandler = async (config) => {
       };
   }
 
-  // --- Games (Placeholder for future) ---
-  // if (url === '/games/guess' ...)
+  // --- Games ---
+  if (url === '/games/guess' && method === 'post') {
+      const { word, failCount } = JSON.parse(data);
+      
+      // '사과'를 입력하면 정답 처리 (api-docs 예시 기준)
+      if (word === '사과') {
+          return { 
+              data: {
+                  ...guessResponseCorrect,
+                  data: { ...guessResponseCorrect.data, failCount: (failCount || 0) + 1 }
+              }, 
+              status: 200 
+          };
+      }
+      
+      // 그 외에는 오답 처리 (유사도/순위는 일단 고정값 반환)
+      return { 
+          data: {
+              ...guessResponseWrong,
+              data: { 
+                  ...guessResponseWrong.data, 
+                  word, 
+                  failCount: (failCount || 0) + 1,
+                  similarity: (Math.random() * 100).toFixed(2), // TODO: 실제 백엔드 연동 시 제거
+                  rank: Math.floor(Math.random() * 1000) + 1    // TODO: 실제 백엔드 연동 시 제거
+              }
+          }, 
+          status: 200 
+      };
+  }
+
+  if (url === '/games/give-up' && method === 'post') {
+      return { data: giveUpResponse, status: 200 };
+  }
 
   // Default: 404
   console.warn(`[Mock API] Unhandled Request: ${method} ${url}`);
