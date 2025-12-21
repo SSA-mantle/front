@@ -33,7 +33,7 @@ coverage
 /cypress/screenshots/
 
 #Docs
-docs/
+#docs/
 
 # Vitest
 __screenshots__/
