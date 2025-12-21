@@ -3,6 +3,7 @@ import signUpResponse from './api-docs/api-docs/users/sign-up-response.json';
 import signUpResponseDuplicate from './api-docs/api-docs/users/sign-up-response-duplicate-email.json';
 import getMyInfoResponse from './api-docs/api-docs/users/get-my-info-response.json';
 import refreshResponse from './api-docs/api-docs/auth/refresh-response.json';
+import signInInvalidResponse from './api-docs/api-docs/auth/sign-in-response-invalid-credentials.json';
 
 // Simple delay function to simulate network latency
 const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
@@ -21,12 +22,12 @@ export const mockHandler = async (config) => {
       const { email, password } = JSON.parse(data);
       // Simulate Wrong Password
       if (password === 'wrong') {
-           return Promise.reject({
-              response: {
-                  status: 401,
-                  data: { success: false, error: { message: "아이디 또는 비밀번호가 틀렸습니다!" } }
-              }
-          });
+          return Promise.reject({
+             response: {
+                 status: 401,
+                 data: signInInvalidResponse
+             }
+         });
       }
       
       // Update mock user email on login (for consistency if we had multiple users)
@@ -70,6 +71,24 @@ export const mockHandler = async (config) => {
   
   if (url === '/auth/refresh' && method === 'post') {
       return { data: refreshResponse, status: 200 };
+  }
+
+  if (url === '/users/me' && method === 'put') {
+      const { nickname, password } = JSON.parse(data);
+      
+      // Update mockUser
+      if (nickname) mockUser.nickname = nickname;
+      // We don't store password in mockUser for safety/realism, but we acknowledge it
+      
+      // Return updated info (simulating response)
+      return {
+          data: {
+              success: true,
+              data: { ...mockUser, message: "유저 정보가 성공적으로 수정되었습니다." },
+              error: null
+          },
+          status: 200
+      };
   }
 
   // --- Games (Placeholder for future) ---
