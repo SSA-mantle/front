@@ -18,7 +18,7 @@
           <DailyChallengeCard @submit-guess="handleSubmitGuess" />
         </div>
         <div class="main__right">
-          <GuessSummaryCard :guesses="guesses" />
+          <GuessSummaryCard :guesses="gameStore.guesses" />
         </div>
       </section>
     </main>
@@ -28,29 +28,26 @@
 </template>
 
 <script setup>
-import { ref } from "vue";
+import { onMounted } from "vue";
+import { useGameStore } from "@/stores/game";
 
 import AppHeader from "@/components/layout/AppHeader.vue";
 import AppFooter from "@/components/layout/AppFooter.vue";
 import DailyChallengeCard from "@/components/main/DailyChallengeCard.vue";
 import GuessSummaryCard from "@/components/main/GuessSummaryCard.vue";
 
-const guesses = ref([]);
+const gameStore = useGameStore();
 
-// 임시 로직: 입력한 단어를 리스트에 쌓기 (백엔드 붙기 전까지만 사용)
-const handleSubmitGuess = (word) => {
-  const trimmed = word.trim();
-  if (!trimmed) return;
+onMounted(async () => {
+  await gameStore.initializeGame();
+});
 
-  guesses.value = [
-    {
-      id: Date.now(),
-      word: trimmed,
-      attempt: guesses.value.length + 1,
-      similarity: Math.round(Math.random() * 1000) / 10, // 0.0 ~ 100.0 더미
-    },
-    ...guesses.value,
-  ];
+const handleSubmitGuess = async (word) => {
+  try {
+    await gameStore.submitGuess(word);
+  } catch (error) {
+    alert(error.message);
+  }
 };
 </script>
 

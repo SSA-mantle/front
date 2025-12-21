@@ -8,10 +8,13 @@
     <div v-if="!guesses.length" class="summary__empty">아직 입력한 단어가 없습니다.</div>
 
     <ul v-else class="summary__list">
-      <li v-for="guess in limitedGuesses" :key="guess.id" class="summary__item">
+      <li v-for="guess in limitedGuesses" :key="guess.word" class="summary__item">
         <span class="summary__order">{{ guess.attempt }}</span>
         <span class="summary__word">{{ guess.word }}</span>
-        <span class="summary__score">{{ guess.similarity }}%</span>
+        <div class="summary__info-box">
+          <span v-if="guess.rank" class="summary__rank">#{{ guess.rank }}</span>
+          <span class="summary__score">{{ guess.similarity }}%</span>
+        </div>
       </li>
     </ul>
   </section>
@@ -83,7 +86,8 @@ const limitedGuesses = computed(() => {
 
   &__item {
     display: grid;
-    grid-template-columns: 0.4fr 2fr 1fr;
+    grid-template-columns: 36px 1fr auto;
+    gap: 1rem;
     align-items: center;
     padding: 0.75rem 0.9rem;
     border-radius: 0.75rem;
@@ -103,19 +107,36 @@ const limitedGuesses = computed(() => {
     background-color: #f3f7ff;
     color: #1f2937;
     font-weight: 700;
+    font-size: 0.85rem;
     box-shadow: 0 4px 12px rgba(15, 23, 42, 0.04);
   }
 
   &__word {
     font-weight: 700;
     color: #0f172a;
-    padding-left: 0.6rem;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  &__info-box {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 0.1rem;
+  }
+
+  &__rank {
+    font-size: 0.75rem;
+    color: #64748b;
+    font-weight: 600;
   }
 
   &__score {
     text-align: right;
     font-weight: 800;
     color: #1e40af;
+    font-size: 0.95rem;
   }
 
   /* make the list container stand out a bit */
