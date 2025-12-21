@@ -12,7 +12,7 @@
         </p>
       </section>
 
-      <!-- 아래: 왼쪽 Daily Challenge, 오른쪽 추측 단어 카드 -->
+      <!-- 아래: 게임 영역 -->
       <section class="main__row">
         <div class="main__left">
           <DailyChallengeCard @submit-guess="handleSubmitGuess" />

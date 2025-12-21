@@ -99,7 +99,7 @@ export const mockHandler = async (config) => {
   if (url === '/games/guess' && method === 'post') {
       const { word, failCount } = JSON.parse(data);
       
-      // '사과'를 입력하면 정답 처리 (api-docs 예시 기준)
+      // '사과'를 입력하면 정답 처리
       if (word === '사과') {
           return { 
               data: {

@@ -22,7 +22,7 @@
           v-model="nickname"
           type="text"
           class="auth-card__input"
-          placeholder="사용할 닉네임을 입력해주세요"
+          placeholder="사용하실 닉네임을 입력해주세요"
         />
       </div>
 
