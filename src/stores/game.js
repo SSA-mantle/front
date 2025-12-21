@@ -73,6 +73,7 @@ export const useGameStore = defineStore('game', () => {
         similarity: result.similarity,
         rank: result.rank,
         isCorrect: result.isCorrect,
+        attempt: failCount.value + 1,
       };
 
       // 정렬 logic: 유사도 높은 순으로 내림차순 정렬 (정답이 최상단)

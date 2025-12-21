@@ -5,29 +5,50 @@
     </div>
 
     <div class="daily-card__body">
-      <div class="daily-card__info">오늘의 단어를 맞춰보세요!</div>
+      <div v-if="!isGameOver" class="daily-card__info">오늘의 단어를 맞춰보세요!</div>
+      <div v-else-if="gameStore.status === 'success'" class="daily-card__info daily-card__info--success">
+        축하합니다! 정답은 <span class="daily-card__answer">'{{ gameStore.answer }}'</span> 입니다.
+      </div>
+      <div v-else class="daily-card__info daily-card__info--fail">
+        아쉽네요. 정답은 <span class="daily-card__answer">'{{ gameStore.answer }}'</span> 이었습니다.
+      </div>
 
-      <form class="daily-card__form" @submit.prevent="onSubmit">
+      <form v-if="!isGameOver" class="daily-card__form" @submit.prevent="onSubmit">
         <input
           v-model="guess"
           class="daily-card__input"
+          :class="{ 'daily-card__input--error': errorMessage }"
           type="text"
           placeholder="단어를 입력하세요"
         />
         <button type="submit" class="daily-card__button">입력</button>
       </form>
+      
+      <p v-if="errorMessage" class="daily-card__error">{{ errorMessage }}</p>
 
-      <button type="button" class="daily-card__giveup">포기하고 정답 보기</button>
+      <button 
+        v-if="!isGameOver" 
+        type="button" 
+        class="daily-card__giveup"
+        @click="handleGiveUp"
+      >
+        포기하고 정답 보기
+      </button>
     </div>
   </section>
 </template>
 
 <script setup>
 import { computed, ref } from "vue";
+import { useGameStore } from "@/stores/game";
 
 const emit = defineEmits(["submit-guess"]);
 
+const gameStore = useGameStore();
 const guess = ref("");
+const errorMessage = ref("");
+
+const isGameOver = computed(() => gameStore.status !== "playing");
 
 const todayLabel = computed(() => {
   const d = new Date();
@@ -40,9 +61,29 @@ const todayLabel = computed(() => {
 const challengeNo = 142;
 
 const onSubmit = () => {
-  if (!guess.value.trim()) return;
-  emit("submit-guess", guess.value);
+  errorMessage.value = "";
+  const trimmed = guess.value.trim();
+  
+  if (!trimmed) return;
+  
+  // 중복 체크 (Store에서도 하지만 UI에서 즉시 피드백)
+  if (gameStore.guesses.some(g => g.word === trimmed)) {
+    errorMessage.value = "이미 시도한 단어입니다.";
+    return;
+  }
+
+  emit("submit-guess", trimmed);
   guess.value = "";
+};
+
+const handleGiveUp = async () => {
+  if (confirm("정말로 포기하시겠습니까? 정답이 공개됩니다.")) {
+    try {
+      await gameStore.giveUp();
+    } catch (error) {
+      alert("포기 처리에 실패했습니다.");
+    }
+  }
 };
 </script>
 
@@ -84,10 +125,20 @@ const onSubmit = () => {
   }
 
   &__info {
-    margin-top: 0;
-    font-size: 1.12rem;
-    font-weight: 800;
     margin-bottom: 1rem;
+    color: var(--color-text-heading);
+
+    &--success {
+      color: #059669;
+    }
+    &--fail {
+      color: #dc2626;
+    }
+  }
+
+  &__answer {
+    color: #4f46e5;
+    font-weight: 900;
   }
 
   &__form {
@@ -113,6 +164,18 @@ const onSubmit = () => {
       border-color: #1e40af;
       box-shadow: 0 6px 18px rgba(37, 99, 235, 0.12);
     }
+
+    &--error {
+      border-color: #ef4444 !important;
+      background-color: #fef2f2;
+    }
+  }
+
+  &__error {
+    color: #ef4444;
+    font-size: 0.85rem;
+    margin: 0.5rem 0 0 0.5rem;
+    font-weight: 600;
   }
 
   &__button {
