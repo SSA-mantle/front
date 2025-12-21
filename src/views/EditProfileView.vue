@@ -103,18 +103,29 @@
 </template>
 
 <script setup>
-import { ref, computed } from "vue";
+import { ref, computed, onMounted, watch } from "vue"; // watch added for reactivity
 import { useRouter } from "vue-router";
+import { useAuthStore } from "@/stores/auth";
 import AppHeader from "@/components/layout/AppHeader.vue";
 import AppFooter from "@/components/layout/AppFooter.vue";
 
 const router = useRouter();
+const authStore = useAuthStore();
 
 const form = ref({
-  nickname: "test",
+  nickname: "",
   newPassword: "",
   confirmPassword: "",
 });
+
+// Load user data into form
+// We use a watcher to update the form if the store loads data late (e.g. reload on this page)
+watch(() => authStore.user, (newUser) => {
+    if (newUser) {
+        form.value.nickname = newUser.nickname || "";
+    }
+}, { immediate: true });
+
 
 const showDeleteModal = ref(false);
 
@@ -128,16 +139,29 @@ const cancelEdit = () => {
   }
 };
 
-const saveChanges = () => {
+const saveChanges = async () => {
   if (form.value.newPassword && !isPasswordMatch.value) {
     alert("새 비밀번호가 일치하지 않습니다.");
     return;
   }
 
   if (confirm("정보를 수정하시겠습니까?")) {
-    // TODO: API Call to update profile
-    alert("회원 정보가 수정되었습니다");
-    router.push("/mypage");
+    try {
+      const success = await authStore.updateProfile({ 
+          nickname: form.value.nickname,
+          password: form.value.newPassword || undefined // Only send if set
+      });
+      
+      if (success) {
+        alert("회원 정보가 수정되었습니다");
+        router.push("/mypage");
+      } else {
+        alert("정보 수정에 실패했습니다.");
+      }
+    } catch (error) {
+       console.error(error);
+       alert("오류가 발생했습니다.");
+    }
   }
 };
 
