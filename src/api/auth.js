@@ -27,9 +27,8 @@ export const authApi = {
 
   // Update User Info
   updateUser: async (userData) => {
-    // Using PATCH for partial updates, or PUT. 
-    // Based on "update-user-response.json", we'll assume the endpoint is /users/me
-    const response = await api.patch('/users/me', userData);
+    // Based on "update-user-response.json"
+    const response = await api.put('/users/me', userData);
     return response.data;
   },
 };
