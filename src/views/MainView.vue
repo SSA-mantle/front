@@ -3,32 +3,45 @@
     <AppHeader />
 
     <main class="page__content main">
-      <!-- 가운데 로고 + 타이틀 영역 -->
-      <section class="main__hero">
-        <div class="main__logo-circle">
-          <img :src="logoImg" alt="SSA-mantle Logo" class="main__logo-img" />
-        </div>
-        <h1 class="main__title">SSA-mantle</h1>
-        <p class="main__subtitle">
-          <span class="main__subtitle-strong">유사도 기반 단어 유추 게임</span>
-        </p>
-      </section>
-
-      <!-- 아래: 게임 영역 (게임 종료 시 2컬럼 레이아웃) -->
-      <div
-        class="main__game-container"
-        :class="{ 'main__game-container--split': isGameOver }"
-      >
-        <section class="main__challenge">
-          <DailyChallengeCard />
+      <transition name="intro-fade" mode="out-in">
+        <!-- 인트로 모드: 로그인 후 처음 진입 시 -->
+        <section v-if="showIntro" class="main__intro" @click="closeIntro">
+          <div class="main__intro-logo">
+            <img :src="logoImg" alt="SSA-mantle Logo" class="main__intro-img" />
+          </div>
+          <div class="main__intro-hint">Click to Start</div>
         </section>
 
-        <transition name="fade-scale">
-          <section v-if="isGameOver" class="main__result">
-            <GameResultSection />
+        <!-- 실제 메인 게임 콘텐츠 -->
+        <div v-else class="main__actual-content">
+          <!-- 가운데 로고 + 타이틀 영역 -->
+          <section class="main__hero">
+            <div class="main__logo-circle">
+              <img :src="logoImg" alt="SSA-mantle Logo" class="main__logo-img" />
+            </div>
+            <h1 class="main__title">SSA-mantle</h1>
+            <p class="main__subtitle">
+              <span class="main__subtitle-strong">유사도 기반 단어 유추 게임</span>
+            </p>
           </section>
-        </transition>
-      </div>
+
+          <!-- 아래: 게임 영역 (게임 종료 시 2컬럼 레이아웃) -->
+          <div
+            class="main__game-container"
+            :class="{ 'main__game-container--split': isGameOver }"
+          >
+            <section class="main__challenge">
+              <DailyChallengeCard />
+            </section>
+
+            <transition name="fade-scale">
+              <section v-if="isGameOver" class="main__result">
+                <GameResultSection />
+              </section>
+            </transition>
+          </div>
+        </div>
+      </transition>
     </main>
 
     <AppFooter />
@@ -36,7 +49,7 @@
 </template>
 
 <script setup>
-import { onMounted, computed } from "vue";
+import { ref, onMounted, computed } from "vue";
 import { useGameStore } from "@/stores/game";
 
 import AppHeader from "@/components/layout/AppHeader.vue";
@@ -47,6 +60,15 @@ import logoImg from "@/assets/logo.png";
 
 const gameStore = useGameStore();
 const isGameOver = computed(() => gameStore.status !== "playing");
+
+// 인트로 표시 여부 초기값 설정 (flicker 방지)
+const hasSeenIntro = typeof window !== 'undefined' ? !!sessionStorage.getItem("ssa_intro_seen") : true;
+const showIntro = ref(!hasSeenIntro);
+
+const closeIntro = () => {
+  showIntro.value = false;
+  sessionStorage.setItem("ssa_intro_seen", "true");
+};
 
 onMounted(async () => {
   await gameStore.initializeGame();
@@ -60,29 +82,62 @@ onMounted(async () => {
   margin: 2rem auto 4rem;
   padding: 0 1.5rem;
 
+  &__intro {
+    height: 70vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    gap: 2rem;
+  }
+
+  &__intro-logo {
+    width: 320px;
+    height: 320px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    animation: float-rotate 6s ease-in-out infinite;
+    
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+    }
+  }
+
+  &__intro-hint {
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: var(--color-primary);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    animation: pulse 2s ease-in-out infinite;
+  }
+
+  &__actual-content {
+    animation: slide-up 0.8s var(--ease-spring);
+  }
+
   &__hero {
     text-align: center;
     margin-bottom: 3.5rem;
   }
 
   &__logo-circle {
-    width: 300px;
-    height: 300px;
-    margin: 0 auto 1.2rem;
-    border-radius: 40px;
-    background: #eff6ff;
+    width: 240px;
+    height: 240px;
+    margin: 0 auto 1.5rem;
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 20px; // Padding for the larger 300px size
-    box-shadow: 0 20px 50px rgba(30, 64, 175, 0.1);
-    transform: rotate(-5deg);
     transition: all 0.4s var(--ease-spring);
-    overflow: hidden;
+    animation: float-rotate 6s ease-in-out infinite;
 
     &:hover {
-      transform: rotate(0deg) scale(1.08);
-      box-shadow: 0 20px 40px rgba(30, 64, 175, 0.25);
+      transform: scale(1.08) rotate(0deg);
+      animation-play-state: paused;
     }
   }
 
@@ -138,7 +193,32 @@ onMounted(async () => {
   }
 }
 
-// Custom Scaling Transition for Result Section
+// Keyframes
+@keyframes float-rotate {
+  0%, 100% { transform: rotate(-5deg) translateY(0); }
+  50% { transform: rotate(5deg) translateY(-15px); }
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 0.5; transform: scale(1); }
+  50% { opacity: 1; transform: scale(1.05); }
+}
+
+@keyframes slide-up {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+// Transitions
+.intro-fade-enter-active, .intro-fade-leave-active {
+  transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.intro-fade-enter-from, .intro-fade-leave-to {
+  opacity: 0;
+  transform: scale(1.1);
+  filter: blur(10px);
+}
+
 .fade-scale-enter-active, .fade-scale-leave-active {
   transition: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
@@ -151,11 +231,16 @@ onMounted(async () => {
 @media (max-width: 1024px) {
   .main {
     &__game-container--split {
-      grid-template-columns: 1fr; // Stack columns on smaller screens
+      grid-template-columns: 1fr;
     }
 
     &__hero {
       margin-bottom: 2.5rem;
+    }
+
+    &__intro-logo {
+      width: 240px;
+      height: 240px;
     }
   }
 }

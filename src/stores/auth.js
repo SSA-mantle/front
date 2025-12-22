@@ -76,6 +76,7 @@ export const useAuthStore = defineStore('auth', () => {
     refreshToken.value = null;
     localStorage.removeItem('accessToken');
     localStorage.removeItem('refreshToken');
+    sessionStorage.removeItem('ssa_intro_seen');
   };
 
   // Helper: Set Token
