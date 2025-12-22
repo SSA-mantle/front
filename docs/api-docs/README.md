@@ -12,10 +12,16 @@
 3. [회원가입](#3-회원가입)
 4. [내 정보 조회](#4-내-정보-조회)
 5. [사용자 정보 수정](#5-사용자-정보-수정)
+6. [내 게임 통계 조회](#6-내-게임-통계-조회)
 
 ### 게임 API
-6. [단어 추측 제출](#6-단어-추측-제출)
-7. [게임 포기](#7-게임-포기)
+7. [단어 추측 제출](#7-단어-추측-제출)
+8. [게임 포기](#8-게임-포기)
+9. [오늘 정답 이력 조회](#9-오늘-정답-이력-조회)
+10. [어제 정답 이력 조회](#10-어제-정답-이력-조회)
+
+### 리더보드 API
+11. [리더보드 조회](#11-리더보드-조회)
 
 ---
 
@@ -120,7 +126,7 @@ Content-Type: application/json
 
 ### Endpoint
 ```
-POST /api/v1/users/sign-up
+POST /api/v1/users
 ```
 
 ### Headers
@@ -189,7 +195,7 @@ Content-Type: application/json
 
 ### Endpoint
 ```
-GET /api/v1/users/my-info
+GET /api/v1/users/me
 ```
 
 ### Headers
@@ -233,7 +239,7 @@ Authorization: Bearer {accessToken}
 
 ### Endpoint
 ```
-PATCH /api/v1/users
+PATCH /api/v1/users/me
 ```
 
 ### Headers
@@ -276,9 +282,56 @@ Content-Type: application/json
 
 ---
 
+## 6. 내 게임 통계 조회
+
+### Endpoint
+```
+GET /api/v1/users/me/statistics
+```
+
+### Headers
+```
+Authorization: Bearer {accessToken}
+```
+
+### Request Body
+요청 본문 없음
+
+### Response - 성공 (200 OK)
+```json
+{
+  "success": true,
+  "data": {
+    "userId": 1,
+    "totalGamesPlayed": 50,
+    "successfulGames": 35,
+    "winRate": 70.0,
+    "bestRank": 3,
+    "longestConsecutiveDays": 15,
+    "averageAttempts": 4.2
+  },
+  "error": null
+}
+```
+
+파일: [get-my-statistics-response.json](./users/get-my-statistics-response.json)
+
+### 필드 설명
+| 필드 | 타입 | 설명 |
+|------|------|------|
+| userId | integer | 사용자 ID |
+| totalGamesPlayed | integer | 총 게임 플레이 횟수 |
+| successfulGames | integer | 성공한 게임 횟수 |
+| winRate | double | 승률 (0.0 ~ 100.0) |
+| bestRank | integer | 최고 등수 (null 가능) |
+| longestConsecutiveDays | integer | 최장 연속 풀이 일수 |
+| averageAttempts | double | 평균 시도 횟수 |
+
+---
+
 # 게임 API
 
-## 6. 단어 추측 제출
+## 7. 단어 추측 제출
 
 ### Endpoint
 ```
@@ -369,7 +422,7 @@ Content-Type: application/json
 
 ---
 
-## 7. 게임 포기
+## 8. 게임 포기
 
 ### Endpoint
 ```
@@ -414,6 +467,252 @@ Content-Type: application/json
 ```
 
 파일: [give-up-response-no-game.json](./games/give-up-response-no-game.json)
+
+---
+
+## 9. 오늘 정답 이력 조회
+
+### Endpoint
+```
+GET /api/v1/games/answer-history/today
+```
+
+### Headers
+```
+Authorization: Bearer {accessToken}
+```
+
+### Request Body
+요청 본문 없음
+
+### 설명
+오늘 문제의 정답 단어와 유사도 상위 100개 단어를 조회합니다.
+**문제를 풀었거나 포기해야만 조회 가능**합니다. 진행 중인 경우 answer와 top100Words는 null을 반환합니다.
+
+### Response - 성공 (권한 있음, 200 OK)
+```json
+{
+  "success": true,
+  "data": {
+    "date": "2025-12-22",
+    "answer": "사과",
+    "top100Words": [
+      {
+        "word": "과일",
+        "similarity": 95.5,
+        "rank": 1
+      },
+      {
+        "word": "배",
+        "similarity": 92.3,
+        "rank": 2
+      },
+      {
+        "word": "바나나",
+        "similarity": 89.1,
+        "rank": 3
+      }
+    ]
+  },
+  "error": null
+}
+```
+
+파일: [answer-history-today-response.json](./games/answer-history-today-response.json)
+
+### Response - 성공 (권한 없음, 200 OK)
+문제를 풀지 않았거나 진행 중인 경우
+```json
+{
+  "success": true,
+  "data": {
+    "date": "2025-12-22",
+    "answer": null,
+    "top100Words": null
+  },
+  "error": null
+}
+```
+
+파일: [answer-history-today-response-no-permission.json](./games/answer-history-today-response-no-permission.json)
+
+### Response - 문제가 없는 경우 (200 OK)
+```json
+{
+  "success": true,
+  "data": {
+    "date": "2025-12-22",
+    "answer": null,
+    "top100Words": null
+  },
+  "error": null
+}
+```
+
+파일: [answer-history-response-no-problem.json](./games/answer-history-response-no-problem.json)
+
+---
+
+## 10. 어제 정답 이력 조회
+
+### Endpoint
+```
+GET /api/v1/games/answer-history/yesterday
+```
+
+### Headers
+```
+Authorization: Bearer {accessToken}
+```
+
+### Request Body
+요청 본문 없음
+
+### 설명
+어제 문제의 정답 단어와 유사도 상위 100개 단어를 조회합니다.
+**권한 확인 없이 누구나 조회 가능**합니다.
+
+### Response - 성공 (200 OK)
+```json
+{
+  "success": true,
+  "data": {
+    "date": "2025-12-21",
+    "answer": "딸기",
+    "top100Words": [
+      {
+        "word": "과일",
+        "similarity": 94.2,
+        "rank": 1
+      },
+      {
+        "word": "사과",
+        "similarity": 91.8,
+        "rank": 2
+      },
+      {
+        "word": "체리",
+        "similarity": 88.5,
+        "rank": 3
+      }
+    ]
+  },
+  "error": null
+}
+```
+
+파일: [answer-history-yesterday-response.json](./games/answer-history-yesterday-response.json)
+
+### 필드 설명
+| 필드 | 타입 | 설명 |
+|------|------|------|
+| date | string | 문제 날짜 (YYYY-MM-DD) |
+| answer | string \| null | 정답 단어 (권한이 없거나 문제가 없으면 null) |
+| top100Words | array \| null | 유사도 상위 100개 단어 (권한이 없거나 문제가 없으면 null) |
+| word | string | 단어 |
+| similarity | double | 유사도 (0.0 ~ 100.0) |
+| rank | integer | 순위 (1부터 시작) |
+
+---
+
+# 리더보드 API
+
+## 11. 리더보드 조회
+
+### Endpoint
+```
+GET /api/v1/leaderboard?date=2025-12-22
+```
+
+### Headers
+```
+Authorization: Bearer {accessToken}
+```
+
+### Query Parameters
+| 파라미터 | 타입 | 필수 | 설명 |
+|---------|------|------|------|
+| date | string (YYYY-MM-DD) | 아니오 | 조회할 날짜 (생략 시 오늘 날짜) |
+
+### Request Body
+요청 본문 없음
+
+### Response - 성공 (200 OK)
+```json
+{
+  "success": true,
+  "data": {
+    "date": "2025-12-22",
+    "topRankers": [
+      {
+        "rank": 1,
+        "nickname": "유저1",
+        "failCount": 2,
+        "solvedAt": "2025-12-22T08:15:30"
+      },
+      {
+        "rank": 2,
+        "nickname": "유저2",
+        "failCount": 3,
+        "solvedAt": "2025-12-22T09:20:15"
+      },
+      {
+        "rank": 3,
+        "nickname": "유저3",
+        "failCount": 3,
+        "solvedAt": "2025-12-22T10:05:42"
+      }
+    ],
+    "myRank": {
+      "rank": 15,
+      "nickname": "내닉네임",
+      "failCount": 5,
+      "solvedAt": "2025-12-22T14:30:25"
+    }
+  },
+  "error": null
+}
+```
+
+파일: [get-leaderboard-response.json](./leaderboard/get-leaderboard-response.json)
+
+### Response - 내 순위가 없는 경우 (200 OK)
+문제를 풀지 않았거나 포기한 경우 `myRank`가 `null`입니다.
+```json
+{
+  "success": true,
+  "data": {
+    "date": "2025-12-22",
+    "topRankers": [
+      {
+        "rank": 1,
+        "nickname": "유저1",
+        "failCount": 2,
+        "solvedAt": "2025-12-22T08:15:30"
+      }
+    ],
+    "myRank": null
+  },
+  "error": null
+}
+```
+
+파일: [get-leaderboard-response-no-my-rank.json](./leaderboard/get-leaderboard-response-no-my-rank.json)
+
+### 필드 설명
+| 필드 | 타입 | 설명 |
+|------|------|------|
+| date | string | 리더보드 날짜 (YYYY-MM-DD) |
+| topRankers | array | 상위 랭커 목록 (최대 100명) |
+| myRank | object \| null | 내 순위 정보 (문제를 풀지 않았으면 null) |
+| rank | integer | 순위 (1부터 시작) |
+| nickname | string | 닉네임 |
+| failCount | integer | 실패 횟수 |
+| solvedAt | datetime | 문제 해결 시각 (ISO 8601) |
+
+### 순위 결정 규칙
+1. `failCount` 오름차순 (시도 횟수가 적을수록 높은 순위)
+2. `failCount`가 같으면 `solvedAt` 오름차순 (먼저 푼 사람이 높은 순위)
 
 ---
 
