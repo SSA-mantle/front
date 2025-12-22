@@ -201,7 +201,16 @@ export const mockHandler = async (config) => {
   }
 
   if (url === '/games/answer-history/today' && method === 'get') {
-      return { data: todayHistoryResponse, status: 200 };
+      return {
+          data: {
+              ...todayHistoryResponse,
+              data: {
+                  ...todayHistoryResponse.data,
+                  description: "사과는 장미과 사과나무속에 속하는 식물의 열매로, 전 세계적으로 가장 많이 재배되고 소비되는 과일 중 하나입니다. 아삭한 식감과 달콤하면서도 상큼한 맛이 특징입니다."
+              }
+          },
+          status: 200
+      };
   }
 
   if (url === '/games/answer-history/yesterday' && method === 'get') {
