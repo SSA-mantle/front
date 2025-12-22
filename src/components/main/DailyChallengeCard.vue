@@ -11,7 +11,11 @@
       <div v-if="!isGameOver" class="daily-card__info">오늘의 단어를 맞춰보세요!</div>
 
       <!-- Result Message for Success -->
-      <div v-else-if="gameStore.status === 'success'" class="daily-card__result daily-card__result--success">
+      <div 
+        v-else-if="gameStore.status === 'success'" 
+        class="daily-card__result daily-card__result--success"
+        :class="{ animate: shouldAnimate }"
+      >
         <div class="daily-card__result-icon">🎉</div>
         <div class="daily-card__result-text">
           축하합니다! 정답은 <span class="daily-card__answer">{{ gameStore.answer }}</span> 입니다.
@@ -19,7 +23,11 @@
       </div>
 
       <!-- Result Message for Failure -->
-      <div v-else class="daily-card__result daily-card__result--fail">
+      <div 
+        v-else 
+        class="daily-card__result daily-card__result--fail"
+        :class="{ animate: shouldAnimate }"
+      >
         <div class="daily-card__result-icon">💡</div>
         <div class="daily-card__result-text">
           아쉽네요. 정답은 <span class="daily-card__answer">{{ gameStore.answer }}</span> 이었습니다.
@@ -98,8 +106,15 @@
 </template>
 
 <script setup>
-import { computed, ref } from "vue";
+import { computed, ref, defineProps } from "vue";
 import { useGameStore } from "@/stores/game";
+
+const props = defineProps({
+  shouldAnimate: {
+    type: Boolean,
+    default: false
+  }
+});
 
 const gameStore = useGameStore();
 const guess = ref("");
@@ -232,9 +247,12 @@ const handleGiveUp = async () => {
     border-radius: 0.75rem;
     margin-bottom: 1rem;
     text-align: center;
-    animation: slide-up-result 0.5s ease-out;
     border-width: 1px;
     border-style: solid;
+
+    &.animate {
+      animation: slide-up-result 0.5s ease-out both;
+    }
 
     &--success {
       background-color: #f0fdf4;

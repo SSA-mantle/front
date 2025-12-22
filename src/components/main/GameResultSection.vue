@@ -1,7 +1,7 @@
 <template>
   <aside class="result-section">
     <!-- Answer Header Card (Style similar to HistoryAnswerCard) -->
-    <div class="result-section__answer answer-card">
+    <div class="result-section__answer answer-card" :class="{ animate: shouldAnimate }">
       <div class="answer-card__header">
         <span class="answer-card__badge">오늘의 정답</span>
         <p class="answer-card__date">{{ todayFullDate }}</p>
@@ -32,7 +32,7 @@
     </div>
 
     <!-- Top 100 List (Style similar to HistorySimilarityList) -->
-    <div class="result-section__list similarity-list">
+    <div class="result-section__list similarity-list" :class="{ animate: shouldAnimate }">
       <header class="similarity-list__header">
         <div>
           <h3 class="similarity-list__title">유사도 상위 단어 100개</h3>
@@ -68,6 +68,13 @@
 <script setup>
 import { ref, computed, onMounted } from 'vue';
 import { useGameStore } from '@/stores/game';
+
+const props = defineProps({
+  shouldAnimate: {
+    type: Boolean,
+    default: false
+  }
+});
 
 const gameStore = useGameStore();
 const showDescription = ref(true);
@@ -126,7 +133,10 @@ onMounted(async () => {
     padding: 1.5rem;
     box-shadow: 0 10px 25px rgba(30, 64, 175, 0.05);
     border: 1px solid #bfdbfe;
-    animation: slide-in-top 0.7s cubic-bezier(0.16, 1, 0.3, 1) 0.5s both; // 0.5s delay to wait for grid shift
+
+    &.animate {
+      animation: slide-in-top 0.7s cubic-bezier(0.16, 1, 0.3, 1) 0.5s both;
+    }
 
     &__header {
       display: flex;
@@ -237,7 +247,10 @@ onMounted(async () => {
     padding: 1.5rem;
     box-shadow: 0 10px 25px rgba(0, 0, 0, 0.03);
     border: 1px solid #e2e8f0;
-    animation: slide-in-bottom 0.7s cubic-bezier(0.16, 1, 0.3, 1) 1.1s both; // Starts after answer card
+
+    &.animate {
+      animation: slide-in-bottom 0.7s cubic-bezier(0.16, 1, 0.3, 1) 1.1s both;
+    }
 
     &__header { margin-bottom: 1.25rem; }
     &__title { margin: 0; font-size: 1.15rem; font-weight: 800; color: #1e293b; }

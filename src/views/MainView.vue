@@ -13,7 +13,11 @@
         </section>
 
         <!-- 실제 메인 게임 콘텐츠 -->
-        <div v-else class="main__actual-content">
+        <div 
+          v-else 
+          class="main__actual-content"
+          :class="{ 'main--animate': isFirstEntrance }"
+        >
           <!-- 가운데 로고 + 타이틀 영역 -->
           <section class="main__hero">
             <div class="main__logo-circle">
@@ -31,12 +35,12 @@
             :class="{ 'main__game-container--split': isGameOver }"
           >
             <section class="main__challenge">
-              <DailyChallengeCard />
+              <DailyChallengeCard :should-animate="isFirstEntrance || showResultAnimation" />
             </section>
 
-            <transition name="fade-scale">
+            <transition :name="showResultAnimation ? 'fade-scale' : ''">
               <section v-if="isGameOver" class="main__result">
-                <GameResultSection />
+                <GameResultSection :should-animate="isFirstEntrance || showResultAnimation" />
               </section>
             </transition>
           </div>
@@ -61,14 +65,33 @@ import logoImg from "@/assets/logo.png";
 const gameStore = useGameStore();
 const isGameOver = computed(() => gameStore.status !== "playing");
 
-// 인트로 표시 여부 초기값 설정 (flicker 방지)
+// 인트로 표시 여부 확인
 const hasSeenIntro = typeof window !== 'undefined' ? !!sessionStorage.getItem("ssa_intro_seen") : true;
 const showIntro = ref(!hasSeenIntro);
 
+// 처음 진입 애니메이션 제어 (인트로 클릭 후 1회만)
+const isFirstEntrance = ref(false);
+
 const closeIntro = () => {
   showIntro.value = false;
+  isFirstEntrance.value = true; // 인트로 닫을 때만 애니메이션 활성화
   sessionStorage.setItem("ssa_intro_seen", "true");
 };
+
+// 정답 처리 애니메이션 제어 (게임 종료 시 1회만)
+const showResultAnimation = ref(false);
+
+const stopResultAnimation = () => {
+  showResultAnimation.value = false;
+};
+
+// 게임 상태 모니터링하여 새로 정답을 맞혔을 때만 애니메이션 적용
+import { watch } from "vue";
+watch(isGameOver, (newValue, oldValue) => {
+  if (newValue === true && oldValue === false) {
+    showResultAnimation.value = true;
+  }
+});
 
 onMounted(async () => {
   await gameStore.initializeGame();
@@ -116,9 +139,7 @@ onMounted(async () => {
     animation: pulse 2s ease-in-out infinite;
   }
 
-  &__actual-content {
-    animation: slide-up 0.8s var(--ease-spring);
-  }
+
 
   &__hero {
     text-align: center;
@@ -181,6 +202,18 @@ onMounted(async () => {
 
     &--split {
       grid-template-columns: 1fr 1fr;
+    }
+  }
+
+  // First-time Entrance Animations
+  &--animate {
+    .main__hero {
+      animation: slide-up 0.8s var(--ease-spring) both;
+      animation-delay: 0.1s;
+    }
+    .main__game-container {
+      animation: slide-up 0.8s var(--ease-spring) both;
+      animation-delay: 0.4s;
     }
   }
 
