@@ -1,6 +1,7 @@
 import { ref, computed } from 'vue';
 import { defineStore } from 'pinia';
-import { authApi } from '@/api/auth';
+import { signIn } from '@/api/auth';
+import { signUp, getMyInfo, updateUser } from '@/api/users';
 
 export const useAuthStore = defineStore('auth', () => {
   const user = ref(null);
@@ -12,7 +13,7 @@ export const useAuthStore = defineStore('auth', () => {
   // Login Action
   const login = async (email, password) => {
     try {
-      const data = await authApi.signIn(email, password);
+      const data = await signIn(email, password);
       // Assuming response structure matches docs: { success: true, data: { accessToken, refreshToken, ... } }
       // Adjust based on actual response structure if needed
       if (data.success && data.data) {
@@ -30,7 +31,7 @@ export const useAuthStore = defineStore('auth', () => {
   // Sign Up Action
   const signup = async (userData) => {
       try {
-          const data = await authApi.signUp(userData);
+          const data = await signUp(userData);
           return data.success;
       } catch (error) {
           console.error('Signup Failed:', error);
@@ -42,7 +43,7 @@ export const useAuthStore = defineStore('auth', () => {
   // Fetch User Info
   const fetchUser = async () => {
     try {
-      const data = await authApi.getMyInfo();
+      const data = await getMyInfo();
       if (data.success) {
         user.value = data.data;
       }
@@ -55,7 +56,7 @@ export const useAuthStore = defineStore('auth', () => {
   // Update Profile
   const updateProfile = async (userData) => {
       try {
-          const data = await authApi.updateUser(userData);
+          const data = await updateUser(userData);
           if (data.success && data.data) {
               // Update local state immediately
               user.value = { ...user.value, ...data.data };
