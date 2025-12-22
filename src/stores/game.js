@@ -1,12 +1,14 @@
 import { ref, computed } from 'vue';
 import { defineStore } from 'pinia';
-import { guessWord, giveUpGame } from '@/api/game';
+import { guessWord, giveUpGame, getTodayHistory } from '@/api/game';
 
 export const useGameStore = defineStore('game', () => {
   // --- State ---
   const guesses = ref([]); // 추측 단어 리스트: { word, similarity, rank, isCorrect }
   const status = ref('playing'); // 'playing', 'success', 'giveup'
   const answer = ref(null); // 정답 단어 (게임 종료 시)
+  const answerDescription = ref(null); // 정답 단어 설명
+  const top100Words = ref([]); // 유사도 상위 100개 단어
   const failCount = computed(() => guesses.value.length);
   const gameDate = ref(new Date().toISOString().split('T')[0]); // 오늘 날짜 (YYYY-MM-DD)
 
@@ -18,6 +20,8 @@ export const useGameStore = defineStore('game', () => {
       guesses: guesses.value,
       status: status.value,
       answer: answer.value,
+      answerDescription: answerDescription.value,
+      top100Words: top100Words.value,
       gameDate: gameDate.value,
     };
     localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
@@ -32,6 +36,8 @@ export const useGameStore = defineStore('game', () => {
         guesses.value = state.guesses;
         status.value = state.status;
         answer.value = state.answer;
+        answerDescription.value = state.answerDescription || null;
+        top100Words.value = state.top100Words || [];
         gameDate.value = state.gameDate;
 
         // 정렬 보장
@@ -50,6 +56,8 @@ export const useGameStore = defineStore('game', () => {
     guesses.value = [];
     status.value = 'playing';
     answer.value = null;
+    answerDescription.value = null;
+    top100Words.value = [];
     gameDate.value = new Date().toISOString().split('T')[0];
     saveToLocalStorage();
   };
@@ -58,7 +66,24 @@ export const useGameStore = defineStore('game', () => {
 
   // 초기화 (App 진입 또는 로그인 시 호출)
   const initializeGame = async () => {
+    // 1. 로컬 스토리지 데이터 로드
     loadFromLocalStorage();
+
+    // 2. 로컬 상태가 'playing'인 경우, 서버에 이미 종료된 기록이 있는지 한 번 더 확인
+    // (기기 변경이나 새로고침 시 데이터 유실을 방지하기 위함)
+    if (status.value === 'playing') {
+      try {
+        const result = await fetchTodayHistory();
+        if (result && result.answer) {
+          // 서버에 데이터가 존재한다면 이미 성공(또는 포기)하여 종료된 상태임
+          status.value = 'success';
+          answer.value = result.answer;
+          saveToLocalStorage();
+        }
+      } catch (error) {
+        // 기록이 없는 경우(신규 게임)는 에러를 무시하고 진행
+      }
+    }
   };
 
   const submitGuess = async (word) => {
@@ -121,14 +146,30 @@ export const useGameStore = defineStore('game', () => {
     }
   };
 
+  const fetchTodayHistory = async () => {
+    try {
+      const res = await getTodayHistory();
+      const result = res.data;
+      top100Words.value = result.top100Words || [];
+      answerDescription.value = result.description || null;
+      saveToLocalStorage();
+      return result;
+    } catch (error) {
+      console.error('Failed to fetch today history:', error);
+    }
+  };
+
   return {
     guesses,
     status,
     answer,
+    answerDescription,
+    top100Words,
     failCount,
     initializeGame,
     submitGuess,
     giveUp,
+    fetchTodayHistory,
     resetGame,
   };
 });

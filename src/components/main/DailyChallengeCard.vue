@@ -101,8 +101,6 @@
 import { computed, ref } from "vue";
 import { useGameStore } from "@/stores/game";
 
-const emit = defineEmits(["submit-guess"]);
-
 const gameStore = useGameStore();
 const guess = ref("");
 const errorMessage = ref("");
@@ -137,7 +135,7 @@ const handleDevReset = () => {
   }
 };
 
-const onSubmit = () => {
+const onSubmit = async () => {
   errorMessage.value = "";
   const trimmed = guess.value.trim();
 
@@ -150,7 +148,11 @@ const onSubmit = () => {
     return;
   }
 
-  emit("submit-guess", trimmed);
+  try {
+    await gameStore.submitGuess(trimmed);
+  } catch (error) {
+    errorMessage.value = error.message || "오류가 발생했습니다.";
+  }
   guess.value = "";
 };
 
@@ -167,14 +169,13 @@ const handleGiveUp = async () => {
 
 <style lang="scss" scoped>
 .daily-card {
-  margin-bottom: 2rem;
   border-radius: 1.25rem;
   overflow: hidden;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-  border: 1px solid #e2e8f0; // Clearer border for the card
+  border: 1px solid #e2e8f0;
 
   &__header {
-    background-color: #1e40af; // Deeper blue
+    background-color: #1e40af;
     padding: 0.8rem 1.2rem;
     display: flex;
     align-items: center;
@@ -222,7 +223,6 @@ const handleGiveUp = async () => {
     text-align: left;
   }
 
-  /* Result styling */
   &__result {
     display: flex;
     flex-direction: column;
@@ -232,7 +232,7 @@ const handleGiveUp = async () => {
     border-radius: 0.75rem;
     margin-bottom: 1rem;
     text-align: center;
-    animation: slide-up 0.4s ease-out;
+    animation: slide-up-result 0.5s ease-out;
     border-width: 1px;
     border-style: solid;
 
@@ -251,52 +251,26 @@ const handleGiveUp = async () => {
     }
   }
 
-  &__result-icon {
-    font-size: 1.75rem;
-  }
+  &__result-icon { font-size: 1.75rem; }
+  &__result-text { font-size: 0.95rem; font-weight: 700; line-height: 1.4; }
+  &__answer { font-size: 1.15rem; font-weight: 900; text-decoration: underline; text-underline-offset: 3px; margin: 0 0.1rem; }
 
-  &__result-text {
-    font-size: 0.95rem;
-    font-weight: 700;
-    line-height: 1.4;
-  }
-
-  &__answer {
-    font-size: 1.15rem;
-    font-weight: 900;
-    text-decoration: underline;
-    text-underline-offset: 3px;
-    margin: 0 0.1rem;
-  }
-
-  &__form {
-    display: flex;
-    gap: 0.5rem;
-  }
-
+  &__form { display: flex; gap: 0.5rem; }
   &__input {
     flex: 1;
     border-radius: 0.75rem;
-    border: 2px solid #e2e8f0; // Stronger border
+    border: 2px solid #e2e8f0;
     padding: 0.75rem 1rem;
     font-size: 0.95rem;
     font-weight: 500;
     outline: none;
     transition: all 0.2s ease;
-
-    &:focus {
-      border-color: #3b82f6;
-      box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
-    }
-
-    &--error {
-      border-color: #ef4444 !important;
-      background-color: #fffafb;
-    }
+    &:focus { border-color: #3b82f6; box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1); }
+    &--error { border-color: #ef4444 !important; background-color: #fffafb; }
   }
 
   &__button {
-    background: #1e40af; // Deeper blue
+    background: #1e40af;
     color: white;
     border: none;
     padding: 0 1.25rem;
@@ -305,20 +279,10 @@ const handleGiveUp = async () => {
     font-size: 0.95rem;
     cursor: pointer;
     transition: all 0.2s ease;
-    box-shadow: 0 4px 10px rgba(59, 130, 246, 0.2);
-
-    &:hover {
-      transform: translateY(-1px);
-      box-shadow: 0 6px 14px rgba(59, 130, 246, 0.3);
-    }
+    &:hover { transform: translateY(-1px); box-shadow: 0 4px 10px rgba(59, 130, 246, 0.2); }
   }
 
-  &__error {
-    color: #ef4444;
-    font-size: 0.8rem;
-    font-weight: 600;
-    margin: 0.4rem 0 0 0.5rem;
-  }
+  &__error { color: #ef4444; font-size: 0.8rem; font-weight: 600; margin: 0.4rem 0 0 0.5rem; }
 
   &__giveup {
     margin-top: 1rem;
@@ -330,206 +294,51 @@ const handleGiveUp = async () => {
     font-weight: 600;
     text-decoration: underline;
     cursor: pointer;
-    transition: color 0.2s ease;
-
-    &:hover {
-      color: #64748b;
-    }
+    &:hover { color: #64748b; }
   }
 }
 
-/* Merged Summary Styles */
 .summary {
   margin-top: 1.5rem;
-
-  &__divider {
-    height: 1px;
-    background-color: #f1f5f9;
-    margin-bottom: 1.25rem;
-  }
-
-  &__header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-bottom: 0.75rem;
-  }
-
-  &__title {
-    font-weight: 800;
-    font-size: 1.15rem; // Increased from 0.95rem
-    color: #1e293b;
-  }
-
-  &__badge {
-    padding: 0.2rem 0.5rem;
-    border-radius: 999px;
-    font-size: 0.75rem;
-    color: #3b82f6;
-    background-color: #eff6ff;
-    font-weight: 700;
-  }
-
-  &__empty {
-    font-size: 0.9rem;
-    color: #94a3b8;
-    padding: 1.25rem 0;
-    text-align: center;
-    background-color: #f8fafc;
-    border-radius: 0.75rem;
-    border: 1px dashed #e2e8f0;
-  }
-
-  &__list {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-  }
-
+  &__divider { height: 1px; background-color: #f1f5f9; margin-bottom: 1.25rem; }
+  &__header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.75rem; }
+  &__title { font-weight: 800; font-size: 1.15rem; color: #1e293b; }
+  &__badge { padding: 0.2rem 0.5rem; border-radius: 999px; font-size: 0.75rem; color: #3b82f6; background-color: #eff6ff; font-weight: 700; }
+  &__empty { font-size: 0.9rem; color: #94a3b8; padding: 1.25rem 0; text-align: center; background-color: #f8fafc; border-radius: 0.75rem; border: 1px dashed #e2e8f0; }
+  &__list { list-style: none; padding: 0; margin: 0; }
   &__item {
     display: grid;
-    grid-template-columns: 36px minmax(80px, 1fr) 2fr auto; // Slightly wider order, flexible word
-    gap: 1.25rem; // Increased gap from 1rem
+    grid-template-columns: 36px minmax(80px, 1fr) 2fr auto;
+    gap: 1.25rem;
     align-items: center;
-    padding: 0.75rem 1rem; // Increased padding
+    padding: 0.75rem 1rem;
     border-radius: 0.6rem;
     background-color: #ffffff;
     margin-bottom: 0.5rem;
-    box-shadow: none;
     border: 1px solid #e2e8f0;
-    transition: all 0.2s ease;
-
-    &:hover {
-      border-color: #cbd5e1;
-      background-color: #f8fafc;
-    }
-
+    &:hover { border-color: #cbd5e1; background-color: #f8fafc; }
     &--correct {
       background: linear-gradient(90deg, #fefce8, #fef9c3);
       border: 1.5px solid #facc15;
-      box-shadow: 0 4px 12px rgba(250, 204, 21, 0.1);
-      animation: correct-bounce 0.6s ease-out;
-
-      .summary__order {
-        background-color: #facc15;
-        color: #854d0e;
-      }
-
-      .summary__word {
-        color: #854d0e;
-        font-size: 1rem;
-      }
-
-      .summary__score {
-        color: #ca8a04;
-        font-weight: 900;
-      }
-
-      .summary__similarity-progress {
-        background-color: #facc15; // Solid color
-      }
+      .summary__order { background-color: #facc15; color: #854d0e; }
+      .summary__word { color: #854d0e; font-size: 1rem; }
+      .summary__score { color: #ca8a04; font-weight: 900; }
+      .summary__similarity-progress { background-color: #facc15; }
     }
   }
-
-  &__order {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    width: 28px;
-    height: 28px;
-    border-radius: 6px;
-    background-color: #f1f5f9;
-    color: #64748b;
-    font-weight: 700;
-    font-size: 0.75rem;
-  }
-
-  &__word {
-    font-weight: 700;
-    color: #1e293b;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    font-size: 0.95rem;
-  }
-
-  &__similarity-container {
-    width: 100%;
-    padding: 0 0.75rem; // Increased horizontal padding to separate from neighbors
-  }
-
-  &__similarity-bar {
-    height: 10px; // Slightly thicker
-    background-color: #e2e8f0; // Darker track for better 0-100 visibility
-    border: 1px solid #cbd5e1; // Subtle border to define the range
-    border-radius: 999px;
-    overflow: hidden;
-    width: 100%;
-    position: relative;
-  }
-
-  &__similarity-progress {
-    height: 100%;
-    background-color: #3b82f6; // Solid color
-    border-radius: 999px;
-    transition: width 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);
-
-    &--high {
-      background-color: #2563eb; // Solid color
-    }
-  }
-
-  &__info-box {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-end;
-    min-width: 65px; // Slightly wider
-    margin-left: 0.5rem; // Added margin to separate from bar
-  }
-
-  &__rank {
-    font-size: 0.65rem;
-    color: #94a3b8;
-    font-weight: 700;
-  }
-
-  &__score {
-    text-align: right;
-    font-weight: 800;
-    color: #3b82f6;
-    font-size: 0.9rem;
-  }
-
+  &__order { display: inline-flex; align-items: center; justify-content: center; width: 28px; height: 28px; border-radius: 6px; background-color: #f1f5f9; color: #64748b; font-weight: 700; font-size: 0.75rem; }
+  &__word { font-weight: 700; color: #1e293b; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: 0.95rem; }
+  &__similarity-container { width: 100%; padding: 0 0.75rem; }
+  &__similarity-bar { height: 10px; background-color: #e2e8f0; border: 1px solid #cbd5e1; border-radius: 999px; overflow: hidden; width: 100%; position: relative; }
+  &__similarity-progress { height: 100%; background-color: #3b82f6; border-radius: 999px; transition: width 0.8s cubic-bezier(0.34, 1.56, 0.64, 1); &--high { background-color: #2563eb; } }
+  &__info-box { display: flex; flex-direction: column; align-items: flex-end; min-width: 65px; margin-left: 0.5rem; }
+  &__rank { font-size: 0.65rem; color: #94a3b8; font-weight: 700; }
+  &__score { text-align: right; font-weight: 800; color: #3b82f6; font-size: 0.9rem; }
   &__show-more {
-    display: block;
-    width: 100%;
-    margin-top: 0.75rem;
-    padding: 0.5rem;
-    background: #f8fafc;
-    border: 1px solid #e2e8f0;
-    border-radius: 0.5rem;
-    color: #64748b;
-    font-size: 0.8rem;
-    font-weight: 700;
-    cursor: pointer;
-    transition: all 0.2s ease;
-
-    &:hover {
-      background: #f1f5f9;
-      color: #334155;
-      border-color: #cbd5e1;
-    }
+    display: block; width: 100%; margin-top: 0.75rem; padding: 0.5rem; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 0.5rem; color: #64748b; font-size: 0.8rem; font-weight: 700; cursor: pointer;
+    &:hover { background: #f1f5f9; color: #334155; border-color: #cbd5e1; }
   }
 }
 
-@keyframes slide-up {
-  from { opacity: 0; transform: translateY(8px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-
-@keyframes correct-bounce {
-  0% { transform: scale(0.98); }
-  50% { transform: scale(1.02); }
-  100% { transform: scale(1); }
-}
+@keyframes slide-up-result { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
 </style>
