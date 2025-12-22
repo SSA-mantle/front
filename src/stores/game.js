@@ -68,22 +68,24 @@ export const useGameStore = defineStore('game', () => {
   const initializeGame = async () => {
     // 1. 로컬 스토리지 데이터 로드
     loadFromLocalStorage();
-
-    // 2. 로컬 상태가 'playing'인 경우, 서버에 이미 종료된 기록이 있는지 한 번 더 확인
-    // (기기 변경이나 새로고침 시 데이터 유실을 방지하기 위함)
-    if (status.value === 'playing') {
-      try {
-        const result = await fetchTodayHistory();
-        if (result && result.answer) {
-          // 서버에 데이터가 존재한다면 이미 성공(또는 포기)하여 종료된 상태임
-          status.value = 'success';
-          answer.value = result.answer;
-          saveToLocalStorage();
-        }
-      } catch (error) {
-        // 기록이 없는 경우(신규 게임)는 에러를 무시하고 진행
-      }
-    }
+    
+    // TODO : 백앤드에서 상태 정보 받아온 이후 로직 처리
+  
+    // // 2. 로컬 상태가 'playing'인 경우, 서버에 이미 종료된 기록이 있는지 한 번 더 확인
+    // // (기기 변경이나 새로고침 시 데이터 유실을 방지하기 위함)
+    // if (status.value === 'playing') {
+    //   try {
+    //     const result = await fetchTodayHistory();
+    //     if (result && result.answer) {
+    //       // 서버에 데이터가 존재한다면 이미 성공(또는 포기)하여 종료된 상태임
+    //       status.value = 'success';
+    //       answer.value = result.answer;
+    //       saveToLocalStorage();
+    //     }
+    //   } catch (error) {
+    //     // 기록이 없는 경우(신규 게임)는 에러를 무시하고 진행
+    //   }
+    // }
   };
 
   const submitGuess = async (word) => {
