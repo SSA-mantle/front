@@ -58,7 +58,6 @@ export const useGameStore = defineStore('game', () => {
 
   // 초기화 (App 진입 또는 로그인 시 호출)
   const initializeGame = async () => {
-    // TODO: 백엔드에 '오늘의 게임 상태 조회' API가 생기면 여기서 호출하여 동기화
     loadFromLocalStorage();
   };
 
@@ -71,8 +70,8 @@ export const useGameStore = defineStore('game', () => {
     }
 
     try {
-      const response = await guessWord(word, failCount.value);
-      const result = response.data.data;
+      const res = await guessWord(word, failCount.value);
+      const result = res.data;
 
       // 새 추측 결과 추가
       const newGuess = {
@@ -108,8 +107,8 @@ export const useGameStore = defineStore('game', () => {
     if (status.value !== 'playing') return;
 
     try {
-      const response = await giveUpGame();
-      const result = response.data.data;
+      const res = await giveUpGame();
+      const result = res.data;
 
       status.value = 'giveup';
       answer.value = result.answer;

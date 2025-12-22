@@ -1,7 +1,8 @@
 import api from './index';
 
 // Get Leaderboard
-export const getLeaderboard = (date) => {
+export const getLeaderboard = async (date) => {
   const params = date ? { date } : {};
-  return api.get('/leaderboard', { params });
+  const response = await api.get('/leaderboard', { params });
+  return response.data;
 };
