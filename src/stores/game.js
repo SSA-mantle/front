@@ -33,6 +33,13 @@ export const useGameStore = defineStore('game', () => {
         status.value = state.status;
         answer.value = state.answer;
         gameDate.value = state.gameDate;
+
+        // 정렬 보장
+        guesses.value.sort((a, b) => {
+            if (a.isCorrect) return -1;
+            if (b.isCorrect) return 1;
+            return (b.similarity || 0) - (a.similarity || 0);
+        });
       } else {
         resetGame();
       }
@@ -76,8 +83,7 @@ export const useGameStore = defineStore('game', () => {
         attempt: failCount.value + 1,
       };
 
-      // 정렬 logic: 유사도 높은 순으로 내림차순 정렬 (정답이 최상단)
-      // 실제 표시할 때는 UI에서 정렬할 수도 있지만, store에서 관리하는 것이 편함
+      // 정렬 logic: 정답 우선, 그 다음 유사도 높은 순
       guesses.value.unshift(newGuess);
       guesses.value.sort((a, b) => {
           if (a.isCorrect) return -1;
