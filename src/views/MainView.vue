@@ -13,13 +13,8 @@
       </section>
 
       <!-- 아래: 게임 영역 -->
-      <section class="main__row">
-        <div class="main__left">
-          <DailyChallengeCard @submit-guess="handleSubmitGuess" />
-        </div>
-        <div class="main__right">
-          <GuessSummaryCard :guesses="gameStore.guesses" />
-        </div>
+      <section class="main__content">
+        <DailyChallengeCard @submit-guess="handleSubmitGuess" />
       </section>
     </main>
 
@@ -34,7 +29,6 @@ import { useGameStore } from "@/stores/game";
 import AppHeader from "@/components/layout/AppHeader.vue";
 import AppFooter from "@/components/layout/AppFooter.vue";
 import DailyChallengeCard from "@/components/main/DailyChallengeCard.vue";
-import GuessSummaryCard from "@/components/main/GuessSummaryCard.vue";
 
 const gameStore = useGameStore();
 
@@ -108,16 +102,8 @@ const handleSubmitGuess = async (word) => {
     color: var(--color-text-heading);
   }
 
-  &__row {
+  &__content {
     margin-top: 2rem;
-    display: flex;
-    flex-direction: column;
-    gap: 1.5rem;
-    width: 100%;
-  }
-
-  &__left,
-  &__right {
     width: 100%;
   }
 }
