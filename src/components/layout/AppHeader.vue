@@ -3,7 +3,9 @@
     <div class="app-header__inner">
       <!-- 브랜드 영역 -->
       <RouterLink to="/main" class="app-header__brand">
-        <div class="app-header__logo">🧠</div>
+        <div class="app-header__logo">
+          <img :src="logoImg" alt="Logo" class="app-header__logo-img" />
+        </div>
         <div class="app-header__brand-text">
           <span class="app-header__title">SSA-mantle</span>
         </div>
@@ -65,6 +67,7 @@ import { ref, computed } from "vue";
 import { useRouter, RouterLink } from "vue-router";
 import { useAuthStore } from "@/stores/auth";
 import BaseModal from "@/components/common/BaseModal.vue";
+import logoImg from "@/assets/logo.png";
 
 const router = useRouter();
 const authStore = useAuthStore();
@@ -122,8 +125,21 @@ const confirmLogout = () => {
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 1.4rem;
-    box-shadow: var(--shadow-md);
+    padding: 0;
+    background: #ffffff;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+    overflow: hidden;
+    transition: transform 0.2s ease;
+
+    &-img {
+      width: 80%;
+      height: 80%;
+      object-fit: contain;
+    }
+
+    &:hover {
+      transform: scale(1.1);
+    }
   }
 
   &__title {
@@ -205,7 +221,7 @@ const confirmLogout = () => {
     display: flex;
     flex-direction: column;
     align-items: center;
-    
+
     .highlight {
       color: var(--color-primary);
       font-weight: 700;
@@ -218,8 +234,8 @@ const confirmLogout = () => {
   background: linear-gradient(135deg, #3b82f6, #2563eb); /* Modern blue gradient */
   color: white;
   width: 100%;
-  box-shadow: 0 4px 6px -1px rgba(37, 99, 235, 0.2), 0 2px 4px -1px rgba(37, 99, 235, 0.1); 
-  
+  box-shadow: 0 4px 6px -1px rgba(37, 99, 235, 0.2), 0 2px 4px -1px rgba(37, 99, 235, 0.1);
+
   &:hover {
     background: linear-gradient(135deg, #2563eb, #1d4ed8);
     box-shadow: 0 10px 15px -3px rgba(37, 99, 235, 0.3), 0 4px 6px -2px rgba(37, 99, 235, 0.15);
@@ -236,7 +252,7 @@ const confirmLogout = () => {
     &__nav {
       display: none; // Mobile menu to be implemented later or use hamburger
     }
-    
+
     &__user {
       margin-left: auto;
       border-left: none;

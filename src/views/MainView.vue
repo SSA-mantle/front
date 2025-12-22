@@ -5,7 +5,9 @@
     <main class="page__content main">
       <!-- 가운데 로고 + 타이틀 영역 -->
       <section class="main__hero">
-        <div class="main__logo-circle">🧠</div>
+        <div class="main__logo-circle">
+          <img :src="logoImg" alt="SSA-mantle Logo" class="main__logo-img" />
+        </div>
         <h1 class="main__title">SSA-mantle</h1>
         <p class="main__subtitle">
           <span class="main__subtitle-strong">유사도 기반 단어 유추 게임</span>
@@ -41,6 +43,7 @@ import AppHeader from "@/components/layout/AppHeader.vue";
 import AppFooter from "@/components/layout/AppFooter.vue";
 import DailyChallengeCard from "@/components/main/DailyChallengeCard.vue";
 import GameResultSection from "@/components/main/GameResultSection.vue";
+import logoImg from "@/assets/logo.png";
 
 const gameStore = useGameStore();
 const isGameOver = computed(() => gameStore.status !== "playing");
@@ -63,23 +66,30 @@ onMounted(async () => {
   }
 
   &__logo-circle {
-    width: 100px;
-    height: 100px;
+    width: 300px;
+    height: 300px;
     margin: 0 auto 1.2rem;
-    border-radius: 28px;
-    background: linear-gradient(135deg, var(--color-primary-400), var(--color-primary-700));
+    border-radius: 40px;
+    background: #eff6ff;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 3rem;
-    color: #ffffff;
-    box-shadow: var(--shadow-xl);
+    padding: 20px; // Padding for the larger 300px size
+    box-shadow: 0 20px 50px rgba(30, 64, 175, 0.1);
     transform: rotate(-5deg);
-    transition: transform 0.3s var(--ease-spring);
+    transition: all 0.4s var(--ease-spring);
+    overflow: hidden;
 
     &:hover {
-      transform: rotate(0deg) scale(1.05);
+      transform: rotate(0deg) scale(1.08);
+      box-shadow: 0 20px 40px rgba(30, 64, 175, 0.25);
     }
+  }
+
+  &__logo-img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
   }
 
   &__title {
