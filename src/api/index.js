@@ -32,11 +32,50 @@ api.interceptors.request.use(
 // Response Interceptor: Handle Errors (e.g., 401)
 api.interceptors.response.use(
   (response) => response,
-  (error) => {
+  async (error) => {
+    const originalRequest = error.config;
+
     // Handle 401 Unauthorized globally
-    if (error.response && error.response.status === 401) {
-      // Clear token and redirect to login if needed
-      // window.location.href = '/'; // Optional: Redirect or let the component handle it
+    if (error.response && error.response.status === 401 && !originalRequest._retry) {
+      originalRequest._retry = true;
+
+      try {
+        const refreshToken = localStorage.getItem('refreshToken');
+
+        // If no refresh token, fail immediately
+        if (!refreshToken) {
+            throw new Error("No refresh token");
+        }
+
+        // Call refresh endpoint
+        // Use a new axios instance to avoid interceptor loops
+        const { data } = await axios.post(`${api.defaults.baseURL}/auth/refresh`, {
+            refreshToken
+        });
+
+        if (data && data.success && data.data) {
+             const { accessToken: newAccessToken, refreshToken: newRefreshToken } = data.data;
+
+             // Update Tokens
+             localStorage.setItem('accessToken', newAccessToken);
+             localStorage.setItem('refreshToken', newRefreshToken);
+
+             // Update Header and Retry
+             originalRequest.headers.Authorization = `Bearer ${newAccessToken}`;
+             return api(originalRequest);
+        }
+
+      } catch (refreshError) {
+          console.error("Token refresh failed:", refreshError);
+          // Clear tokens and redirect to login
+          localStorage.removeItem('accessToken');
+          localStorage.removeItem('refreshToken');
+          sessionStorage.removeItem('ssa_intro_seen'); // Optional cleanup
+
+          // Redirect to home/login
+          window.location.href = '/';
+          return Promise.reject(refreshError);
+      }
     }
     return Promise.reject(error);
   }
