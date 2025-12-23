@@ -1,5 +1,6 @@
 import { ref, computed } from 'vue';
 import { defineStore } from 'pinia';
+import { useAuthStore } from '@/stores/auth';
 import { guessWord, giveUpGame, getTodayHistory, getGameStatus } from '@/api/game';
 
 export const useGameStore = defineStore('game', () => {
@@ -13,9 +14,17 @@ export const useGameStore = defineStore('game', () => {
   const gameDate = ref(new Date().toISOString().split('T')[0]); // 오늘 날짜 (YYYY-MM-DD)
 
   // --- Persistence ---
-  const STORAGE_KEY = 'ssa-mantle-game-state';
+  const BASE_STORAGE_KEY = 'ssa-mantle-game-state';
+
+  // Helper to get key for current user
+  const getStorageKey = () => {
+      const authStore = useAuthStore();
+      const userId = authStore.user?.userId || 'guest';
+      return `${BASE_STORAGE_KEY}-${userId}`;
+  };
 
   const saveToLocalStorage = () => {
+    const key = getStorageKey();
     const state = {
       guesses: guesses.value,
       status: status.value,
@@ -24,11 +33,12 @@ export const useGameStore = defineStore('game', () => {
       top100Words: top100Words.value,
       gameDate: gameDate.value,
     };
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+    localStorage.setItem(key, JSON.stringify(state));
   };
 
   const loadFromLocalStorage = () => {
-    const saved = localStorage.getItem(STORAGE_KEY);
+    const key = getStorageKey();
+    const saved = localStorage.getItem(key);
     if (saved) {
       const state = JSON.parse(saved);
       // 날짜가 같으면 복원, 다르면 초기화
@@ -47,19 +57,26 @@ export const useGameStore = defineStore('game', () => {
             return (b.similarity || 0) - (a.similarity || 0);
         });
       } else {
+        // 날짜가 다르면(어제 게임 등) 리셋하되,
+        // 여기서 resetGame()을 호출하면 '저장'까지 해버려서 덮어쓸 위험이 있음.
+        // 그냥 로컬 상태만 초기화하고 저장은 나중에 변경 생길 때 하는 게 안전함.
+        // 하지만 편의상 resetGame() 사용. (키가 날짜별로 다르진 않으므로 덮어써도 무방: 오늘 새 게임 시작이니까)
         resetGame();
       }
+    } else {
+        // 저장된 게 없으면 리셋 (상태 클리어)
+       resetGame(false); // don't save yet to avoid creating empty files unnecessary? Actually resetGame saves.
     }
   };
 
-  const resetGame = () => {
+  const resetGame = (shouldSave = true) => {
     guesses.value = [];
     status.value = 'playing';
     answer.value = null;
     answerDescription.value = null;
     top100Words.value = [];
     gameDate.value = new Date().toISOString().split('T')[0];
-    saveToLocalStorage();
+    if (shouldSave) saveToLocalStorage();
   };
 
   // --- Actions ---
