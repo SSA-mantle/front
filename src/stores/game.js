@@ -1,6 +1,6 @@
 import { ref, computed } from 'vue';
 import { defineStore } from 'pinia';
-import { guessWord, giveUpGame, getTodayHistory } from '@/api/game';
+import { guessWord, giveUpGame, getTodayHistory, getGameStatus } from '@/api/game';
 
 export const useGameStore = defineStore('game', () => {
   // --- State ---
@@ -68,24 +68,51 @@ export const useGameStore = defineStore('game', () => {
   const initializeGame = async () => {
     // 1. 로컬 스토리지 데이터 로드
     loadFromLocalStorage();
-    
-    // TODO : 백앤드에서 상태 정보 받아온 이후 로직 처리
-  
-    // // 2. 로컬 상태가 'playing'인 경우, 서버에 이미 종료된 기록이 있는지 한 번 더 확인
-    // // (기기 변경이나 새로고침 시 데이터 유실을 방지하기 위함)
-    // if (status.value === 'playing') {
-    //   try {
-    //     const result = await fetchTodayHistory();
-    //     if (result && result.answer) {
-    //       // 서버에 데이터가 존재한다면 이미 성공(또는 포기)하여 종료된 상태임
-    //       status.value = 'success';
-    //       answer.value = result.answer;
-    //       saveToLocalStorage();
-    //     }
-    //   } catch (error) {
-    //     // 기록이 없는 경우(신규 게임)는 에러를 무시하고 진행
-    //   }
-    // }
+
+    // 2. 백엔드 상태 동기화
+    try {
+      const res = await getGameStatus();
+      if (res.success && res.data) {
+        const { status: serverStatus } = res.data;
+
+        // 서버 상태에 따른 로컬 상태 업데이트
+        if (serverStatus === 'SOLVED') {
+           if (status.value !== 'success') {
+             status.value = 'success';
+             // 결과가 없으면 가져오기
+             if (!answer.value) {
+               await fetchTodayHistory();
+             }
+           }
+        } else if (serverStatus === 'GAVE_UP') {
+           if (status.value !== 'giveup') {
+             status.value = 'giveup';
+             // 결과가 없으면 가져오기
+             if (!answer.value) {
+               await fetchTodayHistory();
+             }
+           }
+        } else {
+           // NOT_STARTED or IN_PROGRESS
+           // 로컬 상태가 이미 완료(success/giveup)인데 서버가 진행중이라면?
+           // -> 서버가 Truth이므로 진행중으로 변경해야 하지만,
+           //    보통은 서버가 완료면 로컬도 완료여야 함.
+           //    일단 서버가 진행중이면 로컬도 playing으로.
+           if (status.value !== 'playing') {
+             // 뭔가 동기화가 안맞는 경우 (예: 로컬은 깼는데 서버 기록이 날아감? - 희박함)
+             // 혹은 다른 기기에서 리셋함?
+             status.value = 'playing';
+             answer.value = null;
+             top100Words.value = [];
+           }
+        }
+
+        saveToLocalStorage();
+      }
+    } catch (error) {
+      console.error("Failed to sync game status:", error);
+      // 에러 발생 시 로컬 상태 유지 (오프라인 등)
+    }
   };
 
   const submitGuess = async (word) => {
@@ -120,6 +147,9 @@ export const useGameStore = defineStore('game', () => {
       if (result.isCorrect) {
         status.value = 'success';
         answer.value = result.answer;
+        // 정답을 맞추면 서버 상태도 SOLVED가 되었을 것임.
+        // 상세 결과(Top100 등)를 위해 히스토리 호출
+        await fetchTodayHistory();
       }
 
       saveToLocalStorage();
@@ -140,6 +170,9 @@ export const useGameStore = defineStore('game', () => {
       status.value = 'giveup';
       answer.value = result.answer;
 
+      // 포기 후에도 결과 정보(Top 100 등)를 가져오기 위해 히스토리 호출
+      await fetchTodayHistory();
+
       saveToLocalStorage();
       return result;
     } catch (error) {
@@ -152,8 +185,11 @@ export const useGameStore = defineStore('game', () => {
     try {
       const res = await getTodayHistory();
       const result = res.data;
-      top100Words.value = result.top100Words || [];
-      answerDescription.value = result.description || null;
+      if (result) {
+        if (result.answer) answer.value = result.answer;
+        top100Words.value = result.top100Words || [];
+        answerDescription.value = result.description || null; // API might not return description yet based on docs but let's keep logic
+      }
       saveToLocalStorage();
       return result;
     } catch (error) {
