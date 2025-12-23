@@ -155,7 +155,6 @@
               <p>100게임 완료</p>
             </div>
           </div>
-          
            <div class="achievement-card card locked">
              <div class="medal-icon bg-gray">
                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
@@ -210,7 +209,6 @@ const email = computed(() => authStore.user?.email || '');
     display: flex;
     justify-content: space-between;
     align-items: center;
-    
     .profile-info {
       display: flex;
       align-items: center;
@@ -225,7 +223,6 @@ const email = computed(() => authStore.user?.email || '');
         display: flex;
         align-items: center;
         justify-content: center;
-        
         svg {
             width: 2rem;
             height: 2rem;
@@ -283,7 +280,6 @@ const email = computed(() => authStore.user?.email || '');
       display: flex;
       flex-direction: column;
       gap: 0.75rem;
-      
       &__icon {
         display: flex;
         align-items: center;
@@ -354,7 +350,6 @@ const email = computed(() => authStore.user?.email || '');
       &.locked {
         background-color: #f9fafb; // Gray 50
         border-color: var(--color-border);
-        
         .medal-icon {
             background-color: #e5e7eb; // Gray 200
             color: white;
@@ -403,7 +398,6 @@ const email = computed(() => authStore.user?.email || '');
     &__stats {
       grid-template-columns: 1fr;
     }
-    
     &__achievements .achievement-grid {
       grid-template-columns: 1fr;
     }
