@@ -21,10 +21,10 @@
       <template v-else>
         <!-- 상위 3명 포디움 (챔피언 섹션) -->
         <section v-if="top3.length > 0" class="leaderboard__podium">
-          <div 
-            v-for="(player, idx) in podiumSorted" 
+          <div
+            v-for="(player, idx) in podiumSorted"
             :key="player.nickname"
-            class="podium-card" 
+            class="podium-card"
             :class="[`podium-card--${player.rank}`, { 'podium-card--me': player.nickname === currentUserNickname }]"
           >
             <div class="podium-card__medal">{{ player.rank === 1 ? '🥇' : player.rank === 2 ? '🥈' : '🥉' }}</div>
@@ -39,12 +39,23 @@
 
         <!-- 나머지 리스트 -->
         <section class="leaderboard__main-list">
-          <LeaderboardList 
-            :entries="remainingEntries" 
+          <LeaderboardList
+            :entries="remainingEntries"
             :current-user-nickname="currentUserNickname"
           />
-          
-          <p v-if="sortedEntries.length === 0" class="leaderboard__empty">
+
+          <!-- 50위 밖의 내 순위 표시 -->
+          <div v-if="myRankEntry" class="leaderboard__my-rank-section">
+            <div class="leaderboard__divider">
+              <span class="leaderboard__divider-text">내 순위</span>
+            </div>
+            <LeaderboardList
+              :entries="[myRankEntry]"
+              :current-user-nickname="currentUserNickname"
+            />
+          </div>
+
+          <p v-if="top50Entries.length === 0" class="leaderboard__empty">
             아직 정답을 맞힌 플레이어가 없습니다. 첫 번째 주인공이 되어보세요!
           </p>
         </section>
@@ -56,7 +67,7 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted } from "vue";
+import { ref, computed, onMounted, watch } from "vue";
 import { getLeaderboard } from "@/api/leaderboard";
 import { useAuthStore } from "@/stores/auth";
 
@@ -71,9 +82,22 @@ const isLoading = ref(true);
 
 const currentUserNickname = computed(() => authStore.user?.nickname || "");
 
-const sortedEntries = computed(() => entries.value);
-const top3 = computed(() => sortedEntries.value.slice(0, 3));
-const remainingEntries = computed(() => sortedEntries.value.slice(3));
+// 상위 50명만 표시
+const top50Entries = computed(() => entries.value.slice(0, 50));
+const top3 = computed(() => top50Entries.value.slice(0, 3));
+const remainingEntries = computed(() => top50Entries.value.slice(3));
+
+// 내 순위가 50위 밖인지 확인
+const isMyRankOutsideTop50 = computed(() => {
+  if (!myRank.value) return false;
+  return myRank.value.rank > 50;
+});
+
+// 50위 밖이면 내 순위를 별도로 표시
+const myRankEntry = computed(() => {
+  if (!isMyRankOutsideTop50.value) return null;
+  return myRank.value;
+});
 
 // For podium layout: [2nd, 1st, 3rd] looks more natural
 const podiumSorted = computed(() => {
@@ -105,7 +129,27 @@ const fetchLeaderboard = async () => {
   }
 };
 
-onMounted(() => {
+// 사용자 정보가 로드되면 리더보드를 다시 fetch하여 하이라이트 적용
+watch(() => authStore.user, (newUser, oldUser) => {
+  // user가 null에서 실제 값으로 변경되었을 때만 실행
+  if (!oldUser && newUser && entries.value.length > 0) {
+    // 이미 리더보드가 로드된 상태에서 user만 업데이트된 경우
+    // 컴포넌트가 자동으로 리렌더링되어 하이라이트가 적용됨
+  }
+});
+
+
+onMounted(async () => {
+  // 인증된 사용자의 경우, user 정보가 로드될 때까지 대기
+  if (authStore.isAuthenticated && !authStore.user) {
+    // user 정보가 로드될 때까지 최대 3초 대기
+    const maxWaitTime = 3000;
+    const startTime = Date.now();
+    while (!authStore.user && (Date.now() - startTime) < maxWaitTime) {
+      await new Promise(resolve => setTimeout(resolve, 100));
+    }
+  }
+
   fetchLeaderboard();
 });
 </script>
@@ -221,7 +265,7 @@ onMounted(() => {
       font-size: 0.85rem;
       color: var(--color-text-muted);
       font-weight: 600;
-      
+
       .attempts { color: var(--color-primary); }
     }
 
@@ -283,6 +327,36 @@ onMounted(() => {
     }
   }
 
+  &__my-rank-section {
+    margin-top: 2rem;
+  }
+
+  &__divider {
+    display: flex;
+    align-items: center;
+    text-align: center;
+    margin: 1.5rem 0;
+    position: relative;
+
+    &::before,
+    &::after {
+      content: '';
+      flex: 1;
+      border-bottom: 2px dashed #cbd5e1;
+    }
+
+    &-text {
+      padding: 0 1rem;
+      font-size: 0.85rem;
+      font-weight: 700;
+      color: var(--color-text-muted);
+      background-color: #f9fafb;
+      border-radius: 999px;
+      padding: 0.4rem 1rem;
+      border: 1px solid #e2e8f0;
+    }
+  }
+
   &__empty {
     text-align: center;
     padding: 3rem;
@@ -305,7 +379,7 @@ onMounted(() => {
       align-items: center;
       gap: 1rem;
     }
-    
+
     .podium-card {
       width: 100%;
       max-width: none;

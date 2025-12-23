@@ -16,6 +16,10 @@ import leaderboardResponse from '../../docs/api-docs/leaderboard/get-leaderboard
 // Simple delay function to simulate network latency
 const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
+// 리더보드 테스트 변수
+const TEST_MY_RANK = 51;
+
+
 // In-memory mock database with simple sessionStorage persistence for refreshes
 const STORAGE_KEY = 'ssa-mantle-mock-user';
 const getInitialUser = () => {
@@ -221,7 +225,51 @@ export const mockHandler = async (config) => {
   if (url === '/leaderboard' && method === 'get') {
       const dateParam = params?.date || 'today';
       console.log(`[Mock API] Leaderboard for: ${dateParam}`);
-      return { data: leaderboardResponse, status: 200 };
+
+      // TEST_MY_RANK 설정에 따라 동적으로 리더보드 생성
+      let myRankData = null;
+
+      if (TEST_MY_RANK !== null) {
+          let failCount, solvedAt;
+
+          if (TEST_MY_RANK === 1) {
+              failCount = 2;
+              solvedAt = "2025-12-22T08:15:30";
+          } else if (TEST_MY_RANK === 2) {
+              failCount = 3;
+              solvedAt = "2025-12-22T09:10:15";
+          } else if (TEST_MY_RANK === 3) {
+              failCount = 3;
+              solvedAt = "2025-12-22T09:45:42";
+          } else if (TEST_MY_RANK <= 50) {
+              failCount = Math.floor(TEST_MY_RANK / 3) + 2;
+              const hour = 10 + Math.floor(TEST_MY_RANK / 5);
+              const minute = (TEST_MY_RANK * 7) % 60;
+              solvedAt = `2025-12-22T${String(hour).padStart(2, '0')}:${String(minute).padStart(2, '0')}:15`;
+          } else {
+              failCount = 28 + (TEST_MY_RANK - 51);
+              solvedAt = "2025-12-23T08:30:15";
+          }
+
+          myRankData = {
+              rank: TEST_MY_RANK,
+              nickname: mockUser.nickname,
+              failCount: failCount,
+              solvedAt: solvedAt
+          };
+      }
+
+      const dynamicLeaderboard = {
+          ...leaderboardResponse,
+          data: {
+              ...leaderboardResponse.data,
+              myRank: myRankData
+          }
+      };
+
+      console.log(`[Mock API] 🧪 TEST_MY_RANK = ${TEST_MY_RANK}`, myRankData);
+
+      return { data: dynamicLeaderboard, status: 200 };
   }
 
   // Default: 404
