@@ -66,14 +66,46 @@
 
         <div v-if="!gameStore.guesses.length" class="summary__empty">아직 입력한 단어가 없습니다.</div>
 
-        <ul v-else class="summary__list">
+        <template v-else>
+          <!-- 최근 시도 (고정) -->
+          <div v-if="gameStore.lastGuess" class="summary__recent">
+            <div class="summary__recent-header">
+              <span class="summary__recent-tag">최근 시도</span>
+            </div>
+            <div
+              class="summary__item summary__item--recent"
+              :class="{ 'summary__item--correct': gameStore.lastGuess.isCorrect }"
+            >
+              <span class="summary__order">{{ gameStore.lastGuess.failCount }}</span>
+              <span class="summary__word">{{ gameStore.lastGuess.word }}</span>
+              <div class="summary__similarity-container">
+                <div class="summary__similarity-bar">
+                  <div
+                    class="summary__similarity-progress"
+                    :style="{ width: `${gameStore.lastGuess.similarity}%` }"
+                    :class="{ 'summary__similarity-progress--high': gameStore.lastGuess.similarity > 90 }"
+                  ></div>
+                </div>
+              </div>
+              <div class="summary__info-box">
+                <span v-if="gameStore.lastGuess.isCorrect" class="summary__rank"></span>
+                <span v-else-if="gameStore.lastGuess.rank > 0" class="summary__rank">{{ gameStore.lastGuess.rank }}위</span>
+                <span v-else class="summary__rank">1000위 밖</span>
+                <span class="summary__score">
+                  {{ gameStore.lastGuess.isCorrect ? '정답' : `${gameStore.lastGuess.similarity}%` }}
+                </span>
+              </div>
+            </div>
+          </div>
+
+          <ul class="summary__list">
           <li
             v-for="guess in visibleGuesses"
             :key="guess.word"
             class="summary__item"
             :class="{ 'summary__item--correct': guess.isCorrect }"
           >
-            <span class="summary__order">{{ guess.attempt }}</span>
+            <span class="summary__order">{{ guess.failCount }}</span>
             <span class="summary__word">{{ guess.word }}</span>
             <div class="summary__similarity-container">
               <div class="summary__similarity-bar">
@@ -94,6 +126,7 @@
             </div>
           </li>
         </ul>
+        </template>
 
         <button
           v-if="gameStore.guesses.length > 10"
@@ -330,16 +363,50 @@ const handleGiveUp = async () => {
   &__badge { padding: 0.2rem 0.5rem; border-radius: 999px; font-size: 0.75rem; color: #3b82f6; background-color: #eff6ff; font-weight: 700; }
   &__empty { font-size: 0.9rem; color: #94a3b8; padding: 1.25rem 0; text-align: center; background-color: #f8fafc; border-radius: 0.75rem; border: 1px dashed #e2e8f0; }
   &__list { list-style: none; padding: 0; margin: 0; }
+
+  &__recent {
+    margin-bottom: 1.5rem;
+    padding: 1.25rem;
+    background: linear-gradient(135deg, #f0f8ff, #e6f0ff);
+    border-radius: 1rem;
+    border: 1px solid #dbeafe;
+    box-shadow: inset 0 2px 4px rgba(59, 130, 246, 0.03);
+
+    &-header {
+      margin-bottom: 0.75rem;
+      display: flex;
+    }
+
+    &-tag {
+      background-color: #2563eb;
+      color: white;
+      padding: 0.2rem 0.6rem;
+      border-radius: 0.5rem;
+      font-size: 0.75rem;
+      font-weight: 800;
+      box-shadow: 0 2px 4px rgba(37, 99, 235, 0.2);
+    }
+  }
+
   &__item {
     display: grid;
     grid-template-columns: 36px minmax(80px, 1fr) 2fr auto;
     gap: 1.25rem;
     align-items: center;
     padding: 0.75rem 1rem;
-    border-radius: 0.6rem;
+    border-radius: 0.75rem;
+    margin-bottom: 0.65rem;
     background-color: #ffffff;
-    margin-bottom: 0.5rem;
-    border: 1px solid #e2e8f0;
+    border: 1px solid #f1f5f9;
+    transition: all 0.2s ease;
+
+    &--recent {
+      border: 1px solid #bfdbfe;
+      background-color: #ffffff;
+      box-shadow: 0 4px 12px rgba(59, 130, 246, 0.1);
+      transform: scale(1.01);
+    }
+
     &:hover { border-color: #cbd5e1; background-color: #f8fafc; }
     &--correct {
       background: linear-gradient(90deg, #fefce8, #fef9c3);

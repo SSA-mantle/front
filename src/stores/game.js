@@ -10,6 +10,7 @@ export const useGameStore = defineStore('game', () => {
   const answer = ref(null); // 정답 단어 (게임 종료 시)
   const answerDescription = ref(null); // 정답 단어 설명
   const top100Words = ref([]); // 유사도 상위 100개 단어
+  const lastGuess = ref(null); // 마지막으로 시도한 단어
   const failCount = computed(() => guesses.value.length);
   const gameDate = ref(new Date().toISOString().split('T')[0]); // 오늘 날짜 (YYYY-MM-DD)
 
@@ -31,6 +32,7 @@ export const useGameStore = defineStore('game', () => {
       answer: answer.value,
       answerDescription: answerDescription.value,
       top100Words: top100Words.value,
+      lastGuess: lastGuess.value,
       gameDate: gameDate.value,
     };
     localStorage.setItem(key, JSON.stringify(state));
@@ -48,6 +50,7 @@ export const useGameStore = defineStore('game', () => {
         answer.value = state.answer;
         answerDescription.value = state.answerDescription || null;
         top100Words.value = state.top100Words || [];
+        lastGuess.value = state.lastGuess || null;
         gameDate.value = state.gameDate;
 
         // 정렬 보장
@@ -75,6 +78,7 @@ export const useGameStore = defineStore('game', () => {
     answer.value = null;
     answerDescription.value = null;
     top100Words.value = [];
+    lastGuess.value = null;
     gameDate.value = new Date().toISOString().split('T')[0];
     if (shouldSave) saveToLocalStorage();
   };
@@ -150,8 +154,10 @@ export const useGameStore = defineStore('game', () => {
         similarity: result.similarity,
         rank: result.rank,
         isCorrect: result.isCorrect,
-        attempt: result.failCount,
+        failCount: result.failCount,
       };
+
+      lastGuess.value = newGuess;
 
       // 정렬 logic: 정답 우선, 그 다음 유사도 높은 순
       guesses.value.unshift(newGuess);
@@ -216,6 +222,7 @@ export const useGameStore = defineStore('game', () => {
 
   return {
     guesses,
+    lastGuess,
     status,
     answer,
     answerDescription,
