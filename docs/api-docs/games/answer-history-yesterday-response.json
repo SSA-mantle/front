@@ -5,31 +5,26 @@
     "answer": "딸기",
     "answerDescription": "정답단어는 새콤달콤한 빨간 과일입니다.",
     "top100Words": [
-      {
-        "word": "과일",
-        "similarity": 94.2,
-        "rank": 1
-      },
-      {
-        "word": "사과",
-        "similarity": 91.8,
-        "rank": 2
-      },
-      {
-        "word": "체리",
-        "similarity": 88.5,
-        "rank": 3
-      },
-      {
-        "word": "블루베리",
-        "similarity": 86.9,
-        "rank": 4
-      },
-      {
-        "word": "복숭아",
-        "similarity": 84.3,
-        "rank": 5
-      }
+        { "word": "과일", "similarity": 94.2, "rank": 1 },
+        { "word": "사과", "similarity": 91.8, "rank": 2 },
+        { "word": "체리", "similarity": 88.5, "rank": 3 },
+        { "word": "블루베리", "similarity": 86.9, "rank": 4 },
+        { "word": "복숭아", "similarity": 84.3, "rank": 5 },
+        { "word": "포도", "similarity": 82.5, "rank": 6 },
+        { "word": "배", "similarity": 80.1, "rank": 7 },
+        { "word": "귤", "similarity": 78.4, "rank": 8 },
+        { "word": "바나나", "similarity": 76.9, "rank": 9 },
+        { "word": "오렌지", "similarity": 75.2, "rank": 10 },
+        { "word": "수박", "similarity": 73.8, "rank": 11 },
+        { "word": "참외", "similarity": 71.5, "rank": 12 },
+        { "word": "망고", "similarity": 70.1, "rank": 13 },
+        { "word": "파인애플", "similarity": 68.4, "rank": 14 },
+        { "word": "키위", "similarity": 66.8, "rank": 15 },
+        { "word": "석류", "similarity": 65.2, "rank": 16 },
+        { "word": "감", "similarity": 63.7, "rank": 17 },
+        { "word": "대추", "similarity": 61.3, "rank": 18 },
+        { "word": "밤", "similarity": 59.8, "rank": 19 },
+        { "word": "호두", "similarity": 58.2, "rank": 20 }
     ]
   },
   "error": null

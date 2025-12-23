@@ -158,8 +158,8 @@ const limitedGuesses = computed(() => {
 
   &__rank {
     font-size: 0.75rem;
-    color: #64748b;
-    font-weight: 600;
+    color: #000000;
+    font-weight: 700;
   }
 
   &__score {

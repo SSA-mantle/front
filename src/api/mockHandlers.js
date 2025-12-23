@@ -177,7 +177,7 @@ export const mockHandler = async (config) => {
           return {
               data: {
                   ...guessResponseCorrect,
-                  data: { ...guessResponseCorrect.data, failCount: (failCount || 0) + 1 }
+                  data: { ...guessResponseCorrect.data, failCount: failCount || 1 }
               },
               status: 200
           };
@@ -190,7 +190,7 @@ export const mockHandler = async (config) => {
               data: {
                   ...guessResponseWrong.data,
                   word,
-                  failCount: (failCount || 0) + 1,
+                  failCount: failCount || 1,
                   similarity: (Math.random() * 100).toFixed(2),
                   rank: Math.floor(Math.random() * 1000) + 1
               },

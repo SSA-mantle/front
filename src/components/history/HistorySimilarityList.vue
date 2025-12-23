@@ -9,15 +9,15 @@
 
     <div class="history-list__table">
       <div class="history-list__table-head">
-        <span>순위</span>
-        <span>단어</span>
-        <span>유사도</span>
+        <span class="history-list__col-rank">순위</span>
+        <span class="history-list__col-word">단어</span>
+        <span class="history-list__col-sim">유사도</span>
       </div>
       <ul class="history-list__items">
         <li v-for="word in words" :key="word.rank" class="history-list__row">
-          <span class="history-list__rank">{{ word.rank }}</span>
-          <span class="history-list__word">{{ word.word }}</span>
-          <span class="history-list__similarity">{{ word.similarity }}%</span>
+          <span class="history-list__rank history-list__col-rank">{{ word.rank }}</span>
+          <span class="history-list__word history-list__col-word">{{ word.word }}</span>
+          <span class="history-list__similarity history-list__col-sim">{{ word.similarity }}%</span>
         </li>
       </ul>
     </div>
@@ -78,6 +78,10 @@ defineProps({
     padding: 0;
     max-height: 520px;
     overflow-y: auto;
+
+    &::-webkit-scrollbar { width: 5px; }
+    &::-webkit-scrollbar-track { background: transparent; }
+    &::-webkit-scrollbar-thumb { background: #94a3b8; border-radius: 10px; }
   }
 
   &__row {
@@ -94,8 +98,11 @@ defineProps({
     font-weight: 700;
   }
 
-  &__similarity {
+  &__col-sim {
     text-align: right;
+  }
+
+  &__similarity {
     color: #2563eb;
   }
 }

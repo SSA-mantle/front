@@ -36,7 +36,10 @@ api.interceptors.response.use(
     const originalRequest = error.config;
 
     // Handle 401 Unauthorized globally
-    if (error.response && error.response.status === 401 && !originalRequest._retry) {
+    // EXCLUDE Login request from auto-refresh (401 on login means wrong password)
+    const isLoginRequest = originalRequest.url.includes('/auth/sign-in');
+
+    if (error.response && error.response.status === 401 && !originalRequest._retry && !isLoginRequest) {
       originalRequest._retry = true;
 
       try {
