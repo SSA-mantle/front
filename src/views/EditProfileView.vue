@@ -57,10 +57,15 @@
             <p v-if="!isPasswordMatch && form.confirmPassword" class="error-msg">비밀번호가 일치하지 않습니다.</p>
           </div>
 
+          <!-- API Error Message -->
+          <p v-if="apiErrorMessage" class="api-error-msg">{{ apiErrorMessage }}</p>
+
           <!-- Actions -->
           <div class="form-actions">
             <button type="button" class="btn btn-cancel" @click="cancelEdit">취소</button>
-            <button type="submit" class="btn btn-save">저장하기</button>
+            <button type="submit" class="btn btn-save" :disabled="isSubmitting">
+              {{ isSubmitting ? '저장 중...' : '저장하기' }}
+            </button>
           </div>
         </form>
 
@@ -119,6 +124,7 @@ const form = ref({
 });
 
 const showDeleteModal = ref(false);
+const apiErrorMessage = ref("");
 const isSubmitting = ref(false);
 
 // Load user data into form
@@ -151,8 +157,7 @@ const saveChanges = async () => {
     return;
   }
 
-  // Prevent submit if nothing changed (optional optimization, but good UX)
-  // But here we just confirm.
+  apiErrorMessage.value = "";
 
   if (confirm("정보를 수정하시겠습니까?")) {
     isSubmitting.value = true;
@@ -170,12 +175,14 @@ const saveChanges = async () => {
       if (success) {
         alert("회원 정보가 수정되었습니다");
         router.push("/mypage");
-      } else {
-        alert("정보 수정에 실패했습니다. (중복된 닉네임일 수 있습니다)");
       }
     } catch (error) {
        console.error(error);
-       alert("오류가 발생했습니다. 잠시 후 다시 시도해주세요.");
+       if (error.response && error.response.data && error.response.data.error) {
+          apiErrorMessage.value = error.response.data.error.message;
+       } else {
+          apiErrorMessage.value = "이미 사용 중인 닉네임이거나 정보 수정에 실패했습니다.";
+       }
     } finally {
       isSubmitting.value = false;
     }
@@ -186,7 +193,7 @@ const confirmDelete = () => {
     // API 문서에 회원 탈퇴가 명시되어 있지 않아 임시 처리
     alert("회원 탈퇴가 완료되었습니다.");
     showDeleteModal.value = false;
-    // router.push("/");
+    router.push("/");
 };
 </script>
 
@@ -285,6 +292,18 @@ const confirmDelete = () => {
         font-size: 0.85rem;
         color: #ef4444;
       }
+    }
+
+    .api-error-msg {
+      margin: 0;
+      font-size: 0.9rem;
+      font-weight: 700;
+      color: #ef4444;
+      text-align: center;
+      background-color: #fef2f2;
+      padding: 0.75rem;
+      border-radius: 0.75rem;
+      border: 1px solid #fee2e2;
     }
 
     .form-actions {
