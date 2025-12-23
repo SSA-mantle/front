@@ -11,8 +11,8 @@
       <div v-if="!isGameOver" class="daily-card__info">오늘의 단어를 맞춰보세요!</div>
 
       <!-- Result Message for Success -->
-      <div 
-        v-else-if="gameStore.status === 'success'" 
+      <div
+        v-else-if="gameStore.status === 'success'"
         class="daily-card__result daily-card__result--success"
         :class="{ animate: shouldAnimate }"
       >
@@ -23,8 +23,8 @@
       </div>
 
       <!-- Result Message for Failure -->
-      <div 
-        v-else 
+      <div
+        v-else
         class="daily-card__result daily-card__result--fail"
         :class="{ animate: shouldAnimate }"
       >
@@ -350,7 +350,7 @@ const handleGiveUp = async () => {
   &__similarity-bar { height: 10px; background-color: #e2e8f0; border: 1px solid #cbd5e1; border-radius: 999px; overflow: hidden; width: 100%; position: relative; }
   &__similarity-progress { height: 100%; background-color: #3b82f6; border-radius: 999px; transition: width 0.8s cubic-bezier(0.34, 1.56, 0.64, 1); &--high { background-color: #2563eb; } }
   &__info-box { display: flex; flex-direction: column; align-items: flex-end; min-width: 65px; margin-left: 0.5rem; }
-  &__rank { font-size: 0.65rem; color: #94a3b8; font-weight: 700; }
+  &__rank { font-size: 0.75rem; color: #1f2937; font-weight: 700;  }
   &__score { text-align: right; font-weight: 800; color: #3b82f6; font-size: 0.9rem; }
   &__show-more {
     display: block; width: 100%; margin-top: 0.75rem; padding: 0.5rem; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 0.5rem; color: #64748b; font-size: 0.8rem; font-weight: 700; cursor: pointer;
