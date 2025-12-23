@@ -141,7 +141,7 @@ export const useGameStore = defineStore('game', () => {
     }
 
     try {
-      const res = await guessWord(word, failCount.value);
+      const res = await guessWord(word, failCount.value + 1);
       const result = res.data;
 
       // 새 추측 결과 추가
@@ -150,7 +150,7 @@ export const useGameStore = defineStore('game', () => {
         similarity: result.similarity,
         rank: result.rank,
         isCorrect: result.isCorrect,
-        attempt: failCount.value + 1,
+        attempt: result.failCount,
       };
 
       // 정렬 logic: 정답 우선, 그 다음 유사도 높은 순

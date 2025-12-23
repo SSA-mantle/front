@@ -85,9 +85,11 @@
               </div>
             </div>
             <div class="summary__info-box">
-              <span v-if="guess.rank" class="summary__rank">{{ guess.rank }}위</span>
+              <span v-if="guess.isCorrect" class="summary__rank"></span>
+              <span v-else-if="guess.rank > 0" class="summary__rank">{{ guess.rank }}위</span>
+              <span v-else class="summary__rank">1000위 밖</span>
               <span class="summary__score">
-                {{ guess.isCorrect ? '정답!' : `${guess.similarity}%` }}
+                {{ guess.isCorrect ? '정답' : `${guess.similarity}%` }}
               </span>
             </div>
           </li>
