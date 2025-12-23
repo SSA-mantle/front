@@ -87,7 +87,7 @@ const answerDescription = computed(() => {
     return "어제의 정답을 확인하려면 로그인이 필요합니다.";
   }
   // API에서 description 제공 시 사용, 없으면 기본 메시지
-  return historyData.value?.description || `"${historyData.value.answer}"에 대한 설명입니다.`;
+  return historyData.value?.answerDescription || `"${historyData.value.answer}"에 대한 설명입니다.`;
 });
 
 // 상위 100개 단어

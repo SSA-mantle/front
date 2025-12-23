@@ -188,7 +188,7 @@ export const useGameStore = defineStore('game', () => {
       if (result) {
         if (result.answer) answer.value = result.answer;
         top100Words.value = result.top100Words || [];
-        answerDescription.value = result.description || null; // API might not return description yet based on docs but let's keep logic
+        answerDescription.value = result.answerDescription || null; // API might not return description yet based on docs but let's keep logic
       }
       saveToLocalStorage();
       return result;

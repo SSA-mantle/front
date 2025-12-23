@@ -210,7 +210,7 @@ export const mockHandler = async (config) => {
               ...todayHistoryResponse,
               data: {
                   ...todayHistoryResponse.data,
-                  description: "사과는 장미과 사과나무속에 속하는 식물의 열매로, 전 세계적으로 가장 많이 재배되고 소비되는 과일 중 하나입니다. 아삭한 식감과 달콤하면서도 상큼한 맛이 특징입니다."
+                  answerDescription: "사과는 장미과 사과나무속에 속하는 식물의 열매로, 전 세계적으로 가장 많이 재배되고 소비되는 과일 중 하나입니다. 아삭한 식감과 달콤하면서도 상큼한 맛이 특징입니다."
               }
           },
           status: 200
@@ -223,7 +223,7 @@ export const mockHandler = async (config) => {
               ...yesterdayHistoryResponse,
               data: {
                   ...yesterdayHistoryResponse.data,
-                  description: "딸기는 장미과에 속하는 다년생 초본 식물의 열매로, 붉은색의 선명한 색상과 달콤한 맛이 특징입니다. 비타민 C가 풍부하여 건강에 좋은 과일로 알려져 있습니다."
+                  answerDescription: "딸기는 장미과에 속하는 다년생 초본 식물의 열매로, 붉은색의 선명한 색상과 달콤한 맛이 특징입니다. 비타민 C가 풍부하여 건강에 좋은 과일로 알려져 있습니다."
               }
           },
           status: 200
