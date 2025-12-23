@@ -78,6 +78,10 @@ defineProps({
     padding: 0;
     max-height: 520px;
     overflow-y: auto;
+
+    &::-webkit-scrollbar { width: 5px; }
+    &::-webkit-scrollbar-track { background: transparent; }
+    &::-webkit-scrollbar-thumb { background: #94a3b8; border-radius: 10px; }
   }
 
   &__row {

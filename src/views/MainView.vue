@@ -13,8 +13,8 @@
         </section>
 
         <!-- 실제 메인 게임 콘텐츠 -->
-        <div 
-          v-else 
+        <div
+          v-else
           class="main__actual-content"
           :class="{ 'main--animate': isFirstEntrance }"
         >
@@ -53,8 +53,9 @@
 </template>
 
 <script setup>
-import { ref, onMounted, computed } from "vue";
+import { ref, onMounted, computed, watch } from "vue";
 import { useGameStore } from "@/stores/game";
+import { useAuthStore } from "@/stores/auth";
 
 import AppHeader from "@/components/layout/AppHeader.vue";
 import AppFooter from "@/components/layout/AppFooter.vue";
@@ -63,6 +64,7 @@ import GameResultSection from "@/components/main/GameResultSection.vue";
 import logoImg from "@/assets/logo.png";
 
 const gameStore = useGameStore();
+const authStore = useAuthStore();
 const isGameOver = computed(() => gameStore.status !== "playing");
 
 // 인트로 표시 여부 확인
@@ -86,7 +88,6 @@ const stopResultAnimation = () => {
 };
 
 // 게임 상태 모니터링하여 새로 정답을 맞혔을 때만 애니메이션 적용
-import { watch } from "vue";
 watch(isGameOver, (newValue, oldValue) => {
   if (newValue === true && oldValue === false) {
     showResultAnimation.value = true;
@@ -94,6 +95,10 @@ watch(isGameOver, (newValue, oldValue) => {
 });
 
 onMounted(async () => {
+  // Ensure user is loaded for correct storage key
+  if (!authStore.user && authStore.isAuthenticated) {
+      await authStore.fetchUser();
+  }
   await gameStore.initializeGame();
 });
 </script>
@@ -122,7 +127,7 @@ onMounted(async () => {
     align-items: center;
     justify-content: center;
     animation: float-rotate 6s ease-in-out infinite;
-    
+
     img {
       width: 100%;
       height: 100%;

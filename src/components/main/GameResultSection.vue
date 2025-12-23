@@ -282,7 +282,7 @@ onMounted(async () => {
 
       &::-webkit-scrollbar { width: 5px; }
       &::-webkit-scrollbar-track { background: transparent; }
-      &::-webkit-scrollbar-thumb { background: #e2e8f0; border-radius: 10px; }
+      &::-webkit-scrollbar-thumb { background: #94a3b8; border-radius: 10px; }
     }
 
     &__row {
