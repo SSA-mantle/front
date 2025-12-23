@@ -13,81 +13,111 @@
             </svg>
           </div>
           <div class="text">
-            <h1 class="username">{{ nickname }}님</h1>
-            <p class="user-desc">{{ email }}</p>
+            <h1 class="username">
+              <span v-if="loadingUserInfo" class="skeleton-text w-32"></span>
+              <span v-else>{{ nickname }}님</span>
+            </h1>
+            <p class="user-desc">
+              <span v-if="loadingUserInfo" class="skeleton-text w-48"></span>
+              <span v-else>{{ email }}</span>
+            </p>
           </div>
         </div>
         <router-link to="/profile/edit" class="btn-edit">
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-6 h-6 icon">
-            <path fill-rule="evenodd" d="M11.078 2.25c-.917 0-1.699.663-1.85 1.567L9.05 5.389c-.02.12-.106.152-.192.201l-2.415.854c-.12.043-.21.063-.326.063-.413 0-.827-.15-1.17-.461L2.83 4.19a1.875 1.875 0 0 0-2.652 2.652l1.857 2.118c.31.343.46.757.46 1.17 0 .117-.02.207-.063.327l-.854 2.414c-.05.087-.082.173-.202.193L-.073 14.77c-.904.152-1.567.934-1.567 1.85 0 .917.663 1.699 1.567 1.85l1.545.253c.12.02.152.106.201.192l.854 2.415c.043.12.063.21.063.326 0 .413-.15.827-.461 1.17l-2.118 1.857a1.875 1.875 0 0 0 2.652 2.652l2.118-1.857c.343-.31.757-.46 1.17-.46.117 0 .207.02.327.063l2.414.854c.087.05.173.082.193.202l.253 1.545c.152.904.934 1.567 1.85 1.567.917 0 1.699-.663 1.85-1.567l.253-1.545c.02-.12.106-.152.192-.201l2.415-.854c.12-.043.21-.063.326-.063.413 0 .827.15 1.17.461l2.118 1.857a1.875 1.875 0 0 0 2.652-2.652l-1.857-2.118c-.31-.343-.46-.757-.46-1.17 0-.117.02-.207.063-.327l.854-2.414c.05-.087.082-.173.202-.193l1.545-.253c.904-.152 1.567-.934 1.567-1.85 0-.917-.663-1.699-1.567-1.85l-1.545-.253c-.12-.02-.152-.106-.201-.192l-.854-2.415c-.043-.12-.063-.21-.063-.326 0-.413.15-.827.461-1.17l2.118-1.857a1.875 1.875 0 0 0-2.652-2.652l-2.118 1.857c-.343.31-.757.46-1.17.46-.117 0-.207-.02-.327-.063l-2.414-.854c-.087-.05-.173-.082-.193-.202L12.928 2.25Z" clip-rule="evenodd" />
-            <path d="M12 9a3 3 0 1 0 0 6 3 3 0 0 0 0-6Z" />
-          </svg>
+<img :src="iconEditProfile" alt="정보수정" class="icon" />
           정보수정
         </router-link>
       </section>
 
       <!-- 2. Stats Section -->
       <section class="mypage__stats">
-        <div class="stat-card card">
-          <div class="stat-card__icon icon-blue">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
-              <path d="M12.75 12.75a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0ZM7.5 15.75a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5ZM8.25 17.25a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0ZM9.75 15.75a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5ZM10.5 17.25a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0ZM12 15.75a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5ZM12.75 17.25a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0ZM14.25 15.75a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5ZM15 17.25a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0ZM16.5 15.75a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5ZM15 12.75a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0ZM16.5 13.5a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5Z" />
-              <path fill-rule="evenodd" d="M6.75 2.25A.75.75 0 0 1 7.5 3v1.5h9V3A.75.75 0 0 1 18 3v1.5h.75a3 3 0 0 1 3 3v11.25a3 3 0 0 1-3 3H5.25a3 3 0 0 1-3-3V7.5a3 3 0 0 1 3-3H6V3a.75.75 0 0 1 .75-.75Zm13.5 9a1.5 1.5 0 0 0-1.5-1.5H5.25a1.5 1.5 0 0 0-1.5 1.5v7.5a1.5 1.5 0 0 0 1.5 1.5h13.5a1.5 1.5 0 0 0 1.5-1.5v-7.5Z" clip-rule="evenodd" />
-            </svg>
-            <span>총 게임</span>
+        <h2 class="section-title">누적 통계</h2>
+        <div class="stats-grid">
+          <div class="stat-card card">
+            <div class="stat-card__icon icon-blue">
+               <!-- Puzzle Piece Icon -->
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M12.378 1.602a.75.75 0 00-.756 0L3 6.632l9 5.25 9-5.25-8.622-5.03zM21.75 7.93l-9 5.25v9l8.628-5.032a.75.75 0 00.372-.648V7.93zM11.25 22.18v-9l-9-5.25v8.57a.75.75 0 00.372.648l8.628 5.033z" />
+              </svg>
+              <span>총 게임</span>
+            </div>
+            <div class="stat-card__value text-blue">
+              <span v-if="loadingStats" class="skeleton-text w-16"></span>
+              <span v-else>{{ stats.totalGamesPlayed }}</span>
+            </div>
           </div>
-          <div class="stat-card__value text-blue">142</div>
-        </div>
 
-        <div class="stat-card card">
-          <div class="stat-card__icon icon-green">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
-              <path fill-rule="evenodd" d="M8.603 3.799A4.49 4.49 0 0 1 12 2.25c1.657 0 3.107.936 3.903 2.327l2.25 4a2.25 2.25 0 0 1-3.906 2.196L12 8.75l-2.247 2.023A2.25 2.25 0 0 1 5.847 8.578l2.25-4a2.25 2.25 0 0 1 .506-.78ZM2.25 13.5a3 3 0 0 1 3-3h13.5a3 3 0 0 1 3 3v1.5a3 3 0 0 1-3 3H5.25a3 3 0 0 1-3-3v-1.5Zm7.114 4.886A.75.75 0 0 0 10.5 19.5h3a.75.75 0 0 0 1.136-1.114l-2.022-2.247C12.385 15.89 12.196 15.75 12 15.75s-.385.14-.614.389l-2.022 2.247Z" clip-rule="evenodd" />
-            </svg>
-            <span>완료</span>
+          <div class="stat-card card">
+            <div class="stat-card__icon icon-green">
+              <!-- Check Badge Icon -->
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                <path fill-rule="evenodd" d="M8.603 3.799A4.49 4.49 0 0112 2.25c1.657 0 3.107.936 3.903 2.327l2.25 4a2.25 2.25 0 01-3.906 2.196L12 8.75l-2.247 2.023A2.25 2.25 0 015.847 8.578l2.25-4a2.25 2.25 0 01.506-.78zM2.25 13.5a3 3 0 013-3h13.5a3 3 0 013 3v1.5a3 3 0 01-3 3H5.25a3 3 0 01-3-3v-1.5zm7.114 4.886a.75.75 0 00-1.114 0l-2.022 2.247c-.23.255-.386.494-.614.389a.75.75 0 00-1.136-1.114l2.022-2.247a.75.75 0 000-1.026l-2.022-2.247a.75.75 0 011.136-1.114l2.022 2.247a.75.75 0 001.026 0l2.022-2.247a.75.75 0 011.136 1.114l-2.022 2.247a.75.75 0 000 1.026l2.022 2.247a.75.75 0 01-1.136 1.114l-2.022-2.247a.75.75 0 00-1.026 0z" clip-rule="evenodd" />
+              </svg>
+              <span>완료</span>
+            </div>
+            <div class="stat-card__value text-green">
+              <span v-if="loadingStats" class="skeleton-text w-16"></span>
+              <span v-else>{{ stats.successfulGames }}</span>
+            </div>
           </div>
-          <div class="stat-card__value text-green">118</div>
-        </div>
 
-        <div class="stat-card card">
-          <div class="stat-card__icon icon-indigo">
-             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
-              <path fill-rule="evenodd" d="M2.25 13.5a8.25 8.25 0 0 1 8.25-8.25.75.75 0 0 1 .75.75v6.75H18a.75.75 0 0 1 .75.75 8.25 8.25 0 0 1-16.5 0Z" clip-rule="evenodd" />
-              <path fill-rule="evenodd" d="M12.75 3a.75.75 0 0 1 .75-.75 8.25 8.25 0 0 1 8.25 8.25.75.75 0 0 1-.75.75h-7.5a.75.75 0 0 1-.75-.75V3Z" clip-rule="evenodd" />
-            </svg>
-            <span>승률</span>
+          <div class="stat-card card">
+            <div class="stat-card__icon icon-indigo">
+               <!-- Chart Pie Icon -->
+               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                <path fill-rule="evenodd" d="M2.25 13.5a8.25 8.25 0 018.25-8.25.75.75 0 01.75.75v6.75H18a.75.75 0 01.75.75 8.25 8.25 0 01-16.5 0z" clip-rule="evenodd" />
+                <path fill-rule="evenodd" d="M12.75 3a.75.75 0 01.75-.75 8.25 8.25 0 018.25 8.25.75.75 0 01-.75.75h-7.5a.75.75 0 01-.75-.75V3z" clip-rule="evenodd" />
+              </svg>
+              <span>승률</span>
+            </div>
+            <div class="stat-card__value text-indigo">
+              <span v-if="loadingStats" class="skeleton-text w-16"></span>
+              <span v-else>{{ stats.winRate }}%</span>
+            </div>
           </div>
-          <div class="stat-card__value text-indigo">83.1%</div>
-        </div>
 
-        <div class="stat-card card">
-          <div class="stat-card__icon icon-orange">
-             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
-              <path fill-rule="evenodd" d="M5.166 2.621v.858c-1.035.148-2.059.33-3.071.543a.75.75 0 0 0-.584.859 6.753 6.753 0 0 0 6.138 5.6 6.73 6.73 0 0 0 2.743 1.346A6.707 6.707 0 0 1 9.279 15H8.54c-1.036 0-1.875.84-1.875 1.875V19.5h-.75a2.25 2.25 0 0 0-2.25 2.25c0 .414.336.75.75.75h15a.75.75 0 0 0 .75-.75 2.25 2.25 0 0 0-2.25-2.25h-.75v-2.625c0-1.036-.84-1.875-1.875-1.875h-.739a6.706 6.706 0 0 1-1.112-3.173 6.73 6.73 0 0 0 2.743-1.347 6.753 6.753 0 0 0 6.139-5.6.75.75 0 0 0-.585-.858 47.077 47.077 0 0 0-3.07-.543V2.62a.75.75 0 0 0-.656-.75c-1.676-.176-3.372-.176-5.048 0a.75.75 0 0 0-.656.75ZM4.565 5.5c1.833-.418 3.725-.634 5.632-.633 1.907-.001 3.799.215 5.632.633a5.253 5.253 0 0 1-1.385 4.393 5.23 5.23 0 0 1-4.247 1.327 5.23 5.23 0 0 1-4.247-1.327A5.253 5.253 0 0 1 4.565 5.5Z" clip-rule="evenodd" />
-            </svg>
-            <span>최고 순위</span>
+          <div class="stat-card card">
+            <div class="stat-card__icon icon-orange">
+               <!-- Trophy Icon -->
+               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                 <path fill-rule="evenodd" d="M5.166 2.621v.858c-1.035.148-2.059.33-3.071.543a.75.75 0 00-.584.859 6.753 6.753 0 006.138 5.6 6.73 6.73 0 002.743 1.346A6.707 6.707 0 019.279 15H8.54c-1.036 0-1.875.84-1.875 1.875V19.5h-.75a2.25 2.25 0 00-2.25 2.25c0 .414.336.75.75.75h15a.75.75 0 00.75-.75 2.25 2.25 0 00-2.25-2.25h-.75v-2.625c0-1.036-.84-1.875-1.875-1.875h-.739a6.706 6.706 0 01-1.112-3.173 6.73 6.73 0 002.743-1.347 6.753 6.753 0 006.139-5.6.75.75 0 00-.585-.858 47.077 47.077 0 00-3.07-.543V2.62a.75.75 0 00-.656-.75c-1.676-.176-3.372-.176-5.048 0a.75.75 0 00-.656.75zm4.749 1.125a.75.75 0 01.75-.75h3.352a.75.75 0 01.75.75v3.014c0 1.34-1.117 2.425-2.456 2.425-1.34 0-2.456-1.084-2.456-2.425V3.746z" clip-rule="evenodd" />
+              </svg>
+              <span>최고 순위</span>
+            </div>
+            <div class="stat-card__value text-orange">
+              <span v-if="loadingStats" class="skeleton-text w-16"></span>
+              <span v-else>{{ stats.bestRank ? `${stats.bestRank}위` : '-' }}</span>
+            </div>
           </div>
-          <div class="stat-card__value text-orange">2위</div>
-        </div>
 
-        <div class="stat-card card">
-          <div class="stat-card__icon icon-purple">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
-              <path fill-rule="evenodd" d="M15.22 6.268a.75.75 0 0 1 .968-.431l5.942 2.28a.75.75 0 0 1 .431.97l-2.28 5.941a.75.75 0 1 1-1.4-.537l1.63-4.251-1.086.484a11.2 11.2 0 0 0-5.45 5.174.75.75 0 0 1-1.334-.69 12.7 12.7 0 0 1 6.163-5.858l.484-1.086-4.251 1.63a.75.75 0 0 1-.537-1.4l5.941-2.28h.001ZM8.5 4.5a.75.75 0 0 1 .75.75v13.5a.75.75 0 0 1-1.5 0V5.25a.75.75 0 0 1 .75-.75Zm-5.32 5.923a.75.75 0 0 1 1.05.109 25.56 25.56 0 0 1 2.375 3.197.75.75 0 1 1-1.305.742 24.06 24.06 0 0 0-2.23-3 0 75.75 0 0 1-.109-1.05Zm15.82 1.487a.75.75 0 0 1 .11 1.05 25.29 25.29 0 0 1-2.936 3.653.75.75 0 0 1-1.12-1.002 23.79 23.79 0 0 0 2.766-3.44.75.75 0 0 1 .129-.26Z" clip-rule="evenodd" />
-            </svg>
-            <span>평균 시도</span>
+          <div class="stat-card card">
+            <div class="stat-card__icon icon-purple">
+               <!-- Arrow Path Icon / Target / Attempts -->
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M12 15a3 3 0 100-6 3 3 0 000 6z" />
+                <path fill-rule="evenodd" d="M1.323 11.447C2.811 6.976 7.028 3.75 12.001 3.75c4.97 0 9.185 3.223 10.675 7.69.12.362.12.752 0 1.113-1.487 4.471-5.705 7.697-10.677 7.697-4.97 0-9.186-3.223-10.675-7.69a1.762 1.762 0 010-1.113zM17.25 12a5.25 5.25 0 11-10.5 0 5.25 5.25 0 0110.5 0z" clip-rule="evenodd" />
+              </svg>
+              <span>평균 시도</span>
+            </div>
+            <div class="stat-card__value text-purple">
+              <span v-if="loadingStats" class="skeleton-text w-16"></span>
+              <span v-else>{{ stats.averageAttempts }}</span>
+            </div>
           </div>
-          <div class="stat-card__value text-purple">9.3</div>
-        </div>
 
-        <div class="stat-card card">
-           <div class="stat-card__icon icon-red">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
-              <path fill-rule="evenodd" d="M12.963 2.286a.75.75 0 0 0-1.071-.136 9.742 9.742 0 0 0-3.539 6.177 7.547 7.547 0 0 1-1.705-1.715.75.75 0 0 0-1.152.082A9 9 0 1 0 15.68 4.534a7.46 7.46 0 0 1-2.717-2.248ZM15.75 14.25a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0Z" clip-rule="evenodd" />
-            </svg>
-            <span>연속 기록</span>
+          <div class="stat-card card">
+             <div class="stat-card__icon icon-red">
+               <!-- Fire Icon -->
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                <path fill-rule="evenodd" d="M12.963 2.286a.75.75 0 0 0-1.071-.136 9.742 9.742 0 0 0-3.539 6.177 7.547 7.547 0 0 1-1.705-1.715.75.75 0 0 0-1.152.082A9 9 0 1 0 15.68 4.534a7.46 7.46 0 0 1-2.717-2.248ZM15.75 14.25a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0Z" clip-rule="evenodd" />
+              </svg>
+              <span>연속 기록</span>
+            </div>
+            <div class="stat-card__value text-red">
+              <span v-if="loadingStats" class="skeleton-text w-16"></span>
+              <span v-else>{{ stats.longestConsecutiveDays }}일</span>
+            </div>
           </div>
-          <div class="stat-card__value text-red">7일</div>
         </div>
       </section>
 
@@ -95,78 +125,50 @@
       <section class="mypage__achievements">
         <h2 class="section-title">업적</h2>
         <div class="achievement-grid">
-           <!-- Achievement items match the image -->
-          <div class="achievement-card card completed">
-            <div class="medal-icon bg-blue">
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
-                <path fill-rule="evenodd" d="M5.166 2.621v.858c-1.035.148-2.059.33-3.071.543a.75.75 0 0 0-.584.859 6.753 6.753 0 0 0 6.138 5.6 6.73 6.73 0 0 0 2.743 1.346A6.707 6.707 0 0 1 9.279 15H8.54c-1.036 0-1.875.84-1.875 1.875V19.5h-.75a2.25 2.25 0 0 0-2.25 2.25c0 .414.336.75.75.75h15a.75.75 0 0 0 .75-.75 2.25 2.25 0 0 0-2.25-2.25h-.75v-2.625c0-1.036-.84-1.875-1.875-1.875h-.739a6.706 6.706 0 0 1-1.112-3.173 6.73 6.73 0 0 0 2.743-1.347 6.753 6.753 0 0 0 6.139-5.6.75.75 0 0 0-.585-.858 47.077 47.077 0 0 0-3.07-.543V2.62a.75.75 0 0 0-.656-.75c-1.676-.176-3.372-.176-5.048 0a.75.75 0 0 0-.656.75ZM4.565 5.5c1.833-.418 3.725-.634 5.632-.633 1.907-.001 3.799.215 5.632.633a5.253 5.253 0 0 1-1.385 4.393 5.23 5.23 0 0 1-4.247 1.327 5.23 5.23 0 0 1-4.247-1.327A5.253 5.253 0 0 1 4.565 5.5Z" clip-rule="evenodd" />
-              </svg>
-            </div>
-            <div class="info">
-              <h3>첫 승리</h3>
-              <p>첫 게임 완료</p>
-            </div>
-          </div>
+          <template v-if="loadingAchievements">
+            <!-- Skeleton Loading -->
+             <div class="achievement-card card" v-for="i in 4" :key="i">
+                <div class="skeleton-icon"></div>
+                <div class="info">
+                   <div class="skeleton-text w-32"></div>
+                   <div class="skeleton-text w-48" style="margin-top: 0.5rem; height: 1rem;"></div>
+                </div>
+             </div>
+          </template>
 
-          <div class="achievement-card card completed">
-             <div class="medal-icon bg-blue">
-               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
-                <path fill-rule="evenodd" d="M5.166 2.621v.858c-1.035.148-2.059.33-3.071.543a.75.75 0 0 0-.584.859 6.753 6.753 0 0 0 6.138 5.6 6.73 6.73 0 0 0 2.743 1.346A6.707 6.707 0 0 1 9.279 15H8.54c-1.036 0-1.875.84-1.875 1.875V19.5h-.75a2.25 2.25 0 0 0-2.25 2.25c0 .414.336.75.75.75h15a.75.75 0 0 0 .75-.75 2.25 2.25 0 0 0-2.25-2.25h-.75v-2.625c0-1.036-.84-1.875-1.875-1.875h-.739a6.706 6.706 0 0 1-1.112-3.173 6.73 6.73 0 0 0 2.743-1.347 6.753 6.753 0 0 0 6.139-5.6.75.75 0 0 0-.585-.858 47.077 47.077 0 0 0-3.07-.543V2.62a.75.75 0 0 0-.656-.75c-1.676-.176-3.372-.176-5.048 0a.75.75 0 0 0-.656.75ZM4.565 5.5c1.833-.418 3.725-.634 5.632-.633 1.907-.001 3.799.215 5.632.633a5.253 5.253 0 0 1-1.385 4.393 5.23 5.23 0 0 1-4.247 1.327 5.23 5.23 0 0 1-4.247-1.327A5.253 5.253 0 0 1 4.565 5.5Z" clip-rule="evenodd" />
-              </svg>
+          <template v-else>
+             <div
+              v-for="achievement in allAchievements"
+              :key="achievement.type"
+              class="achievement-card card"
+              :class="{ 'completed': achievement.isUnlocked, 'locked': !achievement.isUnlocked }"
+            >
+              <div class="medal-icon" :class="[achievement.isUnlocked ? 'bg-blue' : '', achievement.colorClass]">
+                <!-- Fire Icon -->
+                <svg v-if="achievement.iconType === 'fire'" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                  <path fill-rule="evenodd" d="M12.963 2.286a.75.75 0 0 0-1.071-.136 9.742 9.742 0 0 0-3.539 6.177 7.547 7.547 0 0 1-1.705-1.715.75.75 0 0 0-1.152.082A9 9 0 1 0 15.68 4.534a7.46 7.46 0 0 1-2.717-2.248ZM15.75 14.25a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0Z" clip-rule="evenodd" />
+                </svg>
+                <!-- Medal Icon -->
+                 <svg v-else-if="achievement.iconType === 'medal'" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                  <path fill-rule="evenodd" d="M5.166 2.621v.858c-1.035.148-2.059.33-3.071.543a.75.75 0 0 0-.584.859 6.753 6.753 0 0 0 6.138 5.6 6.73 6.73 0 0 0 2.743 1.346A6.707 6.707 0 0 1 9.279 15H8.54c-1.036 0-1.875.84-1.875 1.875V19.5h-.75a2.25 2.25 0 0 0-2.25 2.25c0 .414.336.75.75.75h15a.75.75 0 0 0 .75-.75 2.25 2.25 0 0 0-2.25-2.25h-.75v-2.625c0-1.036-.84-1.875-1.875-1.875h-.739a6.706 6.706 0 0 1-1.112-3.173 6.73 6.73 0 0 0 2.743-1.347 6.753 6.753 0 0 0 6.139-5.6.75.75 0 0 0-.585-.858 47.077 47.077 0 0 0-3.07-.543V2.62a.75.75 0 0 0-.656-.75c-1.676-.176-3.372-.176-5.048 0a.75.75 0 0 0-.656.75ZM4.565 5.5c1.833-.418 3.725-.634 5.632-.633 1.907-.001 3.799.215 5.632.633a5.253 5.253 0 0 1-1.385 4.393 5.23 5.23 0 0 1-4.247 1.327 5.23 5.23 0 0 1-4.247-1.327A5.253 5.253 0 0 1 4.565 5.5Z" clip-rule="evenodd" />
+                </svg>
+                <!-- Trophy/Crown Icon (Using Trophy for now) -->
+                <svg v-else-if="achievement.iconType === 'trophy'" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                  <path fill-rule="evenodd" d="M9.315 7.584C12.195 3.883 16.695 1.5 21.75 1.5a.75.75 0 0 1 .75.75c0 5.056-2.383 9.555-6.084 12.436h.684c1.248 0 2.25-.809 2.25-1.808 0-1.21-1.24-2.203-2.922-2.348a.75.75 0 0 1-.689-.747V9.75a.75.75 0 0 1 .809-.748c2.91.248 4.302 2.062 4.302 3.848 0 2.28-1.92 4.091-4.75 4.316v1.365c0 1.597-2.197 3.033-5.32 3.208a.75.75 0 0 1-.41-.122L1.875 15a.75.75 0 0 1 0-1.5l8.13-1.016A18.89 18.89 0 0 0 9.315 7.584ZM2.25 10.5a.75.75 0 0 1 .75-1.06 17.653 17.653 0 0 0 4.298-2.652.75.75 0 0 1 1.012 1.107 19.143 19.143 0 0 1-4.496 3.055.75.75 0 0 1-1.077-.282.75.75 0 0 1-.487-.168Z" clip-rule="evenodd" />
+                </svg>
+                <svg v-else xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                  <path fill-rule="evenodd" d="M5.166 2.621v.858c-1.035.148-2.059.33-3.071.543a.75.75 0 0 0-.584.859 6.753 6.753 0 0 0 6.138 5.6 6.73 6.73 0 0 0 2.743 1.346A6.707 6.707 0 0 1 9.279 15H8.54c-1.036 0-1.875.84-1.875 1.875V19.5h-.75a2.25 2.25 0 0 0-2.25 2.25c0 .414.336.75.75.75h15a.75.75 0 0 0 .75-.75 2.25 2.25 0 0 0-2.25-2.25h-.75v-2.625c0-1.036-.84-1.875-1.875-1.875h-.739a6.706 6.706 0 0 1-1.112-3.173 6.73 6.73 0 0 0 2.743-1.347 6.753 6.753 0 0 0 6.139-5.6.75.75 0 0 0-.585-.858 47.077 47.077 0 0 0-3.07-.543V2.62a.75.75 0 0 0-.656-.75c-1.676-.176-3.372-.176-5.048 0a.75.75 0 0 0-.656.75ZM4.565 5.5c1.833-.418 3.725-.634 5.632-.633 1.907-.001 3.799.215 5.632.633a5.253 5.253 0 0 1-1.385 4.393 5.23 5.23 0 0 1-4.247 1.327 5.23 5.23 0 0 1-4.247-1.327A5.253 5.253 0 0 1 4.565 5.5Z" clip-rule="evenodd" />
+                </svg>
+              </div>
+              <div class="info">
+                <h3>{{ achievement.title }}</h3>
+                <p>{{ achievement.description }}</p>
+                <p v-if="achievement.isUnlocked" class="unlocked-date">
+                  {{ new Date(achievement.unlockedAt).toLocaleDateString() }} 획득
+                </p>
+              </div>
             </div>
-            <div class="info">
-               <h3>연속 도전자</h3>
-              <p>7일 연속 플레이</p>
-            </div>
-          </div>
-
-          <div class="achievement-card card completed">
-             <div class="medal-icon bg-blue">
-               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
-                <path fill-rule="evenodd" d="M5.166 2.621v.858c-1.035.148-2.059.33-3.071.543a.75.75 0 0 0-.584.859 6.753 6.753 0 0 0 6.138 5.6 6.73 6.73 0 0 0 2.743 1.346A6.707 6.707 0 0 1 9.279 15H8.54c-1.036 0-1.875.84-1.875 1.875V19.5h-.75a2.25 2.25 0 0 0-2.25 2.25c0 .414.336.75.75.75h15a.75.75 0 0 0 .75-.75 2.25 2.25 0 0 0-2.25-2.25h-.75v-2.625c0-1.036-.84-1.875-1.875-1.875h-.739a6.706 6.706 0 0 1-1.112-3.173 6.73 6.73 0 0 0 2.743-1.347 6.753 6.753 0 0 0 6.139-5.6.75.75 0 0 0-.585-.858 47.077 47.077 0 0 0-3.07-.543V2.62a.75.75 0 0 0-.656-.75c-1.676-.176-3.372-.176-5.048 0a.75.75 0 0 0-.656.75ZM4.565 5.5c1.833-.418 3.725-.634 5.632-.633 1.907-.001 3.799.215 5.632.633a5.253 5.253 0 0 1-1.385 4.393 5.23 5.23 0 0 1-4.247 1.327 5.23 5.23 0 0 1-4.247-1.327A5.253 5.253 0 0 1 4.565 5.5Z" clip-rule="evenodd" />
-              </svg>
-            </div>
-            <div class="info">
-               <h3>완벽주의자</h3>
-              <p>5회 이하로 정답 맞추기</p>
-            </div>
-          </div>
-
-          <div class="achievement-card card completed">
-             <div class="medal-icon bg-blue">
-               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
-                <path fill-rule="evenodd" d="M5.166 2.621v.858c-1.035.148-2.059.33-3.071.543a.75.75 0 0 0-.584.859 6.753 6.753 0 0 0 6.138 5.6 6.73 6.73 0 0 0 2.743 1.346A6.707 6.707 0 0 1 9.279 15H8.54c-1.036 0-1.875.84-1.875 1.875V19.5h-.75a2.25 2.25 0 0 0-2.25 2.25c0 .414.336.75.75.75h15a.75.75 0 0 0 .75-.75 2.25 2.25 0 0 0-2.25-2.25h-.75v-2.625c0-1.036-.84-1.875-1.875-1.875h-.739a6.706 6.706 0 0 1-1.112-3.173 6.73 6.73 0 0 0 2.743-1.347 6.753 6.753 0 0 0 6.139-5.6.75.75 0 0 0-.585-.858 47.077 47.077 0 0 0-3.07-.543V2.62a.75.75 0 0 0-.656-.75c-1.676-.176-3.372-.176-5.048 0a.75.75 0 0 0-.656.75ZM4.565 5.5c1.833-.418 3.725-.634 5.632-.633 1.907-.001 3.799.215 5.632.633a5.253 5.253 0 0 1-1.385 4.393 5.23 5.23 0 0 1-4.247 1.327 5.23 5.23 0 0 1-4.247-1.327A5.253 5.253 0 0 1 4.565 5.5Z" clip-rule="evenodd" />
-              </svg>
-            </div>
-             <div class="info">
-               <h3>랭커</h3>
-              <p>상위 10위 안에 들기</p>
-            </div>
-          </div>
-
-          <div class="achievement-card card completed">
-             <div class="medal-icon bg-blue">
-               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
-                <path fill-rule="evenodd" d="M5.166 2.621v.858c-1.035.148-2.059.33-3.071.543a.75.75 0 0 0-.584.859 6.753 6.753 0 0 0 6.138 5.6 6.73 6.73 0 0 0 2.743 1.346A6.707 6.707 0 0 1 9.279 15H8.54c-1.036 0-1.875.84-1.875 1.875V19.5h-.75a2.25 2.25 0 0 0-2.25 2.25c0 .414.336.75.75.75h15a.75.75 0 0 0 .75-.75 2.25 2.25 0 0 0-2.25-2.25h-.75v-2.625c0-1.036-.84-1.875-1.875-1.875h-.739a6.706 6.706 0 0 1-1.112-3.173 6.73 6.73 0 0 0 2.743-1.347 6.753 6.753 0 0 0 6.139-5.6.75.75 0 0 0-.585-.858 47.077 47.077 0 0 0-3.07-.543V2.62a.75.75 0 0 0-.656-.75c-1.676-.176-3.372-.176-5.048 0a.75.75 0 0 0-.656.75ZM4.565 5.5c1.833-.418 3.725-.634 5.632-.633 1.907-.001 3.799.215 5.632.633a5.253 5.253 0 0 1-1.385 4.393 5.23 5.23 0 0 1-4.247 1.327 5.23 5.23 0 0 1-4.247-1.327A5.253 5.253 0 0 1 4.565 5.5Z" clip-rule="evenodd" />
-              </svg>
-            </div>
-            <div class="info">
-               <h3>백전백승</h3>
-              <p>100게임 완료</p>
-            </div>
-          </div>
-           <div class="achievement-card card locked">
-             <div class="medal-icon bg-gray">
-               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
-                <path fill-rule="evenodd" d="M5.166 2.621v.858c-1.035.148-2.059.33-3.071.543a.75.75 0 0 0-.584.859 6.753 6.753 0 0 0 6.138 5.6 6.73 6.73 0 0 0 2.743 1.346A6.707 6.707 0 0 1 9.279 15H8.54c-1.036 0-1.875.84-1.875 1.875V19.5h-.75a2.25 2.25 0 0 0-2.25 2.25c0 .414.336.75.75.75h15a.75.75 0 0 0 .75-.75 2.25 2.25 0 0 0-2.25-2.25h-.75v-2.625c0-1.036-.84-1.875-1.875-1.875h-.739a6.706 6.706 0 0 1-1.112-3.173 6.73 6.73 0 0 0 2.743-1.347 6.753 6.753 0 0 0 6.139-5.6.75.75 0 0 0-.585-.858 47.077 47.077 0 0 0-3.07-.543V2.62a.75.75 0 0 0-.656-.75c-1.676-.176-3.372-.176-5.048 0a.75.75 0 0 0-.656.75ZM4.565 5.5c1.833-.418 3.725-.634 5.632-.633 1.907-.001 3.799.215 5.632.633a5.253 5.253 0 0 1-1.385 4.393 5.23 5.23 0 0 1-4.247 1.327 5.23 5.23 0 0 1-4.247-1.327A5.253 5.253 0 0 1 4.565 5.5Z" clip-rule="evenodd" />
-              </svg>
-            </div>
-             <div class="info">
-               <h3>전설의 시작</h3>
-              <p>1위 달성</p>
-            </div>
-          </div>
-
+          </template>
         </div>
       </section>
     </main>
@@ -176,14 +178,103 @@
 </template>
 
 <script setup>
-import { computed } from "vue";
+import { ref, onMounted, computed } from 'vue';
 import { useAuthStore } from "@/stores/auth";
+import { getMyInfo, getMyStatistics } from "@/api/users";
+import { getMyAchievements } from "@/api/achievements";
+import { ACHIEVEMENT_METADATA } from "@/constants/achievements";
+import iconEditProfile from '@/assets/icon-edit-profile.png';
 import AppHeader from "@/components/layout/AppHeader.vue";
 import AppFooter from "@/components/layout/AppFooter.vue";
 
 const authStore = useAuthStore();
-const nickname = computed(() => authStore.user?.nickname || '알 수 없음');
-const email = computed(() => authStore.user?.email || '');
+const nickname = ref('알 수 없음');
+const email = ref('');
+const loadingUserInfo = ref(true);
+const loadingStats = ref(true);
+const loadingAchievements = ref(true);
+
+const stats = ref({
+  totalGamesPlayed: 0,
+  successfulGames: 0,
+  winRate: 0,
+  bestRank: null,
+  longestConsecutiveDays: 0,
+  averageAttempts: 0
+});
+
+const myAchievements = ref([]);
+
+// Computed property to merge metadata with user's achievements
+const allAchievements = computed(() => {
+  return Object.keys(ACHIEVEMENT_METADATA).map(key => {
+    const meta = ACHIEVEMENT_METADATA[key];
+    const earned = myAchievements.value.find(a => a.type === key);
+
+    return {
+      type: key,
+      ...meta,
+      isUnlocked: !!earned,
+      unlockedAt: earned ? earned.unlockedAt : null
+    };
+  });
+});
+
+const fetchUserInfo = async () => {
+  try {
+    loadingUserInfo.value = true;
+    const response = await getMyInfo();
+    if (response.success && response.data) {
+       // Also update store to keep it in sync
+       authStore.user = response.data;
+       nickname.value = response.data.nickname;
+       email.value = response.data.email;
+    }
+  } catch (error) {
+    console.error("Failed to fetch user info:", error);
+    // Fallback to store if available
+    if (authStore.user) {
+        nickname.value = authStore.user.nickname;
+        email.value = authStore.user.email;
+    }
+  } finally {
+    loadingUserInfo.value = false;
+  }
+};
+
+const fetchStatistics = async () => {
+    try {
+        loadingStats.value = true;
+        const response = await getMyStatistics();
+        if (response.success && response.data) {
+            stats.value = response.data;
+        }
+    } catch (error) {
+        console.error("Failed to fetch statistics:", error);
+    } finally {
+        loadingStats.value = false;
+    }
+}
+
+const fetchAchievements = async () => {
+  try {
+    loadingAchievements.value = true;
+    const response = await getMyAchievements();
+    if (response.success && response.data) {
+      myAchievements.value = response.data.achievements || [];
+    }
+  } catch (error) {
+    console.error("Failed to fetch achievements:", error);
+  } finally {
+    loadingAchievements.value = false;
+  }
+};
+
+onMounted(() => {
+  fetchUserInfo();
+  fetchStatistics();
+  fetchAchievements();
+});
 </script>
 
 <style lang="scss" scoped>
@@ -193,15 +284,23 @@ const email = computed(() => authStore.user?.email || '');
   padding: 0 1.5rem;
   display: flex;
   flex-direction: column;
-  gap: 1.5rem;
+  gap: 2rem;
+
+  .section-title {
+    font-size: 1.15rem;
+    font-weight: 700;
+    color: var(--color-text-heading);
+    margin-bottom: 1rem;
+    padding-left: 0.25rem;
+  }
 
   // 공통 카드 스타일
   .card {
-     background: white;
+     background: var(--color-surface);
      border-radius: 1rem;
      padding: 1.5rem;
      border: 1px solid var(--color-border);
-     box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+     box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05); /* Modern soft shadow */
   }
 
   // 1. 프로필 섹션
@@ -212,13 +311,13 @@ const email = computed(() => authStore.user?.email || '');
     .profile-info {
       display: flex;
       align-items: center;
-      gap: 1rem;
+      gap: 1.25rem;
 
       .avatar {
         width: 3.5rem;
         height: 3.5rem;
         border-radius: 1rem;
-        background-color: #3b82f6; // Blue 500
+        background-color: var(--color-primary); // Brand Color
         color: white;
         display: flex;
         align-items: center;
@@ -250,8 +349,8 @@ const email = computed(() => authStore.user?.email || '');
       align-items: center;
       gap: 0.5rem;
       padding: 0.6rem 1rem;
-      background-color: #f3f4f6; // Gray 100
-      color: #4b5563; // Gray 600
+      background-color: #f1f5f9; // Slate 100
+      color: #475569; // Slate 600
       border-radius: 0.75rem;
       text-decoration: none;
       font-weight: 600;
@@ -259,7 +358,7 @@ const email = computed(() => authStore.user?.email || '');
       transition: background-color 0.2s;
 
       &:hover {
-        background-color: #e5e7eb; // Gray 200
+        background-color: #e2e8f0; // Slate 200
       }
 
       .icon {
@@ -271,28 +370,33 @@ const email = computed(() => authStore.user?.email || '');
 
   // 2. 통계 섹션
   &__stats {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 1rem;
+    .stats-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 1rem;
+    }
 
     .stat-card {
       padding: 1.5rem;
       display: flex;
       flex-direction: column;
       gap: 0.75rem;
+
       &__icon {
         display: flex;
         align-items: center;
         gap: 0.5rem;
+        // Default color if no class
         color: var(--color-text-muted);
         font-weight: 600;
         font-size: 0.9rem;
 
         svg {
-          width: 1.25rem;
-          height: 1.25rem;
+          width: 1.4rem;
+          height: 1.4rem;
         }
 
+        // Color Variants (Modernized)
         &.icon-blue svg { color: #3b82f6; }
         &.icon-green svg { color: #10b981; }
         &.icon-indigo svg { color: #6366f1; }
@@ -305,7 +409,9 @@ const email = computed(() => authStore.user?.email || '');
         font-size: 2rem;
         font-weight: 800;
         line-height: 1;
+        letter-spacing: -0.02em;
 
+        // Color Variants (Matching Icons)
         &.text-blue { color: #3b82f6; }
         &.text-green { color: #10b981; }
         &.text-indigo { color: #6366f1; }
@@ -318,14 +424,6 @@ const email = computed(() => authStore.user?.email || '');
 
   // 3. 업적 섹션
   &__achievements {
-    .section-title {
-        font-size: 1.1rem;
-        font-weight: 700;
-        color: var(--color-text-heading);
-        margin-bottom: 1rem;
-        padding-left: 0.5rem;
-    }
-
     .achievement-grid {
       display: grid;
       grid-template-columns: 1fr 1fr;
@@ -337,26 +435,26 @@ const email = computed(() => authStore.user?.email || '');
       align-items: center;
       gap: 1rem;
       padding: 1.25rem;
-      border: 1px solid #e0f2fe; // Light blue border for completed
-      background-color: #f0f9ff; // Light blue background
+      border: 1px solid var(--color-border);
+      background-color: var(--color-surface);
 
+      // Completed style updates
       &.completed {
          .medal-icon {
-            background-color: #3b82f6; // Blue 500
+            background-color: var(--color-primary); // Brand Blue
             color: white;
+            box-shadow: 0 4px 6px -1px rgba(59, 130, 246, 0.25);
          }
       }
 
       &.locked {
-        background-color: #f9fafb; // Gray 50
-        border-color: var(--color-border);
+        background-color: #f8fafc; // Slate 50
         .medal-icon {
-            background-color: #e5e7eb; // Gray 200
+            background-color: #e2e8f0; // Slate 200
             color: white;
         }
-
         .info h3, .info p {
-             color: #9ca3af; // Gray 400
+             color: #94a3b8; // Slate 400
         }
       }
 
@@ -379,12 +477,12 @@ const email = computed(() => authStore.user?.email || '');
         h3 {
           font-size: 1rem;
           font-weight: 700;
-          color: #1e293b;
+          color: var(--color-text-heading);
           margin: 0 0 0.25rem;
         }
         p {
           font-size: 0.85rem;
-          color: #64748b;
+          color: var(--color-text-muted);
           margin: 0;
         }
       }
@@ -392,11 +490,46 @@ const email = computed(() => authStore.user?.email || '');
   }
 }
 
+.skeleton-text {
+  display: inline-block;
+  height: 1.5rem;
+  background-color: #e2e8f0;
+  border-radius: 0.25rem;
+  animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+
+  &.w-32 { width: 8rem; }
+  &.w-48 { width: 12rem; }
+  &.w-16 { width: 4rem; }
+}
+
+.skeleton-icon {
+  width: 3rem;
+  height: 3rem;
+  border-radius: 0.75rem;
+  background-color: #e2e8f0;
+  animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  flex-shrink: 0;
+}
+
+.unlocked-date {
+  font-size: 0.75rem !important;
+  color: var(--color-primary) !important;
+  margin-top: 0.25rem !important;
+  font-weight: 500;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: .5; }
+}
+
 // Responsive
 @media (max-width: 768px) {
   .mypage {
     &__stats {
-      grid-template-columns: 1fr;
+      .stats-grid {
+        grid-template-columns: 1fr;
+      }
     }
     &__achievements .achievement-grid {
       grid-template-columns: 1fr;

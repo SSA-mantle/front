@@ -10,6 +10,12 @@ export const giveUpGame = async () => {
   return response.data;
 };
 
+// Get Game Status
+export const getGameStatus = async () => {
+  const response = await api.get('/games/status');
+  return response.data;
+};
+
 // Get Today's Answer History (Correct word and Top 100)
 export const getTodayHistory = async () => {
   const response = await api.get('/games/answer-history/today');

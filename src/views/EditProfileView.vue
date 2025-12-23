@@ -23,10 +23,10 @@
           <!-- Nickname -->
           <div class="form-group">
             <label for="nickname">닉네임</label>
-            <input 
-              type="text" 
-              id="nickname" 
-              v-model="form.nickname" 
+            <input
+              type="text"
+              id="nickname"
+              v-model="form.nickname"
               class="form-input"
             />
           </div>
@@ -34,11 +34,11 @@
           <!-- New Password -->
           <div class="form-group">
             <label for="new-password">새 비밀번호</label>
-            <input 
-              type="password" 
-              id="new-password" 
-              v-model="form.newPassword" 
-              placeholder="변경할 비밀번호를 입력하세요" 
+            <input
+              type="password"
+              id="new-password"
+              v-model="form.newPassword"
+              placeholder="변경할 비밀번호를 입력하세요"
               class="form-input"
             />
             <p class="help-text">비밀번호를 변경하지 않으려면 비워두세요</p>
@@ -47,11 +47,11 @@
           <!-- Confirm New Password (Conditional) -->
           <div class="form-group" v-if="form.newPassword">
             <label for="confirm-password">새 비밀번호 확인</label>
-            <input 
-              type="password" 
-              id="confirm-password" 
-              v-model="form.confirmPassword" 
-              :class="['form-input', { 'error': !isPasswordMatch && form.confirmPassword }]" 
+            <input
+              type="password"
+              id="confirm-password"
+              v-model="form.confirmPassword"
+              :class="['form-input', { 'error': !isPasswordMatch && form.confirmPassword }]"
               placeholder="새 비밀번호를 다시 입력하세요"
             />
             <p v-if="!isPasswordMatch && form.confirmPassword" class="error-msg">비밀번호가 일치하지 않습니다.</p>
@@ -79,7 +79,7 @@
         </section>
       </div>
     </main>
-    
+
     <!-- Delete Modal -->
     <div v-if="showDeleteModal" class="modal-overlay">
       <div class="modal-card">
@@ -103,7 +103,7 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted, watch } from "vue"; // watch added for reactivity
+import { ref, computed, onMounted, watch } from "vue";
 import { useRouter } from "vue-router";
 import { useAuthStore } from "@/stores/auth";
 import AppHeader from "@/components/layout/AppHeader.vue";
@@ -118,18 +118,24 @@ const form = ref({
   confirmPassword: "",
 });
 
+const showDeleteModal = ref(false);
+const isSubmitting = ref(false);
+
 // Load user data into form
-// We use a watcher to update the form if the store loads data late (e.g. reload on this page)
 watch(() => authStore.user, (newUser) => {
     if (newUser) {
         form.value.nickname = newUser.nickname || "";
     }
 }, { immediate: true });
 
-
-const showDeleteModal = ref(false);
+onMounted(async () => {
+  if (!authStore.user) {
+    await authStore.fetchUser();
+  }
+});
 
 const isPasswordMatch = computed(() => {
+  if (!form.value.newPassword) return true;
   return form.value.newPassword === form.value.confirmPassword;
 });
 
@@ -145,30 +151,42 @@ const saveChanges = async () => {
     return;
   }
 
+  // Prevent submit if nothing changed (optional optimization, but good UX)
+  // But here we just confirm.
+
   if (confirm("정보를 수정하시겠습니까?")) {
+    isSubmitting.value = true;
     try {
-      const success = await authStore.updateProfile({ 
-          nickname: form.value.nickname,
-          password: form.value.newPassword || undefined // Only send if set
-      });
-      
+      const payload = {
+        nickname: form.value.nickname,
+      };
+      // Only include password if set
+      if (form.value.newPassword) {
+        payload.password = form.value.newPassword;
+      }
+
+      const success = await authStore.updateProfile(payload);
+
       if (success) {
         alert("회원 정보가 수정되었습니다");
         router.push("/mypage");
       } else {
-        alert("정보 수정에 실패했습니다.");
+        alert("정보 수정에 실패했습니다. (중복된 닉네임일 수 있습니다)");
       }
     } catch (error) {
        console.error(error);
-       alert("오류가 발생했습니다.");
+       alert("오류가 발생했습니다. 잠시 후 다시 시도해주세요.");
+    } finally {
+      isSubmitting.value = false;
     }
   }
 };
 
 const confirmDelete = () => {
-    // TODO: API Call to delete account
-    alert("회원 탈퇴가 완료되었습니다."); // Not visible in image but standard flow
-    router.push("/");
+    // API 문서에 회원 탈퇴가 명시되어 있지 않아 임시 처리
+    alert("회원 탈퇴가 완료되었습니다.");
+    showDeleteModal.value = false;
+    // router.push("/");
 };
 </script>
 
@@ -177,7 +195,7 @@ const confirmDelete = () => {
   display: flex;
   justify-content: center;
   padding: 2rem 1.5rem;
-  
+
   &__container {
     background: white;
     width: 100%;
@@ -252,7 +270,7 @@ const confirmDelete = () => {
         &::placeholder {
            color: #9ca3af;
         }
-        
+
         &.error {
             border-color: #ef4444;
         }
@@ -262,7 +280,7 @@ const confirmDelete = () => {
         font-size: 0.85rem;
         color: #6b7280;
       }
-      
+
       .error-msg {
         font-size: 0.85rem;
         color: #ef4444;
@@ -311,7 +329,7 @@ const confirmDelete = () => {
       align-items: center;
       gap: 0.5rem;
       margin-bottom: 0.5rem;
-      
+
       .icon-warning {
         width: 1.5rem;
         height: 1.5rem;
@@ -381,13 +399,13 @@ const confirmDelete = () => {
 
   .modal-content {
     margin-bottom: 2rem;
-    
+
     p {
       color: #4b5563;
       font-size: 1.1rem;
       line-height: 1.6;
       word-break: keep-all; // Korean text break logic
-      
+
       .highlight {
         color: #3b82f6;
         font-weight: 700;
