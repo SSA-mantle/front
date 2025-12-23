@@ -123,33 +123,52 @@
 
       <!-- 3. Achievements Section -->
       <section class="mypage__achievements">
-        <h2 class="section-title">업적 (준비중)</h2>
-        <div class="achievement-grid" style="opacity: 0.5; pointer-events: none;">
-           <!-- Achievement items match the image -->
-          <div class="achievement-card card completed">
-            <div class="medal-icon bg-blue">
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
-                <path fill-rule="evenodd" d="M5.166 2.621v.858c-1.035.148-2.059.33-3.071.543a.75.75 0 0 0-.584.859 6.753 6.753 0 0 0 6.138 5.6 6.73 6.73 0 0 0 2.743 1.346A6.707 6.707 0 0 1 9.279 15H8.54c-1.036 0-1.875.84-1.875 1.875V19.5h-.75a2.25 2.25 0 0 0-2.25 2.25c0 .414.336.75.75.75h15a.75.75 0 0 0 .75-.75 2.25 2.25 0 0 0-2.25-2.25h-.75v-2.625c0-1.036-.84-1.875-1.875-1.875h-.739a6.706 6.706 0 0 1-1.112-3.173 6.73 6.73 0 0 0 2.743-1.347 6.753 6.753 0 0 0 6.139-5.6.75.75 0 0 0-.585-.858 47.077 47.077 0 0 0-3.07-.543V2.62a.75.75 0 0 0-.656-.75c-1.676-.176-3.372-.176-5.048 0a.75.75 0 0 0-.656.75ZM4.565 5.5c1.833-.418 3.725-.634 5.632-.633 1.907-.001 3.799.215 5.632.633a5.253 5.253 0 0 1-1.385 4.393 5.23 5.23 0 0 1-4.247 1.327 5.23 5.23 0 0 1-4.247-1.327A5.253 5.253 0 0 1 4.565 5.5Z" clip-rule="evenodd" />
-              </svg>
-            </div>
-            <div class="info">
-              <h3>첫 승리</h3>
-              <p>첫 게임 완료</p>
-            </div>
-          </div>
+        <h2 class="section-title">업적</h2>
+        <div class="achievement-grid">
+          <template v-if="loadingAchievements">
+            <!-- Skeleton Loading -->
+             <div class="achievement-card card" v-for="i in 4" :key="i">
+                <div class="skeleton-icon"></div>
+                <div class="info">
+                   <div class="skeleton-text w-32"></div>
+                   <div class="skeleton-text w-48" style="margin-top: 0.5rem; height: 1rem;"></div>
+                </div>
+             </div>
+          </template>
 
-          <div class="achievement-card card completed">
-             <div class="medal-icon bg-blue">
-               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
-                <path fill-rule="evenodd" d="M5.166 2.621v.858c-1.035.148-2.059.33-3.071.543a.75.75 0 0 0-.584.859 6.753 6.753 0 0 0 6.138 5.6 6.73 6.73 0 0 0 2.743 1.346A6.707 6.707 0 0 1 9.279 15H8.54c-1.036 0-1.875.84-1.875 1.875V19.5h-.75a2.25 2.25 0 0 0-2.25 2.25c0 .414.336.75.75.75h15a.75.75 0 0 0 .75-.75 2.25 2.25 0 0 0-2.25-2.25h-.75v-2.625c0-1.036-.84-1.875-1.875-1.875h-.739a6.706 6.706 0 0 1-1.112-3.173 6.73 6.73 0 0 0 2.743-1.347 6.753 6.753 0 0 0 6.139-5.6.75.75 0 0 0-.585-.858 47.077 47.077 0 0 0-3.07-.543V2.62a.75.75 0 0 0-.656-.75c-1.676-.176-3.372-.176-5.048 0a.75.75 0 0 0-.656.75ZM4.565 5.5c1.833-.418 3.725-.634 5.632-.633 1.907-.001 3.799.215 5.632.633a5.253 5.253 0 0 1-1.385 4.393 5.23 5.23 0 0 1-4.247 1.327 5.23 5.23 0 0 1-4.247-1.327A5.253 5.253 0 0 1 4.565 5.5Z" clip-rule="evenodd" />
-              </svg>
+          <template v-else>
+             <div
+              v-for="achievement in allAchievements"
+              :key="achievement.type"
+              class="achievement-card card"
+              :class="{ 'completed': achievement.isUnlocked, 'locked': !achievement.isUnlocked }"
+            >
+              <div class="medal-icon" :class="[achievement.isUnlocked ? 'bg-blue' : '', achievement.colorClass]">
+                <!-- Fire Icon -->
+                <svg v-if="achievement.iconType === 'fire'" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                  <path fill-rule="evenodd" d="M12.963 2.286a.75.75 0 0 0-1.071-.136 9.742 9.742 0 0 0-3.539 6.177 7.547 7.547 0 0 1-1.705-1.715.75.75 0 0 0-1.152.082A9 9 0 1 0 15.68 4.534a7.46 7.46 0 0 1-2.717-2.248ZM15.75 14.25a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0Z" clip-rule="evenodd" />
+                </svg>
+                <!-- Medal Icon -->
+                 <svg v-else-if="achievement.iconType === 'medal'" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                  <path fill-rule="evenodd" d="M5.166 2.621v.858c-1.035.148-2.059.33-3.071.543a.75.75 0 0 0-.584.859 6.753 6.753 0 0 0 6.138 5.6 6.73 6.73 0 0 0 2.743 1.346A6.707 6.707 0 0 1 9.279 15H8.54c-1.036 0-1.875.84-1.875 1.875V19.5h-.75a2.25 2.25 0 0 0-2.25 2.25c0 .414.336.75.75.75h15a.75.75 0 0 0 .75-.75 2.25 2.25 0 0 0-2.25-2.25h-.75v-2.625c0-1.036-.84-1.875-1.875-1.875h-.739a6.706 6.706 0 0 1-1.112-3.173 6.73 6.73 0 0 0 2.743-1.347 6.753 6.753 0 0 0 6.139-5.6.75.75 0 0 0-.585-.858 47.077 47.077 0 0 0-3.07-.543V2.62a.75.75 0 0 0-.656-.75c-1.676-.176-3.372-.176-5.048 0a.75.75 0 0 0-.656.75ZM4.565 5.5c1.833-.418 3.725-.634 5.632-.633 1.907-.001 3.799.215 5.632.633a5.253 5.253 0 0 1-1.385 4.393 5.23 5.23 0 0 1-4.247 1.327 5.23 5.23 0 0 1-4.247-1.327A5.253 5.253 0 0 1 4.565 5.5Z" clip-rule="evenodd" />
+                </svg>
+                <!-- Trophy/Crown Icon (Using Trophy for now) -->
+                <svg v-else-if="achievement.iconType === 'trophy'" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                  <path fill-rule="evenodd" d="M9.315 7.584C12.195 3.883 16.695 1.5 21.75 1.5a.75.75 0 0 1 .75.75c0 5.056-2.383 9.555-6.084 12.436h.684c1.248 0 2.25-.809 2.25-1.808 0-1.21-1.24-2.203-2.922-2.348a.75.75 0 0 1-.689-.747V9.75a.75.75 0 0 1 .809-.748c2.91.248 4.302 2.062 4.302 3.848 0 2.28-1.92 4.091-4.75 4.316v1.365c0 1.597-2.197 3.033-5.32 3.208a.75.75 0 0 1-.41-.122L1.875 15a.75.75 0 0 1 0-1.5l8.13-1.016A18.89 18.89 0 0 0 9.315 7.584ZM2.25 10.5a.75.75 0 0 1 .75-1.06 17.653 17.653 0 0 0 4.298-2.652.75.75 0 0 1 1.012 1.107 19.143 19.143 0 0 1-4.496 3.055.75.75 0 0 1-1.077-.282.75.75 0 0 1-.487-.168Z" clip-rule="evenodd" />
+                </svg>
+                <svg v-else xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                  <path fill-rule="evenodd" d="M5.166 2.621v.858c-1.035.148-2.059.33-3.071.543a.75.75 0 0 0-.584.859 6.753 6.753 0 0 0 6.138 5.6 6.73 6.73 0 0 0 2.743 1.346A6.707 6.707 0 0 1 9.279 15H8.54c-1.036 0-1.875.84-1.875 1.875V19.5h-.75a2.25 2.25 0 0 0-2.25 2.25c0 .414.336.75.75.75h15a.75.75 0 0 0 .75-.75 2.25 2.25 0 0 0-2.25-2.25h-.75v-2.625c0-1.036-.84-1.875-1.875-1.875h-.739a6.706 6.706 0 0 1-1.112-3.173 6.73 6.73 0 0 0 2.743-1.347 6.753 6.753 0 0 0 6.139-5.6.75.75 0 0 0-.585-.858 47.077 47.077 0 0 0-3.07-.543V2.62a.75.75 0 0 0-.656-.75c-1.676-.176-3.372-.176-5.048 0a.75.75 0 0 0-.656.75ZM4.565 5.5c1.833-.418 3.725-.634 5.632-.633 1.907-.001 3.799.215 5.632.633a5.253 5.253 0 0 1-1.385 4.393 5.23 5.23 0 0 1-4.247 1.327 5.23 5.23 0 0 1-4.247-1.327A5.253 5.253 0 0 1 4.565 5.5Z" clip-rule="evenodd" />
+                </svg>
+              </div>
+              <div class="info">
+                <h3>{{ achievement.title }}</h3>
+                <p>{{ achievement.description }}</p>
+                <p v-if="achievement.isUnlocked" class="unlocked-date">
+                  {{ new Date(achievement.unlockedAt).toLocaleDateString() }} 획득
+                </p>
+              </div>
             </div>
-            <div class="info">
-               <h3>연속 도전자</h3>
-              <p>7일 연속 플레이</p>
-            </div>
-          </div>
-          <!-- More items excluded for brevity since they are static/placeholder for now -->
+          </template>
         </div>
       </section>
     </main>
@@ -159,9 +178,11 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, computed } from 'vue';
 import { useAuthStore } from "@/stores/auth";
 import { getMyInfo, getMyStatistics } from "@/api/users";
+import { getMyAchievements } from "@/api/achievements";
+import { ACHIEVEMENT_METADATA } from "@/constants/achievements";
 import iconEditProfile from '@/assets/icon-edit-profile.png';
 import AppHeader from "@/components/layout/AppHeader.vue";
 import AppFooter from "@/components/layout/AppFooter.vue";
@@ -171,6 +192,7 @@ const nickname = ref('알 수 없음');
 const email = ref('');
 const loadingUserInfo = ref(true);
 const loadingStats = ref(true);
+const loadingAchievements = ref(true);
 
 const stats = ref({
   totalGamesPlayed: 0,
@@ -179,6 +201,23 @@ const stats = ref({
   bestRank: null,
   longestConsecutiveDays: 0,
   averageAttempts: 0
+});
+
+const myAchievements = ref([]);
+
+// Computed property to merge metadata with user's achievements
+const allAchievements = computed(() => {
+  return Object.keys(ACHIEVEMENT_METADATA).map(key => {
+    const meta = ACHIEVEMENT_METADATA[key];
+    const earned = myAchievements.value.find(a => a.type === key);
+
+    return {
+      type: key,
+      ...meta,
+      isUnlocked: !!earned,
+      unlockedAt: earned ? earned.unlockedAt : null
+    };
+  });
 });
 
 const fetchUserInfo = async () => {
@@ -217,9 +256,24 @@ const fetchStatistics = async () => {
     }
 }
 
+const fetchAchievements = async () => {
+  try {
+    loadingAchievements.value = true;
+    const response = await getMyAchievements();
+    if (response.success && response.data) {
+      myAchievements.value = response.data.achievements || [];
+    }
+  } catch (error) {
+    console.error("Failed to fetch achievements:", error);
+  } finally {
+    loadingAchievements.value = false;
+  }
+};
+
 onMounted(() => {
   fetchUserInfo();
   fetchStatistics();
+  fetchAchievements();
 });
 </script>
 
@@ -446,6 +500,22 @@ onMounted(() => {
   &.w-32 { width: 8rem; }
   &.w-48 { width: 12rem; }
   &.w-16 { width: 4rem; }
+}
+
+.skeleton-icon {
+  width: 3rem;
+  height: 3rem;
+  border-radius: 0.75rem;
+  background-color: #e2e8f0;
+  animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  flex-shrink: 0;
+}
+
+.unlocked-date {
+  font-size: 0.75rem !important;
+  color: var(--color-primary) !important;
+  margin-top: 0.25rem !important;
+  font-weight: 500;
 }
 
 @keyframes pulse {
