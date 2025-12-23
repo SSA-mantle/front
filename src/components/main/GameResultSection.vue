@@ -21,12 +21,6 @@
           <p class="answer-card__description">
             {{ gameStore.answerDescription || '단어 설명을 불러오는 중입니다...' }}
           </p>
-          <div class="answer-card__actions">
-            <button class="answer-card__share-btn" @click="handleShare">
-              <span class="icon">🔗</span> 결과 공유하기
-            </button>
-            <span v-if="copyFeedback" class="answer-card__feedback">{{ copyFeedback }}</span>
-          </div>
         </div>
       </transition>
     </div>
@@ -78,31 +72,6 @@ const props = defineProps({
 
 const gameStore = useGameStore();
 const showDescription = ref(true);
-const copyFeedback = ref("");
-
-const handleShare = async () => {
-  const challengeNo = 142; // TODO: Dynamic from store/API
-  const attempts = gameStore.guesses.length;
-  const statusEmoji = gameStore.status === 'success' ? '🎉' : '💡';
-
-  const text = `🧠 SSA-mantle #${challengeNo}
-정답: ${gameStore.answer}
-결과: ${statusEmoji} ${attempts}회 시도 성공!
-최종 유사도: 100%
-
-#싸멘틀 #SSAFY #단어게임`;
-
-  try {
-    await navigator.clipboard.writeText(text);
-    copyFeedback.value = "복사 완료!";
-    setTimeout(() => {
-      copyFeedback.value = "";
-    }, 2000);
-  } catch (err) {
-    console.error('Failed to copy: ', err);
-    alert('결과 복사에 실패했습니다.');
-  }
-};
 
 const todayFullDate = computed(() => {
   return new Date().toLocaleDateString("ko-KR", {

@@ -68,7 +68,7 @@
 
         <template v-else>
           <!-- 최근 시도 (고정) -->
-          <div v-if="gameStore.lastGuess" class="summary__recent">
+          <div v-if="gameStore.lastGuess && gameStore.status === 'playing'" class="summary__recent">
             <div class="summary__recent-header">
               <span class="summary__recent-tag">최근 시도</span>
             </div>
