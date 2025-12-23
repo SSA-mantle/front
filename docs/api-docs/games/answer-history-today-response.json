@@ -3,6 +3,7 @@
   "data": {
     "date": "2025-12-22",
     "answer": "사과",
+    "answerDescription": "정답단어는 빨간색 과일입니다.",
     "top100Words": [
       {
         "word": "과일",

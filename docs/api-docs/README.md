@@ -17,11 +17,15 @@
 ### 게임 API
 7. [단어 추측 제출](#7-단어-추측-제출)
 8. [게임 포기](#8-게임-포기)
-9. [오늘 정답 이력 조회](#9-오늘-정답-이력-조회)
-10. [어제 정답 이력 조회](#10-어제-정답-이력-조회)
+9. [게임 상태 조회](#9-게임-상태-조회)
+10. [오늘 정답 이력 조회](#10-오늘-정답-이력-조회)
+11. [어제 정답 이력 조회](#11-어제-정답-이력-조회)
 
 ### 리더보드 API
-11. [리더보드 조회](#11-리더보드-조회)
+12. [리더보드 조회](#12-리더보드-조회)
+
+### 업적 API
+13. [내 업적 목록 조회](#13-내-업적-목록-조회)
 
 ---
 
@@ -365,13 +369,45 @@ Content-Type: application/json
     "similarity": null,
     "rank": null,
     "answer": "사과",
-    "failCount": 3
+    "failCount": 3,
+    "newAchievements": null
   },
   "error": null
 }
 ```
 
 파일: [guess-response-correct.json](./games/guess-response-correct.json)
+
+### Response - 정답이고 새 업적 획득한 경우 (200 OK)
+```json
+{
+  "success": true,
+  "data": {
+    "isCorrect": true,
+    "message": "정답입니다!",
+    "word": "사과",
+    "similarity": null,
+    "rank": null,
+    "answer": "사과",
+    "failCount": 3,
+    "newAchievements": [
+      {
+        "type": "STREAK_3_DAYS",
+        "title": "3일 연속 풀이",
+        "description": "3일 연속으로 문제를 해결했습니다"
+      },
+      {
+        "type": "TOTAL_10_SOLVED",
+        "title": "문제 10개 해결",
+        "description": "총 10개의 문제를 해결했습니다"
+      }
+    ]
+  },
+  "error": null
+}
+```
+
+파일: [guess-response-correct-with-achievements.json](./games/guess-response-correct-with-achievements.json)
 
 ### Response - 오답인 경우 (200 OK)
 ```json
@@ -470,7 +506,94 @@ Content-Type: application/json
 
 ---
 
-## 9. 오늘 정답 이력 조회
+## 9. 게임 상태 조회
+
+### Endpoint
+```
+GET /api/v1/games/status
+```
+
+### Headers
+```
+Authorization: Bearer {accessToken}
+```
+
+### Request Body
+요청 본문 없음
+
+### 설명
+사용자의 오늘 게임 진행 상태를 조회합니다.
+상태는 다음 4가지 중 하나입니다:
+- `NOT_STARTED`: 오늘 문제를 시작하지 않음
+- `IN_PROGRESS`: 문제를 풀고 있는 중
+- `SOLVED`: 문제를 해결함
+- `GAVE_UP`: 문제를 포기함
+
+### Response - 시작하지 않음 (200 OK)
+```json
+{
+  "success": true,
+  "data": {
+    "status": "NOT_STARTED",
+    "failCount": 0
+  },
+  "error": null
+}
+```
+
+파일: [get-game-status-response-not-started.json](./games/get-game-status-response-not-started.json)
+
+### Response - 진행 중 (200 OK)
+```json
+{
+  "success": true,
+  "data": {
+    "status": "IN_PROGRESS",
+    "failCount": 5
+  },
+  "error": null
+}
+```
+
+파일: [get-game-status-response-in-progress.json](./games/get-game-status-response-in-progress.json)
+
+### Response - 문제 해결함 (200 OK)
+```json
+{
+  "success": true,
+  "data": {
+    "status": "SOLVED",
+    "failCount": 8
+  },
+  "error": null
+}
+```
+
+파일: [get-game-status-response-solved.json](./games/get-game-status-response-solved.json)
+
+### Response - 포기함 (200 OK)
+```json
+{
+  "success": true,
+  "data": {
+    "status": "GAVE_UP",
+    "failCount": 12
+  },
+  "error": null
+}
+```
+
+파일: [get-game-status-response-gave-up.json](./games/get-game-status-response-gave-up.json)
+
+### 필드 설명
+| 필드 | 타입 | 설명 |
+|------|------|------|
+| status | string | 게임 상태 (NOT_STARTED, IN_PROGRESS, SOLVED, GAVE_UP) |
+| failCount | integer | 현재까지 실패한 횟수 (NOT_STARTED인 경우 0) |
+
+---
+
+## 10. 오늘 정답 이력 조회
 
 ### Endpoint
 ```
@@ -553,7 +676,7 @@ Authorization: Bearer {accessToken}
 
 ---
 
-## 10. 어제 정답 이력 조회
+## 11. 어제 정답 이력 조회
 
 ### Endpoint
 ```
@@ -617,7 +740,7 @@ Authorization: Bearer {accessToken}
 
 # 리더보드 API
 
-## 11. 리더보드 조회
+## 12. 리더보드 조회
 
 ### Endpoint
 ```
@@ -811,6 +934,7 @@ POST /api/v1/games/give-up
 | rank | integer | 순위 (1~10000) | 오답일 때만 |
 | answer | string | 정답 단어 | 정답일 때만 |
 | failCount | integer | 시도 횟수 | 항상 포함 |
+| newAchievements | array \| null | 새로 획득한 업적 목록 | 정답일 때만 (없으면 null) |
 
 ### GiveUpGameResponse
 | 필드 | 타입 | 설명 |
@@ -819,6 +943,102 @@ POST /api/v1/games/give-up
 | answer | string | 정답 단어 |
 | failCount | integer | 최종 시도 횟수 |
 | giveUpAt | datetime | 포기 시간 (ISO 8601) |
+
+---
+
+# 업적 API
+
+## 13. 내 업적 목록 조회
+
+### Endpoint
+```
+GET /api/v1/achievements/me
+```
+
+### Headers
+```
+Authorization: Bearer {accessToken}
+```
+
+### Request Body
+요청 본문 없음
+
+### 설명
+현재 로그인한 사용자가 획득한 모든 업적을 조회합니다.
+업적은 획득한 시간 순서대로 최신순으로 정렬됩니다.
+
+### Response - 성공 (200 OK)
+```json
+{
+  "success": true,
+  "data": {
+    "userId": 1,
+    "achievements": [
+      {
+        "type": "STREAK_3_DAYS",
+        "title": "3일 연속 풀이",
+        "description": "3일 연속으로 문제를 해결했습니다",
+        "unlockedAt": "2025-12-20T14:30:25"
+      },
+      {
+        "type": "TOTAL_10_SOLVED",
+        "title": "문제 10개 해결",
+        "description": "총 10개의 문제를 해결했습니다",
+        "unlockedAt": "2025-12-22T09:15:10"
+      }
+    ]
+  },
+  "error": null
+}
+```
+
+파일: [get-my-achievements-response.json](./achievements/get-my-achievements-response.json)
+
+### Response - 업적이 없는 경우 (200 OK)
+```json
+{
+  "success": true,
+  "data": {
+    "userId": 1,
+    "achievements": []
+  },
+  "error": null
+}
+```
+
+파일: [get-my-achievements-response-empty.json](./achievements/get-my-achievements-response-empty.json)
+
+### 필드 설명
+| 필드 | 타입 | 설명 |
+|------|------|------|
+| userId | integer | 사용자 ID |
+| achievements | array | 획득한 업적 목록 (최신순 정렬) |
+| type | string | 업적 타입 (enum 값) |
+| title | string | 업적 제목 |
+| description | string | 업적 설명 |
+| unlockedAt | datetime | 업적 획득 시각 (ISO 8601) |
+
+### 업적 종류
+
+#### 스트릭 업적 (연속 풀이)
+| 타입 | 제목 | 조건 |
+|------|------|------|
+| STREAK_3_DAYS | 3일 연속 풀이 | 3일 연속으로 문제를 해결 |
+| STREAK_7_DAYS | 일주일 연속 풀이 | 7일 연속으로 문제를 해결 |
+| STREAK_30_DAYS | 한 달 연속 풀이 | 30일 연속으로 문제를 해결 |
+
+#### 총 문제 업적
+| 타입 | 제목 | 조건 |
+|------|------|------|
+| TOTAL_10_SOLVED | 문제 10개 해결 | 총 10개의 문제를 해결 |
+| TOTAL_50_SOLVED | 문제 50개 해결 | 총 50개의 문제를 해결 |
+| TOTAL_100_SOLVED | 문제 100개 해결 | 총 100개의 문제를 해결 |
+
+### 업적 획득 방식
+- 정답을 맞출 때마다 자동으로 조건을 체크하여 업적을 부여합니다
+- 새로 획득한 업적은 정답 응답(`POST /api/v1/games/guess`)의 `newAchievements` 필드에 포함됩니다
+- 한 번에 여러 조건을 충족하면 모든 업적을 동시에 획득합니다
+- 이미 획득한 업적은 중복으로 부여되지 않습니다
 
 ---
 

@@ -3,62 +3,30 @@
   "data": {
     "date": "2025-12-22",
     "topRankers": [
-      { "rank": 1, "nickname": "알고리즘마스터", "failCount": 2, "solvedAt": "2025-12-22T08:15:30" },
-      { "rank": 2, "nickname": "싸피엔스", "failCount": 3, "solvedAt": "2025-12-22T09:10:15" },
-      { "rank": 3, "nickname": "코드장인", "failCount": 3, "solvedAt": "2025-12-22T09:45:42" },
-      { "rank": 4, "nickname": "커피중독자", "failCount": 4, "solvedAt": "2025-12-22T10:05:12" },
-      { "rank": 5, "nickname": "버그헌터", "failCount": 4, "solvedAt": "2025-12-22T10:15:30" },
-      { "rank": 6, "nickname": "자바스크립트맨", "failCount": 5, "solvedAt": "2025-12-22T10:20:45" },
-      { "rank": 7, "nickname": "파이썬조아", "failCount": 5, "solvedAt": "2025-12-22T10:35:10" },
-      { "rank": 8, "nickname": "구현의신", "failCount": 6, "solvedAt": "2025-12-22T10:40:22" },
-      { "rank": 9, "nickname": "최적화광", "failCount": 6, "solvedAt": "2025-12-22T11:05:15" },
-      { "rank": 10, "nickname": "디버깅전문가", "failCount": 7, "solvedAt": "2025-12-22T11:15:33" },
-      { "rank": 11, "nickname": "리액트왕", "failCount": 7, "solvedAt": "2025-12-22T11:25:40" },
-      { "rank": 12, "nickname": "뷰마스터", "failCount": 8, "solvedAt": "2025-12-22T12:05:10" },
-      { "rank": 13, "nickname": "노드고수", "failCount": 8, "solvedAt": "2025-12-22T12:15:25" },
-      { "rank": 14, "nickname": "쿼리박사", "failCount": 9, "solvedAt": "2025-12-22T12:30:42" },
-      { "rank": 15, "nickname": "user123", "failCount": 9, "solvedAt": "2025-12-22T13:05:15" },
-      { "rank": 16, "nickname": "풀스택지망생", "failCount": 10, "solvedAt": "2025-12-22T13:20:30" },
-      { "rank": 17, "nickname": "컴공학부생", "failCount": 10, "solvedAt": "2025-12-22T13:45:12" },
-      { "rank": 18, "nickname": "비전공자파워", "failCount": 11, "solvedAt": "2025-12-22T14:10:55" },
-      { "rank": 19, "nickname": "코딩노예", "failCount": 11, "solvedAt": "2025-12-22T14:25:33" },
-      { "rank": 20, "nickname": "갓싸피", "failCount": 12, "solvedAt": "2025-12-22T14:40:20" },
-      { "rank": 21, "nickname": "에러메시지", "failCount": 12, "solvedAt": "2025-12-22T14:55:10" },
-      { "rank": 22, "nickname": "무한루프", "failCount": 13, "solvedAt": "2025-12-22T15:10:45" },
-      { "rank": 23, "nickname": "스택오버플로우", "failCount": 13, "solvedAt": "2025-12-22T15:30:22" },
-      { "rank": 24, "nickname": "깃허브스타", "failCount": 14, "solvedAt": "2025-12-22T15:45:15" },
-      { "rank": 25, "nickname": "커밋왕", "failCount": 14, "solvedAt": "2025-12-22T16:05:33" },
-      { "rank": 26, "nickname": "백준골드", "failCount": 15, "solvedAt": "2025-12-22T16:20:10" },
-      { "rank": 27, "nickname": "코드리뷰어", "failCount": 15, "solvedAt": "2025-12-22T16:40:42" },
-      { "rank": 28, "nickname": "클린코드", "failCount": 16, "solvedAt": "2025-12-22T17:05:25" },
-      { "rank": 29, "nickname": "단위테스트", "failCount": 16, "solvedAt": "2025-12-22T17:15:33" },
-      { "rank": 30, "nickname": "배포전문가", "failCount": 17, "solvedAt": "2025-12-22T17:30:10" },
-      { "rank": 31, "nickname": "도커조아", "failCount": 17, "solvedAt": "2025-12-22T17:50:55" },
-      { "rank": 32, "nickname": "입사기원", "failCount": 18, "solvedAt": "2025-12-22T18:10:33" },
-      { "rank": 33, "nickname": "취준생화이팅", "failCount": 18, "solvedAt": "2025-12-22T18:25:20" },
-      { "rank": 34, "nickname": "코딩테스트", "failCount": 19, "solvedAt": "2025-12-22T18:45:12" },
-      { "rank": 35, "nickname": "동적계획법", "failCount": 19, "solvedAt": "2025-12-22T19:05:42" },
-      { "rank": 36, "nickname": "그리디", "failCount": 20, "solvedAt": "2025-12-22T19:20:15" },
-      { "rank": 37, "nickname": "완전탐색", "failCount": 20, "solvedAt": "2025-12-22T19:40:33" },
-      { "rank": 38, "nickname": "그래프이론", "failCount": 21, "solvedAt": "2025-12-22T20:05:10" },
-      { "rank": 39, "nickname": "세그먼트트리", "failCount": 21, "solvedAt": "2025-12-22T20:25:25" },
-      { "rank": 40, "nickname": "해시맵", "failCount": 22, "solvedAt": "2025-12-22T20:45:42" },
-      { "rank": 41, "nickname": "큐와스택", "failCount": 22, "solvedAt": "2025-12-22T21:05:15" },
-      { "rank": 42, "nickname": "정렬의달인", "failCount": 23, "solvedAt": "2025-12-22T21:20:30" },
-      { "rank": 43, "nickname": "문자열처리", "failCount": 23, "solvedAt": "2025-12-22T21:40:12" },
-      { "rank": 44, "nickname": "비트마스킹", "failCount": 24, "solvedAt": "2025-12-22T22:05:55" },
-      { "rank": 45, "nickname": "소수판정", "failCount": 24, "solvedAt": "2025-12-22T22:25:33" },
-      { "rank": 46, "nickname": "최단경로", "failCount": 25, "solvedAt": "2025-12-22T22:45:20" },
-      { "rank": 47, "nickname": "다익스트라", "failCount": 25, "solvedAt": "2025-12-22T23:05:10" },
-      { "rank": 48, "nickname": "벨만포드", "failCount": 26, "solvedAt": "2025-12-22T23:25:45" },
-      { "rank": 49, "nickname": "플로이드", "failCount": 26, "solvedAt": "2025-12-22T23:45:22" },
-      { "rank": 50, "nickname": "코딩끝판왕", "failCount": 27, "solvedAt": "2025-12-22T23:55:15" }
+      {
+        "rank": 1,
+        "nickname": "유저1",
+        "failCount": 2,
+        "solvedAt": "2025-12-22T08:15:30"
+      },
+      {
+        "rank": 2,
+        "nickname": "유저2",
+        "failCount": 3,
+        "solvedAt": "2025-12-22T09:20:15"
+      },
+      {
+        "rank": 3,
+        "nickname": "유저3",
+        "failCount": 3,
+        "solvedAt": "2025-12-22T10:05:42"
+      }
     ],
     "myRank": {
       "rank": 15,
-      "nickname": "user123",
-      "failCount": 9,
-      "solvedAt": "2025-12-22T13:05:15"
+      "nickname": "내닉네임",
+      "failCount": 5,
+      "solvedAt": "2025-12-22T14:30:25"
     }
   },
   "error": null

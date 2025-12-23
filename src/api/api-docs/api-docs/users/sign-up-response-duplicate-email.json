@@ -1,8 +1,0 @@
-{
-  "success": false,
-  "data": null,
-  "error": {
-    "errorCode": "USER_002",
-    "message": "이미 존재하는 이메일입니다."
-  }
-}
