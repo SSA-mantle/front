@@ -218,7 +218,16 @@ export const mockHandler = async (config) => {
   }
 
   if (url === '/games/answer-history/yesterday' && method === 'get') {
-      return { data: yesterdayHistoryResponse, status: 200 };
+      return {
+          data: {
+              ...yesterdayHistoryResponse,
+              data: {
+                  ...yesterdayHistoryResponse.data,
+                  description: "딸기는 장미과에 속하는 다년생 초본 식물의 열매로, 붉은색의 선명한 색상과 달콤한 맛이 특징입니다. 비타민 C가 풍부하여 건강에 좋은 과일로 알려져 있습니다."
+              }
+          },
+          status: 200
+      };
   }
 
   // --- Leaderboard ---
