@@ -168,7 +168,11 @@ const onSubmit = async () => {
   try {
     await gameStore.submitGuess(trimmed);
   } catch (error) {
-    errorMessage.value = error.message || "오류가 발생했습니다.";
+    if (error.response && error.response.data && error.response.data.error) {
+      errorMessage.value = error.response.data.error.message;
+    } else {
+      errorMessage.value = error.message || "오류가 발생했습니다.";
+    }
   }
   guess.value = "";
 };
