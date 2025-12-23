@@ -183,6 +183,23 @@ export const mockHandler = async (config) => {
           };
       }
 
+      // '없는단어'를 입력하면 400 에러 처리 (테스트용)
+      if (word === '없는단어') {
+          return Promise.reject({
+              response: {
+                  status: 400,
+                  data: {
+                      success: false,
+                      data: null,
+                      error: {
+                          errorCode: "G001",
+                          message: "존재하지 않는 단어입니다."
+                      }
+                  }
+              }
+          });
+      }
+
       // 그 외에는 오답 처리 (유사도/순위는 일단 고정값 반환)
       return {
           data: {

@@ -14,7 +14,7 @@
         class="summary__item"
         :class="{ 'summary__item--correct': guess.isCorrect }"
       >
-        <span class="summary__order">{{ guess.attempt }}</span>
+        <span class="summary__order">{{ guess.failCount }}</span>
         <span class="summary__word">{{ guess.word }}</span>
         <div class="summary__info-box">
           <span v-if="guess.rank" class="summary__rank">{{ guess.rank }}위</span>
