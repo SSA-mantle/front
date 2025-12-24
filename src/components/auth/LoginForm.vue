@@ -1,7 +1,7 @@
 <template>
   <div class="auth-card">
     <div class="auth-card__header">
-      <div class="auth-card__icon">➜</div>
+      <!-- <div class="auth-card__icon">➜</div> -->
       <h2 class="auth-card__title">로그인</h2>
       <p class="auth-card__subtitle">게임을 시작하려면 로그인하세요.</p>
     </div>
