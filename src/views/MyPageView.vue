@@ -15,7 +15,7 @@
           <div class="text">
             <h1 class="username">
               <span v-if="loadingUserInfo" class="skeleton-text w-32"></span>
-              <span v-else>{{ nickname }}님</span>
+              <span v-else>{{ nickname }}</span>
             </h1>
             <p class="user-desc">
               <span v-if="loadingUserInfo" class="skeleton-text w-48"></span>
@@ -25,7 +25,7 @@
         </div>
         <router-link to="/profile/edit" class="btn-edit">
 <img :src="iconEditProfile" alt="정보수정" class="icon" />
-          정보수정
+          정보 수정
         </router-link>
       </section>
 
@@ -43,7 +43,7 @@
             </div>
             <div class="stat-card__value text-blue">
               <span v-if="loadingStats" class="skeleton-text w-16"></span>
-              <span v-else>{{ stats.totalGamesPlayed }}</span>
+              <span v-else>{{ stats.totalGamesPlayed }}일</span>
             </div>
           </div>
 
@@ -53,11 +53,11 @@
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
                 <path fill-rule="evenodd" d="M8.603 3.799A4.49 4.49 0 0112 2.25c1.657 0 3.107.936 3.903 2.327l2.25 4a2.25 2.25 0 01-3.906 2.196L12 8.75l-2.247 2.023A2.25 2.25 0 015.847 8.578l2.25-4a2.25 2.25 0 01.506-.78zM2.25 13.5a3 3 0 013-3h13.5a3 3 0 013 3v1.5a3 3 0 01-3 3H5.25a3 3 0 01-3-3v-1.5zm7.114 4.886a.75.75 0 00-1.114 0l-2.022 2.247c-.23.255-.386.494-.614.389a.75.75 0 00-1.136-1.114l2.022-2.247a.75.75 0 000-1.026l-2.022-2.247a.75.75 0 011.136-1.114l2.022 2.247a.75.75 0 001.026 0l2.022-2.247a.75.75 0 011.136 1.114l-2.022 2.247a.75.75 0 000 1.026l2.022 2.247a.75.75 0 01-1.136 1.114l-2.022-2.247a.75.75 0 00-1.026 0z" clip-rule="evenodd" />
               </svg>
-              <span>완료</span>
+              <span>성공</span>
             </div>
             <div class="stat-card__value text-green">
               <span v-if="loadingStats" class="skeleton-text w-16"></span>
-              <span v-else>{{ stats.successfulGames }}</span>
+              <span v-else>{{ stats.successfulGames }}일</span>
             </div>
           </div>
 
@@ -68,7 +68,7 @@
                 <path fill-rule="evenodd" d="M2.25 13.5a8.25 8.25 0 018.25-8.25.75.75 0 01.75.75v6.75H18a.75.75 0 01.75.75 8.25 8.25 0 01-16.5 0z" clip-rule="evenodd" />
                 <path fill-rule="evenodd" d="M12.75 3a.75.75 0 01.75-.75 8.25 8.25 0 018.25 8.25.75.75 0 01-.75.75h-7.5a.75.75 0 01-.75-.75V3z" clip-rule="evenodd" />
               </svg>
-              <span>승률</span>
+              <span>성공률</span>
             </div>
             <div class="stat-card__value text-indigo">
               <span v-if="loadingStats" class="skeleton-text w-16"></span>
@@ -101,7 +101,7 @@
             </div>
             <div class="stat-card__value text-purple">
               <span v-if="loadingStats" class="skeleton-text w-16"></span>
-              <span v-else>{{ stats.averageAttempts }}</span>
+              <span v-else>{{ stats.averageAttempts }}회</span>
             </div>
           </div>
 
@@ -435,7 +435,7 @@ onMounted(() => {
       }
 
       &__value {
-        font-size: 2rem;
+        font-size: 1.75rem;
         font-weight: 800;
         line-height: 1;
         letter-spacing: -0.02em;
