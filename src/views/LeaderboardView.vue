@@ -123,7 +123,6 @@ const fetchLeaderboard = async () => {
       myRank.value = res.data.myRank;
     }
   } catch (error) {
-    console.error("Failed to fetch leaderboard:", error);
   } finally {
     isLoading.value = false;
   }

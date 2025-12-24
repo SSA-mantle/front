@@ -131,7 +131,6 @@ export const useGameStore = defineStore('game', () => {
         saveToLocalStorage();
       }
     } catch (error) {
-      console.error("Failed to sync game status:", error);
       // 에러 발생 시 로컬 상태 유지 (오프라인 등)
     }
   };
@@ -178,7 +177,6 @@ export const useGameStore = defineStore('game', () => {
       saveToLocalStorage();
       return result;
     } catch (error) {
-      console.error('Guess failed:', error);
       throw error;
     }
   };
@@ -199,7 +197,6 @@ export const useGameStore = defineStore('game', () => {
       saveToLocalStorage();
       return result;
     } catch (error) {
-      console.error('Give up failed:', error);
       throw error;
     }
   };
@@ -216,7 +213,6 @@ export const useGameStore = defineStore('game', () => {
       saveToLocalStorage();
       return result;
     } catch (error) {
-      console.error('Failed to fetch today history:', error);
     }
   };
 

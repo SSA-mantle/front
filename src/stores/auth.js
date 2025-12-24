@@ -23,7 +23,6 @@ export const useAuthStore = defineStore('auth', () => {
       }
       return false;
     } catch (error) {
-      console.error('Login Failed:', error);
       throw error;
     }
   };
@@ -34,7 +33,6 @@ export const useAuthStore = defineStore('auth', () => {
           const data = await signUp(userData);
           return data.success;
       } catch (error) {
-          console.error('Signup Failed:', error);
           throw error;
       }
   }
@@ -48,7 +46,6 @@ export const useAuthStore = defineStore('auth', () => {
         user.value = data.data;
       }
     } catch (error) {
-      console.error('Fetch User Failed:', error);
       logout(); // If fetching user fails (e.g. invalid token), logout
     }
   };
@@ -64,7 +61,6 @@ export const useAuthStore = defineStore('auth', () => {
           }
           return false;
       } catch (error) {
-          console.error('Update Profile Failed:', error);
           throw error;
       }
   };
@@ -93,7 +89,6 @@ export const useAuthStore = defineStore('auth', () => {
     isAuthenticated,
     login,
     signup,
-    logout,
     logout,
     fetchUser,
     updateProfile
