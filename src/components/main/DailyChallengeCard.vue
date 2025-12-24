@@ -262,6 +262,16 @@ const onSubmit = async () => {
 };
 
 const handleGiveUp = async () => {
+  if (gameStore.guesses.length === 0) {
+    showModal({
+      title: "도전해보세요!",
+      message: "<span style='color: #ef4444; font-weight: 700;'>한 번 이상</span>의 도전 이후에만 포기할 수 있습니다!",
+      confirmText: "돌아가기",
+      type: "alert"
+    });
+    return;
+  }
+
   showModal({
     title: "포기하기",
     message: "오늘의 게임이 종료됩니다!<br>정말 포기하고 정답을 확인하시겠습니까?<br><br><span style='color: #ef4444; font-weight: 800;'>오늘은 더이상 게임을 진행할 수 없습니다.</span>",
