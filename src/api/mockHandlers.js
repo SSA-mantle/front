@@ -36,7 +36,7 @@ const saveMockUser = (user) => {
 };
 
 export const mockHandler = async (config) => {
-  await delay(500); // Simulate 500ms delay
+  // await delay(500); // Simulate 500ms delay
 
   const { method, data, params } = config;
 
