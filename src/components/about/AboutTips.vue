@@ -39,9 +39,11 @@ const props = defineProps({
 
   &__header {
     display: flex;
+    flex-direction: column;
     align-items: center;
     gap: 0.9rem;
-    margin-bottom: 1.5rem;
+    margin-bottom: 2rem;
+    text-align: center;
   }
 
   &__icon {
