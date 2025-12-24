@@ -143,17 +143,22 @@ export const useGameStore = defineStore('game', () => {
       throw new Error('이미 시도한 단어입니다.');
     }
 
+    const attemptCount = failCount.value + 1;
+
     try {
-      const res = await guessWord(word, failCount.value + 1);
-      const result = res.data;
+      const res = await guessWord(word, attemptCount);
+      // 백앤드 응답 구조에 따라 데이터 추출 (res.data 또는 res 자체)
+      const result = res.success !== undefined ? res.data : res;
+
+      if (!result) throw new Error('올바르지 않은 응답 형식입니다.');
 
       // 새 추측 결과 추가
       const newGuess = {
-        word: result.word,
-        similarity: result.similarity,
-        rank: result.rank,
-        isCorrect: result.isCorrect,
-        failCount: result.failCount,
+        word: result.word || word,
+        similarity: parseFloat(result.similarity || 0),
+        rank: parseInt(result.rank || 0),
+        isCorrect: !!result.isCorrect,
+        failCount: (result.failCount && result.failCount > 0) ? result.failCount : attemptCount,
       };
 
       lastGuess.value = newGuess;
@@ -163,7 +168,7 @@ export const useGameStore = defineStore('game', () => {
       guesses.value.sort((a, b) => {
           if (a.isCorrect) return -1;
           if (b.isCorrect) return 1;
-          return (b.similarity || 0) - (a.similarity || 0);
+          return parseFloat(b.similarity || 0) - parseFloat(a.similarity || 0);
       });
 
       if (result.isCorrect) {
