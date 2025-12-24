@@ -15,12 +15,29 @@
         </p>
       </section>
 
-      <section class="about__grid">
+      <div class="about__grid">
         <AboutHowToCard :items="howToItems" />
         <AboutTips :tips="tips" />
-      </section>
+      </div>
 
-      <AboutSampleBanner />
+      <section class="about__pages">
+        <header class="about__pages-header">
+          <h2 class="about__pages-title">페이지 가이드</h2>
+          <p class="about__pages-subtitle">SSA-mantle의 다양한 기능을 탐색해보세요</p>
+        </header>
+
+        <div class="about__pages-grid">
+          <article v-for="page in pageIntros" :key="page.title" class="about__pages-item">
+            <div class="about__pages-icon" :style="{ backgroundColor: page.tint }">
+              {{ page.icon }}
+            </div>
+            <div class="about__pages-info">
+              <h3 class="about__pages-item-title">{{ page.title }}</h3>
+              <p class="about__pages-item-desc">{{ page.description }}</p>
+            </div>
+          </article>
+        </div>
+      </section>
     </main>
 
     <AppFooter />
@@ -32,13 +49,12 @@ import AppHeader from "@/components/layout/AppHeader.vue";
 import AppFooter from "@/components/layout/AppFooter.vue";
 import AboutHowToCard from "@/components/about/AboutHowToCard.vue";
 import AboutTips from "@/components/about/AboutTips.vue";
-import AboutSampleBanner from "@/components/about/AboutSampleBanner.vue";
 
 const howToItems = [
-  { number: 1, text: "정답 단어와 의미적으로 가장 유사한 단어를 찾는 게임입니다." },
-  { number: 2, text: "입력한 단어의 유사도가 백분율(%)로 표시됩니다." },
-  { number: 3, text: "유사도가 높을수록 정답에 가까워집니다." },
-  { number: 4, text: "상위 1000개 단어에 들면 순위가 함께 표시됩니다." },
+  { number: 1, text: "추측한 단어의 유사도가 백분율(%)로 표시됩니다" },
+  { number: 2, text: "유사도가 높을수록 정답에 가까워집니다" },
+  { number: 3, text: "유사도 상위 1000위 안의 단어는 순위가 함께 표시됩니다" },
+  { number: 4, text: "도저히 모르겠을때는 포기하고 정답을 확인해보세요" },
 ];
 
 const tips = [
@@ -61,17 +77,50 @@ const tips = [
     tint: "#fee2e2",
   },
 ];
+
+const pageIntros = [
+  {
+    title: "게임 (Daily Challenge)",
+    description: "매일 새로운 정답 단어를 맞춰보세요.",
+    icon: "🎯",
+    tint: "#dcfce7",
+  },
+  {
+    title: "리더보드 (Leaderboard)",
+    description: "다른 유저들의 순위를 확인하고 나의 위치를 파악해보세요.",
+    icon: "🏆",
+    tint: "#fef9c3",
+  },
+  {
+    title: "히스토리 (History)",
+    description: "어제의 정답 단어와 유사도 상위 100개 단어를 확인해보세요.",
+    icon: "📅",
+    tint: "#e0f2fe",
+  },
+  {
+    title: "마이페이지 (My Page)",
+    description: "나의 상세 프로필과 업적 등을 관리하고 게임 통계를 확인해보세요.",
+    icon: "👤",
+    tint: "#f5f3ff",
+  },
+  {
+    title: "FAQ",
+    description: "서비스 이용에 궁금한 점들을 확인해보세요.",
+    icon: "❓",
+    tint: "#f1f5f9",
+  },
+];
 </script>
 
 <style lang="scss" scoped>
 .about {
-  max-width: 1000px; /* Slightly narrower for modern look but wide enough for grid */
+  max-width: 1400px;
   width: 100%;
   margin: 2rem auto 4rem;
   padding: 0 1.5rem;
   display: flex;
   flex-direction: column;
-  gap: 3rem;
+  gap: 4rem;
 
   &__hero {
     display: flex;
@@ -119,20 +168,108 @@ const tips = [
 
   &__grid {
     display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 1.5rem;
+    grid-template-columns: 2fr 3fr;
+    gap: 2rem;
+    align-items: stretch;
+  }
+
+  &__pages {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+
+    &-header {
+      text-align: center;
+    }
+
+    &-title {
+      font-size: 1.8rem;
+      font-weight: 800;
+      color: var(--color-text-heading);
+      margin: 0;
+    }
+
+    &-subtitle {
+      font-size: 1rem;
+      color: var(--color-text-muted);
+      margin: 0.5rem 0 0;
+    }
+
+    &-grid {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 1rem;
+    }
+
+    &-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      gap: 1rem;
+      background-color: var(--color-surface);
+      border-radius: 1.25rem;
+      padding: 1.5rem 1rem;
+      border: 1px solid var(--color-border);
+      transition: all 0.2s var(--ease-spring);
+
+      &:hover {
+        transform: translateY(-2px);
+        border-color: var(--color-primary-200);
+        box-shadow: 0 12px 24px rgba(0, 0, 0, 0.04);
+      }
+    }
+
+    &-icon {
+      width: 48px;
+      height: 48px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.5rem;
+      flex-shrink: 0;
+    }
+
+    &-item-title {
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--color-text-heading);
+      margin: 0;
+      word-break: keep-all;
+    }
+
+    &-item-desc {
+      font-size: 0.85rem;
+      color: var(--color-text-muted);
+      margin: 0.25rem 0 0;
+      line-height: 1.4;
+      word-break: keep-all;
+    }
+  }
+}
+
+
+
+@media (max-width: 900px) {
+  .about {
+    &__grid {
+      grid-template-columns: 1fr;
+    }
   }
 }
 
 @media (max-width: 768px) {
   .about {
-    &__grid {
-      grid-template-columns: 1fr;
-    }
-    
+    gap: 3rem;
+
     &__hero-title {
       flex-direction: column;
       align-items: center;
+    }
+
+    &__pages-grid {
+      grid-template-columns: 1fr;
     }
   }
 }
