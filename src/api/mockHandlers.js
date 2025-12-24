@@ -11,13 +11,14 @@ import myStatisticsResponse from '../../docs/api-docs/users/get-my-statistics-re
 import todayHistoryResponse from '../../docs/api-docs/games/answer-history-today-response.json';
 import yesterdayHistoryResponse from '../../docs/api-docs/games/answer-history-yesterday-response.json';
 import leaderboardResponse from '../../docs/api-docs/leaderboard/get-leaderboard-response.json';
+import getMyAchievementsResponse from '../../docs/api-docs/achievements/get-my-achievements-response.json';
 
 
 // Simple delay function to simulate network latency
 const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
 // 리더보드 테스트 변수
-const TEST_MY_RANK = 51;
+const TEST_MY_RANK = 5;
 
 
 // In-memory mock database with simple sessionStorage persistence for refreshes
@@ -164,6 +165,10 @@ export const mockHandler = async (config) => {
       return { data: myStatisticsResponse, status: 200 };
   }
 
+  if (url === '/achievements/me' && method === 'get') {
+      return { data: getMyAchievementsResponse, status: 200 };
+  }
+
   if (url === '/auth/refresh' && method === 'post') {
       return { data: refreshResponse, status: 200 };
   }
@@ -267,6 +272,9 @@ export const mockHandler = async (config) => {
           } else if (TEST_MY_RANK === 3) {
               failCount = 3;
               solvedAt = "2025-12-22T09:45:42";
+          } else if (TEST_MY_RANK === 5) {
+              failCount = 5;
+              solvedAt = "2025-12-22T08:04:28";
           } else if (TEST_MY_RANK <= 50) {
               failCount = Math.floor(TEST_MY_RANK / 3) + 2;
               const hour = 10 + Math.floor(TEST_MY_RANK / 5);

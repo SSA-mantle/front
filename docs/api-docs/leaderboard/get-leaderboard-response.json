@@ -3,25 +3,62 @@
   "data": {
     "date": "2025-12-22",
     "topRankers": [
-      {
-        "rank": 1,
-        "nickname": "유저1",
-        "failCount": 2,
-        "solvedAt": "2025-12-22T08:15:30"
-      },
-      {
-        "rank": 2,
-        "nickname": "유저2",
-        "failCount": 3,
-        "solvedAt": "2025-12-22T09:20:15"
-      },
-      {
-        "rank": 3,
-        "nickname": "유저3",
-        "failCount": 3,
-        "solvedAt": "2025-12-22T10:05:42"
-      }
-    ],
+  { "rank": 1, "nickname": "길태환", "failCount": 2, "solvedAt": "2025-12-22T08:03:12" },
+  { "rank": 2, "nickname": "윤승혁", "failCount": 2, "solvedAt": "2025-12-22T08:07:45" },
+  { "rank": 3, "nickname": "오민재", "failCount": 4, "solvedAt": "2025-12-22T08:01:33" },
+  { "rank": 4, "nickname": "스프링전사", "failCount": 4, "solvedAt": "2025-12-22T08:09:02" },
+  { "rank": 5, "nickname": "김싸피", "failCount": 5, "solvedAt": "2025-12-22T08:04:28" },
+  { "rank": 6, "nickname": "마이바티스", "failCount": 6, "solvedAt": "2025-12-22T08:02:15" },
+  { "rank": 7, "nickname": "쿼리헌터", "failCount": 6, "solvedAt": "2025-12-22T08:12:40" },
+  { "rank": 8, "nickname": "디비튜너", "failCount": 7, "solvedAt": "2025-12-22T08:06:05" },
+  { "rank": 9, "nickname": "JWT수호자", "failCount": 8, "solvedAt": "2025-12-22T08:05:19" },
+  { "rank": 10, "nickname": "REST마스터", "failCount": 8, "solvedAt": "2025-12-22T08:10:51" },
+
+  { "rank": 11, "nickname": "DP지박령", "failCount": 11, "solvedAt": "2025-12-22T08:08:08" },
+  { "rank": 12, "nickname": "그래프장인", "failCount": 11, "solvedAt": "2025-12-22T08:13:26" },
+  { "rank": 13, "nickname": "정렬의신", "failCount": 12, "solvedAt": "2025-12-22T08:11:14" },
+  { "rank": 14, "nickname": "이분탐색러", "failCount": 14, "solvedAt": "2025-12-22T08:14:03" },
+  { "rank": 15, "nickname": "우선순위큐", "failCount": 14, "solvedAt": "2025-12-22T08:16:22" },
+  { "rank": 16, "nickname": "세그트리장인", "failCount": 15, "solvedAt": "2025-12-22T08:15:07" },
+  { "rank": 17, "nickname": "유니온파인더", "failCount": 16, "solvedAt": "2025-12-22T08:17:59" },
+  { "rank": 18, "nickname": "다익스트라러", "failCount": 16, "solvedAt": "2025-12-22T08:19:41" },
+  { "rank": 19, "nickname": "백트래킹킹", "failCount": 18, "solvedAt": "2025-12-22T08:20:10" },
+  { "rank": 20, "nickname": "투포인터맨", "failCount": 19, "solvedAt": "2025-12-22T08:18:27" },
+
+  { "rank": 21, "nickname": "해시맵장인", "failCount": 19, "solvedAt": "2025-12-22T08:22:58" },
+  { "rank": 22, "nickname": "큐스택러", "failCount": 21, "solvedAt": "2025-12-22T08:21:33" },
+  { "rank": 23, "nickname": "BFS러너", "failCount": 22, "solvedAt": "2025-12-22T08:23:10" },
+  { "rank": 24, "nickname": "DFS마스터", "failCount": 22, "solvedAt": "2025-12-22T08:25:44" },
+  { "rank": 25, "nickname": "그리디헌터", "failCount": 23, "solvedAt": "2025-12-22T08:24:02" },
+  { "rank": 26, "nickname": "MST장인", "failCount": 24, "solvedAt": "2025-12-22T08:27:35" },
+  { "rank": 27, "nickname": "플로이드러", "failCount": 26, "solvedAt": "2025-12-22T08:26:18" },
+  { "rank": 28, "nickname": "위상정렬러", "failCount": 26, "solvedAt": "2025-12-22T08:28:59" },
+  { "rank": 29, "nickname": "비트마스커", "failCount": 27, "solvedAt": "2025-12-22T08:29:33" },
+  { "rank": 30, "nickname": "메모이제이션", "failCount": 29, "solvedAt": "2025-12-22T08:30:11" },
+
+  { "rank": 31, "nickname": "스프링부트러", "failCount": 29, "solvedAt": "2025-12-22T08:31:54" },
+  { "rank": 32, "nickname": "JPA경계자", "failCount": 30, "solvedAt": "2025-12-22T08:32:08" },
+  { "rank": 33, "nickname": "MyBatis수련생", "failCount": 31, "solvedAt": "2025-12-22T08:33:27" },
+  { "rank": 34, "nickname": "트랜잭션맨", "failCount": 31, "solvedAt": "2025-12-22T08:35:06" },
+  { "rank": 35, "nickname": "인덱스튜너", "failCount": 33, "solvedAt": "2025-12-22T08:34:14" },
+  { "rank": 36, "nickname": "쿼리최적화", "failCount": 34, "solvedAt": "2025-12-22T08:36:50" },
+  { "rank": 37, "nickname": "Redis러너", "failCount": 35, "solvedAt": "2025-12-22T08:37:22" },
+  { "rank": 38, "nickname": "JWT발급기", "failCount": 35, "solvedAt": "2025-12-22T08:39:03" },
+  { "rank": 39, "nickname": "인터셉터", "failCount": 36, "solvedAt": "2025-12-22T08:38:41" },
+  { "rank": 40, "nickname": "DTO장인", "failCount": 38, "solvedAt": "2025-12-22T08:40:12" },
+
+  { "rank": 41, "nickname": "DAO헌터", "failCount": 38, "solvedAt": "2025-12-22T08:41:55" },
+  { "rank": 42, "nickname": "Mapper마스터", "failCount": 40, "solvedAt": "2025-12-22T08:42:10" },
+  { "rank": 43, "nickname": "컨트롤러왕", "failCount": 41, "solvedAt": "2025-12-22T08:43:37" },
+  { "rank": 44, "nickname": "서비스레이어", "failCount": 42, "solvedAt": "2025-12-22T08:44:09" },
+  { "rank": 45, "nickname": "예외처리러", "failCount": 42, "solvedAt": "2025-12-22T08:46:33" },
+  { "rank": 46, "nickname": "로그추적자", "failCount": 45, "solvedAt": "2025-12-22T08:47:10" },
+  { "rank": 47, "nickname": "테스트코더", "failCount": 46, "solvedAt": "2025-12-22T08:48:58" },
+  { "rank": 48, "nickname": "CI파이프라인", "failCount": 48, "solvedAt": "2025-12-22T08:49:23" },
+  { "rank": 49, "nickname": "빌드브레이커", "failCount": 49, "solvedAt": "2025-12-22T08:50:41" },
+  { "rank": 50, "nickname": "배포전사", "failCount": 50, "solvedAt": "2025-12-22T08:52:05" }
+]
+,
     "myRank": {
       "rank": 15,
       "nickname": "내닉네임",
