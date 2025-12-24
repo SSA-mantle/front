@@ -36,7 +36,6 @@ const saveMockUser = (user) => {
 };
 
 export const mockHandler = async (config) => {
-  // await delay(500); // Simulate 500ms delay
 
   const { method, data, params } = config;
 
@@ -55,7 +54,6 @@ export const mockHandler = async (config) => {
   // Ensure it starts with /
   if (!url.startsWith('/')) url = '/' + url;
 
-  console.log(`[Mock API] ${method.toUpperCase()} ${url}`, { data, params });
 
   // --- Auth & User ---
   if (url === '/auth/sign-in' && method === 'post') {
@@ -255,7 +253,6 @@ export const mockHandler = async (config) => {
   // --- Leaderboard ---
   if (url === '/leaderboard' && method === 'get') {
       const dateParam = params?.date || 'today';
-      console.log(`[Mock API] Leaderboard for: ${dateParam}`);
 
       // TEST_MY_RANK 설정에 따라 동적으로 리더보드 생성
       let myRankData = null;
@@ -301,7 +298,6 @@ export const mockHandler = async (config) => {
           }
       };
 
-      console.log(`[Mock API] 🧪 TEST_MY_RANK = ${TEST_MY_RANK}`, myRankData);
 
       return { data: dynamicLeaderboard, status: 200 };
   }

@@ -260,7 +260,6 @@ const fetchUserInfo = async () => {
        email.value = response.data.email;
     }
   } catch (error) {
-    console.error("Failed to fetch user info:", error);
     // Fallback to store if available
     if (authStore.user) {
         nickname.value = authStore.user.nickname;
@@ -279,7 +278,6 @@ const fetchStatistics = async () => {
             stats.value = response.data;
         }
     } catch (error) {
-        console.error("Failed to fetch statistics:", error);
     } finally {
         loadingStats.value = false;
     }
@@ -293,7 +291,6 @@ const fetchAchievements = async () => {
       myAchievements.value = response.data.achievements || [];
     }
   } catch (error) {
-    console.error("Failed to fetch achievements:", error);
   } finally {
     loadingAchievements.value = false;
   }
