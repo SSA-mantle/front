@@ -124,48 +124,74 @@
       <!-- 3. Achievements Section -->
       <section class="mypage__achievements">
         <h2 class="section-title">업적</h2>
-        <div class="achievement-grid">
+
+        <div class="achievement-groups">
           <template v-if="loadingAchievements">
             <!-- Skeleton Loading -->
-             <div class="achievement-card card" v-for="i in 4" :key="i">
-                <div class="skeleton-icon"></div>
-                <div class="info">
-                   <div class="skeleton-text w-32"></div>
-                   <div class="skeleton-text w-48" style="margin-top: 0.5rem; height: 1rem;"></div>
-                </div>
+             <div class="achievement-grid">
+               <div class="achievement-card card" v-for="i in 4" :key="i">
+                  <div class="skeleton-icon"></div>
+                  <div class="info">
+                     <div class="skeleton-text w-32"></div>
+                     <div class="skeleton-text w-48" style="margin-top: 0.5rem; height: 1rem;"></div>
+                  </div>
+               </div>
              </div>
           </template>
 
           <template v-else>
-             <div
-              v-for="achievement in allAchievements"
-              :key="achievement.type"
-              class="achievement-card card"
-              :class="{ 'completed': achievement.isUnlocked, 'locked': !achievement.isUnlocked }"
-            >
-              <div class="medal-icon" :class="[achievement.isUnlocked ? 'bg-blue' : '', achievement.colorClass]">
-                <!-- Fire Icon -->
-                <svg v-if="achievement.iconType === 'fire'" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
-                  <path fill-rule="evenodd" d="M12.963 2.286a.75.75 0 0 0-1.071-.136 9.742 9.742 0 0 0-3.539 6.177 7.547 7.547 0 0 1-1.705-1.715.75.75 0 0 0-1.152.082A9 9 0 1 0 15.68 4.534a7.46 7.46 0 0 1-2.717-2.248ZM15.75 14.25a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0Z" clip-rule="evenodd" />
-                </svg>
-                <!-- Medal Icon -->
-                 <svg v-else-if="achievement.iconType === 'medal'" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
-                  <path fill-rule="evenodd" d="M5.166 2.621v.858c-1.035.148-2.059.33-3.071.543a.75.75 0 0 0-.584.859 6.753 6.753 0 0 0 6.138 5.6 6.73 6.73 0 0 0 2.743 1.346A6.707 6.707 0 0 1 9.279 15H8.54c-1.036 0-1.875.84-1.875 1.875V19.5h-.75a2.25 2.25 0 0 0-2.25 2.25c0 .414.336.75.75.75h15a.75.75 0 0 0 .75-.75 2.25 2.25 0 0 0-2.25-2.25h-.75v-2.625c0-1.036-.84-1.875-1.875-1.875h-.739a6.706 6.706 0 0 1-1.112-3.173 6.73 6.73 0 0 0 2.743-1.347 6.753 6.753 0 0 0 6.139-5.6.75.75 0 0 0-.585-.858 47.077 47.077 0 0 0-3.07-.543V2.62a.75.75 0 0 0-.656-.75c-1.676-.176-3.372-.176-5.048 0a.75.75 0 0 0-.656.75ZM4.565 5.5c1.833-.418 3.725-.634 5.632-.633 1.907-.001 3.799.215 5.632.633a5.253 5.253 0 0 1-1.385 4.393 5.23 5.23 0 0 1-4.247 1.327 5.23 5.23 0 0 1-4.247-1.327A5.253 5.253 0 0 1 4.565 5.5Z" clip-rule="evenodd" />
-                </svg>
-                <!-- Trophy/Crown Icon (Using Trophy for now) -->
-                <svg v-else-if="achievement.iconType === 'trophy'" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
-                  <path fill-rule="evenodd" d="M9.315 7.584C12.195 3.883 16.695 1.5 21.75 1.5a.75.75 0 0 1 .75.75c0 5.056-2.383 9.555-6.084 12.436h.684c1.248 0 2.25-.809 2.25-1.808 0-1.21-1.24-2.203-2.922-2.348a.75.75 0 0 1-.689-.747V9.75a.75.75 0 0 1 .809-.748c2.91.248 4.302 2.062 4.302 3.848 0 2.28-1.92 4.091-4.75 4.316v1.365c0 1.597-2.197 3.033-5.32 3.208a.75.75 0 0 1-.41-.122L1.875 15a.75.75 0 0 1 0-1.5l8.13-1.016A18.89 18.89 0 0 0 9.315 7.584ZM2.25 10.5a.75.75 0 0 1 .75-1.06 17.653 17.653 0 0 0 4.298-2.652.75.75 0 0 1 1.012 1.107 19.143 19.143 0 0 1-4.496 3.055.75.75 0 0 1-1.077-.282.75.75 0 0 1-.487-.168Z" clip-rule="evenodd" />
-                </svg>
-                <svg v-else xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
-                  <path fill-rule="evenodd" d="M5.166 2.621v.858c-1.035.148-2.059.33-3.071.543a.75.75 0 0 0-.584.859 6.753 6.753 0 0 0 6.138 5.6 6.73 6.73 0 0 0 2.743 1.346A6.707 6.707 0 0 1 9.279 15H8.54c-1.036 0-1.875.84-1.875 1.875V19.5h-.75a2.25 2.25 0 0 0-2.25 2.25c0 .414.336.75.75.75h15a.75.75 0 0 0 .75-.75 2.25 2.25 0 0 0-2.25-2.25h-.75v-2.625c0-1.036-.84-1.875-1.875-1.875h-.739a6.706 6.706 0 0 1-1.112-3.173 6.73 6.73 0 0 0 2.743-1.347 6.753 6.753 0 0 0 6.139-5.6.75.75 0 0 0-.585-.858 47.077 47.077 0 0 0-3.07-.543V2.62a.75.75 0 0 0-.656-.75c-1.676-.176-3.372-.176-5.048 0a.75.75 0 0 0-.656.75ZM4.565 5.5c1.833-.418 3.725-.634 5.632-.633 1.907-.001 3.799.215 5.632.633a5.253 5.253 0 0 1-1.385 4.393 5.23 5.23 0 0 1-4.247 1.327 5.23 5.23 0 0 1-4.247-1.327A5.253 5.253 0 0 1 4.565 5.5Z" clip-rule="evenodd" />
-                </svg>
+            <!-- Unlocked Achievements -->
+            <div v-if="unlockedAchievements.length > 0" class="achievement-section">
+              <h3 class="subsection-title">달성한 업적</h3>
+              <div class="achievement-grid">
+                <div
+                  v-for="achievement in unlockedAchievements"
+                  :key="achievement.type"
+                  class="achievement-card card completed"
+                >
+                  <div class="medal-icon" :class="achievement.colorClass">
+                    <span v-if="achievement.iconType === 'streak-3'">🌱</span>
+                    <span v-else-if="achievement.iconType === 'streak-7'">🌿</span>
+                    <span v-else-if="achievement.iconType === 'streak-30'">🌳</span>
+                    <span v-else-if="achievement.iconType === 'total-10'">🥉</span>
+                    <span v-else-if="achievement.iconType === 'total-50'">🥈</span>
+                    <span v-else-if="achievement.iconType === 'total-100'">🥇</span>
+                    <span v-else>✨</span>
+                  </div>
+                  <div class="info">
+                    <h3>{{ achievement.title }}</h3>
+                    <p>{{ achievement.description }}</p>
+                    <p class="unlocked-date">
+                      {{ new Date(achievement.unlockedAt).toLocaleDateString() }} 획득
+                    </p>
+                  </div>
+                </div>
               </div>
-              <div class="info">
-                <h3>{{ achievement.title }}</h3>
-                <p>{{ achievement.description }}</p>
-                <p v-if="achievement.isUnlocked" class="unlocked-date">
-                  {{ new Date(achievement.unlockedAt).toLocaleDateString() }} 획득
-                </p>
+            </div>
+
+            <!-- Locked Achievements -->
+            <div v-if="lockedAchievements.length > 0" class="achievement-section">
+              <h3 class="subsection-title">남은 업적</h3>
+              <div class="achievement-grid">
+                <div
+                  v-for="achievement in lockedAchievements"
+                  :key="achievement.type"
+                  class="achievement-card card locked"
+                >
+                  <div class="medal-icon">
+                    <span v-if="achievement.iconType === 'streak-3'">🌱</span>
+                    <span v-else-if="achievement.iconType === 'streak-7'">🌿</span>
+                    <span v-else-if="achievement.iconType === 'streak-30'">🌳</span>
+                    <span v-else-if="achievement.iconType === 'total-10'">🥉</span>
+                    <span v-else-if="achievement.iconType === 'total-50'">🥈</span>
+                    <span v-else-if="achievement.iconType === 'total-100'">🥇</span>
+                    <span v-else>🔒</span>
+                  </div>
+                  <div class="info">
+                    <h3>{{ achievement.title }}</h3>
+                    <p>{{ achievement.description }}</p>
+                  </div>
+                </div>
               </div>
             </div>
           </template>
@@ -219,6 +245,9 @@ const allAchievements = computed(() => {
     };
   });
 });
+
+const unlockedAchievements = computed(() => allAchievements.value.filter(a => a.isUnlocked));
+const lockedAchievements = computed(() => allAchievements.value.filter(a => !a.isUnlocked));
 
 const fetchUserInfo = async () => {
   try {
@@ -424,17 +453,37 @@ onMounted(() => {
 
   // 3. 업적 섹션
   &__achievements {
+    .achievement-groups {
+      display: flex;
+      flex-direction: column;
+      gap: 2rem;
+    }
+
+    .achievement-section {
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+
+      .subsection-title {
+        font-size: 0.95rem;
+        font-weight: 700;
+        color: var(--color-text-muted);
+        margin: 0;
+        padding-left: 0.25rem;
+      }
+    }
+
     .achievement-grid {
       display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 1rem;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 0.75rem;
     }
 
     .achievement-card {
       display: flex;
       align-items: center;
-      gap: 1rem;
-      padding: 1.25rem;
+      gap: 0.75rem;
+      padding: 1rem;
       border: 1px solid var(--color-border);
       background-color: var(--color-surface);
 
@@ -459,31 +508,42 @@ onMounted(() => {
       }
 
       .medal-icon {
-        width: 3rem;
-        height: 3rem;
-        border-radius: 0.75rem;
+        width: 2.5rem;
+        height: 2.5rem;
+        border-radius: 0.6rem;
         display: flex;
         align-items: center;
         justify-content: center;
         flex-shrink: 0;
+        font-size: 1.25rem;
 
-        svg {
-            width: 1.5rem;
-            height: 1.5rem;
+        // Achievement Category Colors
+        &.achievement--bronze {
+          background-color: #ffedd5; // Orange 100
+          box-shadow: 0 4px 6px -1px rgba(249, 115, 22, 0.1);
+        }
+        &.achievement--silver {
+          background-color: #f1f5f9; // Slate 100
+          box-shadow: 0 4px 6px -1px rgba(148, 163, 184, 0.1);
+        }
+        &.achievement--gold {
+          background-color: #fefce8; // Yellow 100
+          box-shadow: 0 4px 6px -1px rgba(234, 179, 8, 0.1);
         }
       }
 
       .info {
         h3 {
-          font-size: 1rem;
+          font-size: 0.9rem;
           font-weight: 700;
           color: var(--color-text-heading);
-          margin: 0 0 0.25rem;
+          margin: 0 0 0.15rem;
         }
         p {
-          font-size: 0.85rem;
+          font-size: 0.75rem;
           color: var(--color-text-muted);
           margin: 0;
+          line-height: 1.3;
         }
       }
     }
