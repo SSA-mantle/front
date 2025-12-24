@@ -1,7 +1,7 @@
 <template>
   <div class="auth-card">
     <div class="auth-card__header">
-      <div class="auth-card__icon">✨</div>
+      <!-- <div class="auth-card__icon">✨</div> -->
       <h2 class="auth-card__title">회원가입</h2>
       <p class="auth-card__subtitle">SSAFY Mantle 계정을 만들어주세요.</p>
     </div>
@@ -58,11 +58,23 @@
       <button type="button" class="auth-card__link" @click="switchToLogin">로그인</button>
     </p>
   </div>
+
+  <BaseModal
+    :isOpen="showSuccessModal"
+    title="회원가입 완료"
+    @close="handleModalClose"
+  >
+    <p>회원가입이 완료되었습니다!<br />로그인해주세요.</p>
+    <template #footer>
+      <button class="modal-confirm-btn" @click="handleModalClose">확인</button>
+    </template>
+  </BaseModal>
 </template>
 
 <script setup>
 import { ref } from "vue";
 import { useAuthStore } from "@/stores/auth";
+import BaseModal from "@/components/common/BaseModal.vue";
 
 const emit = defineEmits(["signup-success", "switch-to-login"]);
 const authStore = useAuthStore();
@@ -73,6 +85,7 @@ const password = ref("");
 const passwordConfirm = ref("");
 const errorMessage = ref("");
 const isLoading = ref(false);
+const showSuccessModal = ref(false);
 
 const onSubmit = async () => {
   if (!userId.value || !password.value || !passwordConfirm.value || !nickname.value) {
@@ -94,10 +107,9 @@ const onSubmit = async () => {
       password: password.value,
       nickname: nickname.value
     });
-    
+
     if (success) {
-      alert("회원가입이 완료되었습니다!");
-      emit("signup-success");
+      showSuccessModal.value = true;
     }
   } catch (error) {
     if (error.response && error.response.data && error.response.data.error) {
@@ -108,6 +120,11 @@ const onSubmit = async () => {
   } finally {
     isLoading.value = false;
   }
+};
+
+const handleModalClose = () => {
+  showSuccessModal.value = false;
+  emit("signup-success");
 };
 
 const switchToLogin = () => {

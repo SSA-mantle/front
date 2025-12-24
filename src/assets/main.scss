@@ -3,7 +3,7 @@
 /* Pretendard CDN */
 @import url("https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css");
 
-/* 
+/*
   ---------------------------------------------------------------------------
   ✨ DESIGN SYSTEM: Premium & Vivid
   ---------------------------------------------------------------------------
@@ -16,7 +16,7 @@
   --color-primary:     #3b82f6; /* Main Brand Color */
   --color-primary-600: #2563eb;
   --color-primary-700: #1d4ed8;
-  
+
   /* --- Colors: Accent (Gradient Stops) --- */
   --color-accent-blue: #3b82f6;
   --color-accent-purple: #8b5cf6;
@@ -26,11 +26,11 @@
   --color-bg-base:     #f8fafc; /* Cool White */
   --color-bg-inset:    #f1f5f9;
   --color-surface:     #ffffff;
-  
+
   --color-text-heading: #0f172a; /* Slate 900 */
   --color-text-body:    #334155; /* Slate 700 */
   --color-text-muted:   #64748b; /* Slate 500 */
-  
+
   --color-border:       #e2e8f0; /* Slate 200 */
 
   /* --- Radius & Spacing --- */
@@ -38,7 +38,7 @@
   --radius-md: 0.75rem;  /* 12px */
   --radius-lg: 1rem;     /* 16px */
   --radius-xl: 1.5rem;   /* 24px */
-  
+
   /* --- Shadows (Soft & Diffused) --- */
   --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
   --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.06), 0 2px 4px -2px rgb(0 0 0 / 0.06);
@@ -50,7 +50,7 @@
   --ease-spring: cubic-bezier(0.4, 0.0, 0.2, 1);
 }
 
-/* 
+/*
   ---------------------------------------------------------------------------
   🧱 RESET & BASE
   ---------------------------------------------------------------------------
@@ -68,15 +68,15 @@ html, body {
 
 body {
   font-family: "Pretendard", system-ui, -apple-system, sans-serif;
-  
+
   /* Mesh Gradient Background (Subtle) */
   background-color: var(--color-bg-base);
-  background-image: 
-    radial-gradient(at 0% 0%, hsla(253,16%,7%,0) 0, hsla(253,16%,7%,0) 50%), 
-    radial-gradient(at 50% 0%, hsla(225,39%,30%,0) 0, hsla(225,39%,30%,0) 50%), 
+  background-image:
+    radial-gradient(at 0% 0%, hsla(253,16%,7%,0) 0, hsla(253,16%,7%,0) 50%),
+    radial-gradient(at 50% 0%, hsla(225,39%,30%,0) 0, hsla(225,39%,30%,0) 50%),
     radial-gradient(at 100% 0%, hsla(339,49%,30%,0) 0, hsla(339,49%,30%,0) 50%);
   /* We will add a stronger background element in App.vue */
-  
+
   color: var(--color-text-body);
   -webkit-font-smoothing: antialiased;
   line-height: 1.6;
@@ -91,7 +91,7 @@ button {
   font-family: inherit;
 }
 
-/* 
+/*
   ---------------------------------------------------------------------------
   🎨 UTILITIES
   ---------------------------------------------------------------------------
@@ -145,4 +145,41 @@ button {
   max-width: 1200px;
   margin: 0 auto;
   padding: 0 1.5rem;
+}
+
+/* Modal Buttons */
+.modal-confirm-btn {
+  background: linear-gradient(135deg, var(--color-primary), var(--color-primary-600));
+  color: white;
+  border: none;
+  box-shadow: 0 4px 6px -1px rgba(37, 99, 235, 0.2), 0 2px 4px -1px rgba(37, 99, 235, 0.1);
+  transition: all 0.2s var(--ease-spring);
+
+  &:hover {
+    background: linear-gradient(135deg, var(--color-primary-600), var(--color-primary-700));
+    box-shadow: 0 10px 15px -3px rgba(37, 99, 235, 0.3);
+    transform: translateY(-1px);
+  }
+
+  &:active {
+    transform: translateY(0);
+  }
+}
+
+.modal-confirm-btn--danger {
+  background: linear-gradient(135deg, #ef4444, #dc2626);
+  color: white;
+  border: none;
+  box-shadow: 0 4px 6px -1px rgba(239, 68, 68, 0.2), 0 2px 4px -1px rgba(239, 68, 68, 0.1);
+  transition: all 0.2s var(--ease-spring);
+
+  &:hover {
+    background: linear-gradient(135deg, #dc2626, #b91c1c);
+    box-shadow: 0 10px 15px -3px rgba(239, 68, 68, 0.3);
+    transform: translateY(-1px);
+  }
+
+  &:active {
+    transform: translateY(0);
+  }
 }

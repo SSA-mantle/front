@@ -222,23 +222,7 @@ const confirmLogout = () => {
   }
 }
 
-.modal-confirm-btn {
-  /* BaseModal passes scoped styles but Teleport moves it out of .app-header */
-  background: linear-gradient(135deg, #3b82f6, #2563eb); /* Modern blue gradient */
-  color: white;
-  width: 100%;
-  box-shadow: 0 4px 6px -1px rgba(37, 99, 235, 0.2), 0 2px 4px -1px rgba(37, 99, 235, 0.1);
 
-  &:hover {
-    background: linear-gradient(135deg, #2563eb, #1d4ed8);
-    box-shadow: 0 10px 15px -3px rgba(37, 99, 235, 0.3), 0 4px 6px -2px rgba(37, 99, 235, 0.15);
-    transform: translateY(-1px);
-  }
-
-  &:active {
-    transform: translateY(0);
-  }
-}
 
 @media (max-width: 768px) {
   .app-header {

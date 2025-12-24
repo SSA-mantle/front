@@ -86,22 +86,53 @@
     </main>
 
     <!-- Delete Modal -->
-    <div v-if="showDeleteModal" class="modal-overlay">
-      <div class="modal-card">
-        <h2 class="modal-title">회원 탈퇴</h2>
-        <div class="modal-content">
-          <p>
-            지금까지 <span class="highlight">{{ form.nickname }}</span> 님이 이루신<br/>
-            모든 기록이 삭제됩니다!<br/>
-            정말 탈퇴하시겠습니까?
-          </p>
-        </div>
-        <div class="modal-actions">
-          <button class="btn btn-cancel-modal" @click="showDeleteModal = false">취소</button>
-          <button class="btn btn-delete-confirm" @click="confirmDelete">탈퇴하기</button>
-        </div>
+    <BaseModal
+      :isOpen="showDeleteModal"
+      title="회원 탈퇴"
+      @close="showDeleteModal = false"
+    >
+      <div class="modal-content">
+        <p>
+          지금까지 <span class="highlight">{{ form.nickname }}</span> 님이 이루신
+          모든 기록이 삭제됩니다!<br/>
+          정말 <span style="color: #ef4444; font-weight: 800;">탈퇴</span>하시겠습니까?
+        </p>
       </div>
-    </div>
+      <template #footer>
+        <button class="btn-cancel-modal" @click="showDeleteModal = false">취소</button>
+        <button class="btn-delete-confirm" @click="confirmDelete">탈퇴하기</button>
+      </template>
+    </BaseModal>
+
+    <!-- Generic Info Modal -->
+    <BaseModal
+      :isOpen="infoModal.isOpen"
+      :title="infoModal.title"
+      @close="closeInfoModal"
+    >
+      <p v-html="infoModal.message"></p>
+      <template #footer>
+        <button class="modal-confirm-btn" @click="closeInfoModal">확인</button>
+      </template>
+    </BaseModal>
+
+    <!-- Confirm Modal -->
+    <BaseModal
+      :isOpen="confirmModal.isOpen"
+      :title="confirmModal.title"
+      @close="confirmModal.isOpen = false"
+    >
+      <p>{{ confirmModal.message }}</p>
+      <template #footer>
+        <button class="btn-cancel-modal" @click="confirmModal.isOpen = false">취소</button>
+        <button
+          :class="confirmModal.isDanger ? 'modal-confirm-btn--danger' : 'modal-confirm-btn'"
+          @click="handleConfirm"
+        >
+          {{ confirmModal.confirmText || '확인' }}
+        </button>
+      </template>
+    </BaseModal>
 
     <AppFooter />
   </div>
@@ -113,6 +144,7 @@ import { useRouter } from "vue-router";
 import { useAuthStore } from "@/stores/auth";
 import AppHeader from "@/components/layout/AppHeader.vue";
 import AppFooter from "@/components/layout/AppFooter.vue";
+import BaseModal from "@/components/common/BaseModal.vue";
 
 const router = useRouter();
 const authStore = useAuthStore();
@@ -126,6 +158,47 @@ const form = ref({
 const showDeleteModal = ref(false);
 const apiErrorMessage = ref("");
 const isSubmitting = ref(false);
+
+const infoModal = ref({
+  isOpen: false,
+  title: "",
+  message: "",
+  onClose: null
+});
+
+const confirmModal = ref({
+  isOpen: false,
+  title: "",
+  message: "",
+  confirmText: "확인",
+  isDanger: false,
+  onConfirm: null
+});
+
+const showAlert = (title, message, onClose = null) => {
+  infoModal.value = { isOpen: true, title, message, onClose };
+};
+
+const showConfirm = (options) => {
+  confirmModal.value = {
+    isOpen: true,
+    title: options.title || "",
+    message: options.message || "",
+    confirmText: options.confirmText || "확인",
+    isDanger: options.isDanger || false,
+    onConfirm: options.onConfirm || null
+  };
+};
+
+const closeInfoModal = () => {
+  infoModal.value.isOpen = false;
+  if (infoModal.value.onClose) infoModal.value.onClose();
+};
+
+const handleConfirm = () => {
+  confirmModal.value.isOpen = false;
+  if (confirmModal.value.onConfirm) confirmModal.value.onConfirm();
+};
 
 // Load user data into form
 watch(() => authStore.user, (newUser) => {
@@ -146,54 +219,63 @@ const isPasswordMatch = computed(() => {
 });
 
 const cancelEdit = () => {
-  if (confirm("수정을 취소하시겠습니까?")) {
-    router.push("/mypage");
-  }
+  showConfirm({
+    title: "수정 취소",
+    message: "수정을 취소하시겠습니까?",
+    onConfirm: () => {
+      router.push("/mypage");
+    }
+  });
 };
 
 const saveChanges = async () => {
   if (form.value.newPassword && !isPasswordMatch.value) {
-    alert("새 비밀번호가 일치하지 않습니다.");
+    showAlert("오류", "새 비밀번호가 일치하지 않습니다.");
     return;
   }
 
   apiErrorMessage.value = "";
 
-  if (confirm("정보를 수정하시겠습니까?")) {
-    isSubmitting.value = true;
-    try {
-      const payload = {
-        nickname: form.value.nickname,
-      };
-      // Only include password if set
-      if (form.value.newPassword) {
-        payload.password = form.value.newPassword;
-      }
+  showConfirm({
+    title: "회원 정보 수정",
+    message: "회원 정보를 수정하시겠습니까?",
+    onConfirm: async () => {
+      isSubmitting.value = true;
+      try {
+        const payload = {
+          nickname: form.value.nickname,
+        };
+        if (form.value.newPassword) {
+          payload.password = form.value.newPassword;
+        }
 
-      const success = await authStore.updateProfile(payload);
+        const success = await authStore.updateProfile(payload);
 
-      if (success) {
-        alert("회원 정보가 수정되었습니다");
-        router.push("/mypage");
+        if (success) {
+          showAlert("수정 완료", "회원 정보가 수정되었습니다", () => {
+            router.push("/mypage");
+          });
+        }
+      } catch (error) {
+         console.error(error);
+         if (error.response && error.response.data && error.response.data.error) {
+            apiErrorMessage.value = error.response.data.error.message;
+         } else {
+            apiErrorMessage.value = "이미 사용 중인 닉네임이거나 정보 수정에 실패했습니다.";
+         }
+      } finally {
+        isSubmitting.value = false;
       }
-    } catch (error) {
-       console.error(error);
-       if (error.response && error.response.data && error.response.data.error) {
-          apiErrorMessage.value = error.response.data.error.message;
-       } else {
-          apiErrorMessage.value = "이미 사용 중인 닉네임이거나 정보 수정에 실패했습니다.";
-       }
-    } finally {
-      isSubmitting.value = false;
     }
-  }
+  });
 };
 
 const confirmDelete = () => {
     // API 문서에 회원 탈퇴가 명시되어 있지 않아 임시 처리
-    alert("회원 탈퇴가 완료되었습니다.");
     showDeleteModal.value = false;
-    router.push("/");
+    showAlert("탈퇴 완료", "회원 탈퇴가 완료되었습니다.", () => {
+      router.push("/");
+    });
 };
 </script>
 
@@ -386,35 +468,6 @@ const confirmDelete = () => {
   }
 }
 
-// Modal Styles
-.modal-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
-  background: rgba(0, 0, 0, 0.5);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 1000;
-}
-
-.modal-card {
-  background: white;
-  padding: 2.5rem 2rem;
-  border-radius: 2rem; // Rounded corners same as image
-  width: 90%;
-  max-width: 400px;
-  text-align: center;
-  box-shadow: 0 10px 25px rgba(0,0,0,0.1);
-
-  .modal-title {
-    font-size: 1.8rem;
-    font-weight: 800;
-    margin-bottom: 1.5rem;
-    color: #111827;
-  }
 
   .modal-content {
     margin-bottom: 2rem;
@@ -423,7 +476,7 @@ const confirmDelete = () => {
       color: #4b5563;
       font-size: 1.1rem;
       line-height: 1.6;
-      word-break: keep-all; // Korean text break logic
+      word-break: keep-all;
 
       .highlight {
         color: #3b82f6;
@@ -432,42 +485,34 @@ const confirmDelete = () => {
     }
   }
 
-  .modal-actions {
-    display: flex;
-    gap: 1rem;
-    justify-content: center;
-
-    .btn {
-      padding: 0.75rem 1.5rem;
-      border-radius: 1rem; // Very round buttons
-      font-weight: 700;
-      font-size: 1.1rem;
-      border: none;
-      cursor: pointer;
-      min-width: 120px;
-    }
-
-    .btn-cancel-modal {
-      background-color: #f3f4f6;
-      color: #374151;
-      &:hover { background-color: #e5e7eb; }
-    }
-
-    .btn-delete-confirm {
-      background-color: #ef4444;
-      color: white;
-      &:hover { background-color: #dc2626; }
-    }
+  .btn-cancel-modal {
+    background-color: #f3f4f6;
+    color: #374151;
+    border: none;
+    padding: 0.75rem 1.5rem;
+    border-radius: 1rem;
+    font-weight: 700;
+    font-size: 1.1rem;
+    cursor: pointer;
+    &:hover { background-color: #e5e7eb; }
   }
-}
+
+  .btn-delete-confirm {
+    background-color: #ef4444;
+    color: white;
+    border: none;
+    padding: 0.75rem 1.5rem;
+    border-radius: 1rem;
+    font-weight: 700;
+    font-size: 1.1rem;
+    cursor: pointer;
+    &:hover { background-color: #dc2626; }
+  }
 
 // Mobile
 @media (max-width: 640px) {
     .edit-profile__container {
         padding: 1.5rem;
-    }
-    .modal-card {
-        padding: 2rem 1.5rem;
     }
 }
 </style>

@@ -137,12 +137,31 @@
         </button>
       </div>
     </div>
+
+    <!-- Info/Confirm Modal -->
+    <BaseModal
+      :isOpen="modal.isOpen"
+      :title="modal.title"
+      @close="modal.isOpen = false"
+    >
+      <div class="modal-body-content" v-html="modal.message"></div>
+      <template #footer>
+        <button v-if="modal.type === 'confirm'" class="daily-card__modal-cancel" @click="modal.isOpen = false">취소</button>
+        <button
+          :class="modal.isDanger ? 'modal-confirm-btn--danger' : 'modal-confirm-btn'"
+          @click="handleModalConfirm"
+        >
+          {{ modal.confirmText || '확인' }}
+        </button>
+      </template>
+    </BaseModal>
   </section>
 </template>
 
 <script setup>
 import { computed, ref, defineProps } from "vue";
 import { useGameStore } from "@/stores/game";
+import BaseModal from "@/components/common/BaseModal.vue";
 
 const props = defineProps({
   shouldAnimate: {
@@ -155,6 +174,33 @@ const gameStore = useGameStore();
 const guess = ref("");
 const errorMessage = ref("");
 const showAllGuesses = ref(false);
+
+const modal = ref({
+  isOpen: false,
+  title: "",
+  message: "",
+  type: "alert", // 'alert' | 'confirm'
+  confirmText: "확인",
+  isDanger: false,
+  onConfirm: null
+});
+
+const showModal = (options) => {
+  modal.value = {
+    isOpen: true,
+    title: options.title || "",
+    message: options.message || "",
+    type: options.type || "alert",
+    confirmText: options.confirmText || "확인",
+    isDanger: options.isDanger || false,
+    onConfirm: options.onConfirm || null
+  };
+};
+
+const handleModalConfirm = () => {
+  modal.value.isOpen = false;
+  if (modal.value.onConfirm) modal.value.onConfirm();
+};
 
 const isGameOver = computed(() => gameStore.status !== "playing");
 const isDev = import.meta.env.DEV;
@@ -179,10 +225,15 @@ const visibleGuesses = computed(() => {
 const challengeNo = 142;
 
 const handleDevReset = () => {
-  if (confirm("[Dev] 게임 상태를 초기화하시겠습니까?")) {
-    gameStore.resetGame();
-    showAllGuesses.value = false;
-  }
+  showModal({
+    title: "[Dev] 리셋",
+    message: "게임 상태를 초기화하시겠습니까?",
+    type: "confirm",
+    onConfirm: () => {
+      gameStore.resetGame();
+      showAllGuesses.value = false;
+    }
+  });
 };
 
 const onSubmit = async () => {
@@ -211,13 +262,20 @@ const onSubmit = async () => {
 };
 
 const handleGiveUp = async () => {
-  if (confirm("정말로 포기하시겠습니까? 정답이 공개됩니다.")) {
-    try {
-      await gameStore.giveUp();
-    } catch (error) {
-      alert("포기 처리에 실패했습니다.");
+  showModal({
+    title: "포기하기",
+    message: "오늘의 게임이 종료됩니다!<br>정말 포기하고 정답을 확인하시겠습니까?<br><br><span style='color: #ef4444; font-weight: 800;'>오늘은 더이상 게임을 진행할 수 없습니다.</span>",
+    type: "confirm",
+    confirmText: "포기하기",
+    isDanger: true,
+    onConfirm: async () => {
+      try {
+        await gameStore.giveUp();
+      } catch (error) {
+        showModal({ title: "오류", message: "포기 처리에 실패했습니다." });
+      }
     }
-  }
+  });
 };
 </script>
 
@@ -352,6 +410,18 @@ const handleGiveUp = async () => {
     text-decoration: underline;
     cursor: pointer;
     &:hover { color: #64748b; }
+  }
+
+  &__modal-cancel {
+    background-color: #f3f4f6;
+    color: #374151;
+    border: none;
+    padding: 0.75rem 1.5rem;
+    border-radius: 999px;
+    font-weight: 700;
+    font-size: 1rem;
+    cursor: pointer;
+    &:hover { background-color: #e5e7eb; }
   }
 }
 
