@@ -93,7 +93,7 @@
     >
       <div class="modal-content">
         <p>
-          지금까지 <span class="highlight">{{ form.nickname }}</span> 님이 이루신
+          지금까지 <span class="highlight">{{ form.nickname }}</span> 님이 이루신<br/>
           모든 기록이 삭제됩니다!<br/>
           정말 <span style="color: #ef4444; font-weight: 800;">탈퇴</span>하시겠습니까?
         </p>
@@ -271,9 +271,10 @@ const saveChanges = async () => {
 };
 
 const confirmDelete = () => {
-    // API 문서에 회원 탈퇴가 명시되어 있지 않아 임시 처리
+
     showDeleteModal.value = false;
-    showAlert("탈퇴 완료", "회원 탈퇴가 완료되었습니다.", () => {
+    showAlert("탈퇴 완료", "회원 탈퇴가 완료되었습니다... <br>Good Bye...", () => {
+      authStore.logout();
       router.push("/");
     });
 };
